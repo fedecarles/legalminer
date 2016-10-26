@@ -1,0 +1,14 @@
+<<<<<<< HEAD
+=======
+{% extends 'base.html' %}
+>>>>>>> 9e7de782c3a5c6ede37d2c7c9d405eb72727f14e
+{% load bootstrap3 %}
+{% block content %}
+<div id="detail-view" class="col-md-6 col-md-offset-3">
+    <h3>{{ autos_detail }}</h3>
+    <p>{{ text_detail }}</p>
+<div>
+<script type="text/javascript">
+ $("#detail-view p").mark($('.highlighted').first().text());
+</script>
+{% endblock %}

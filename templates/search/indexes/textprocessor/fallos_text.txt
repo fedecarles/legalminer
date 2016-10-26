@@ -1,0 +1,9 @@
+{{ object.autos }}
+{{ object.actora }}
+{{ object.demandada }}
+{{ object.sobre }}
+{{ object.text }}
+{{ object.fecha }}
+{{ object.jueces }}
+{{ object.materia }}
+{{ object.voces }}

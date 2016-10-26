@@ -1,0 +1,148 @@
+#input_list{
+    float: left;
+    width: 300px;
+    height: 500px;
+}
+#id_input_list{
+    height: 500px;
+}
+#output_list{
+    float: right;
+    width: 300px;
+    height: 500px;
+}
+#id_output_list{
+    height: 500px;
+}
+#process{
+    margin-left: 15%;
+    margin-top: 25%;
+}
+#lists{
+    width: 50%;
+}
+#lista-casos{
+    margin-bottom: 20px;
+}
+#detail-view{
+    text-align: justify;
+    font-size: 12px;
+    margin: 5px;
+    width: 100%; 
+}
+#case-data{
+    font-size: 12px;
+    margin-top: 50px;
+    table-layout: fixed;
+    margin: 0 auto !important;
+    float: none !important;
+    width: 50%;
+}
+.chart rect {
+  fill: steelblue;
+}
+.chart text {
+  fill: white;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
+path {
+  stroke: steelblue;
+  stroke-width: 2;
+  fill: none;
+}
+
+.axis path,
+.axis line{
+  fill: none;
+  stroke: grey;
+  stroke-width: 1;
+  shape-rendering: crispEdges;
+}
+#id_q {
+    border-top-left-radius: 2em;
+    border-bottom-left-radius: 2em;
+}
+#id_q_submit{
+    border-top-right-radius: 2em;
+    border-bottom-right-radius: 2em;
+}
+.form-inline .form-control{
+    width: 600px;
+}
+#search-filters{
+    width: 100%;
+    border: solid #e7e7e7;
+    background-color: #f8f8f8;
+}
+body .highlighted{
+    background-color: #EEFF66;
+}
+.form-inline input{
+    height: 10px;
+    margin: auto 0;
+}
+#table-filters{
+    margin: 0;
+}
+#table-filters td{
+    font-size: 12px;
+    font-weight: bold;
+    padding: 0;
+}
+#table-filters input{
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+<<<<<<< HEAD
+}
+#search-form{
+    width: 45%;
+    float: left;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 7px;
+}
+#results{
+    float: right;
+    width: 30%;
+    font-size: 10px;
+    margin: auto 0; 
+}
+div#details {
+    float: left;
+    width: 50%;
+    height: 100%;
+    overflow:hidden;
+}
+#results a {
+    font-weight: bold;
+    color: black;
+}
+
+.easyPaginateNav {
+    float: right;
+}
+#easyPaginate {
+    width:300px;
+}
+.easyPaginateNav a {
+    font-size: 14px;
+    padding:5px;
+=======
+>>>>>>> 9e7de782c3a5c6ede37d2c7c9d405eb72727f14e
+}
+#search-form{
+    width: 45%;
+    float: left;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 7px;
+}
+#results{
+    float: right;
+    width: 25%;
+    font-size: 10px;
+}

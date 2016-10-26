@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load bootstrap3 %}
+    <form id="edit_form" method='POST' action=''>{% csrf_token %}
+      {{ formset.management_form }}
+      {% for form in formset %}
+      {{ form.id }}
+        <hr width="100%">
+        <br>
+        <div class="form-inline">
+        <input type='submit' class="btn btn-default" id="dbedit" value="Submit"></input>
+          {% bootstrap_form_errors form %}
+        <div class="form-inline">
+          {% bootstrap_field form.fecha show_label=False layout='inline' %}
+          {% bootstrap_field form.tipo show_label=False layout='inline' %}
+          {% bootstrap_field form.resultado show_label=False %}
+        </div>
+        <div class="form-inline">
+          {% bootstrap_field form.corte show_label=False layout='inline'%}
+          {% bootstrap_field form.autos show_label=False layout='inline'%}
+        </div>
+        <div class="form-inline">
+          {% bootstrap_field form.actora show_label=False %}
+          {% bootstrap_field form.demandada show_label=False %}
+        </div>
+        <div class="form-inline">
+          {% bootstrap_field form.mayoria show_label=False %}
+          {% bootstrap_field form.disidencia show_label=False %}
+        </div>
+        </div>
+          {% bootstrap_field form.text show_label=False %}
+      {% endfor %}
+        <input type='submit' class="btn btn-default" id="dbedit" value="Submit"></input>
+    </form>
+    <div class="pagination">
+        <span class="step-links">
+            {% if objects.has_previous %}
+            <a href="?page={{ objects.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ objects.number }} of {{ objects.paginator.num_pages }}
+            </span>
+
+            {% if objects.has_next %}
+            <a href="?page={{ objects.next_page_number }}">next</a>
+            {% endif %}
+        </span>
+    </div>
+
+    <script type="text/javascript">
+    </script>
+{% endblock %}
