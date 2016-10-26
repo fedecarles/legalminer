@@ -3,11 +3,9 @@
 {% load highlight %}
 {% block content %}
 
-<<<<<<< HEAD
 <div id="details"></div>
 
 <form method="post" action="/analyzer/" name="seleccion">{% csrf_token %}
-<div id="details"></div>
         {% for result in page.object_list %}
         <input type="hidden" name="seleccion" value="{{ result.object.pk }}"></input>
         {% endfor %}
@@ -28,49 +26,10 @@
     </div>
     <input class="btn btn-default" type="submit" value="Confirmar Selección">
 </form>
-=======
-<table id="decisiones" class="table">
-        <td id="jueces"></td>
-        <td id="may"></td>
-        <td id="por_may"></td>
-        <td id="dis"></td>
-        <td id="por_dis"></td>
-</table>
-
-<svg class="chart"></svg>
-<div id="container"></div>
-    <form method="post" action="/analyzer/" name="seleccion">{% csrf_token %}
-        <div id="results" class="col-md-6 col-md-offset-3">
-        {% if query %}
-            {{ page.object_list|length }} de {{ page.paginator.count }} resultados en Página {{ page.number }} de {{ page.paginator.num_pages }}
-            {% for result in page.object_list %}
-            <div class="checkbox">
-                <label><input type="checkbox" name="selecciones" value="{{ result.object.pk }}" data-toggle="button" checked><a href="{{ result.object.get_absolute_url }}">{{ result.object.autos }}</a></label> </br>
-            {% highlight result.texto with request.GET.q %}
-            </div>
-            {% empty %}
-                <p>Sin resultados.</p>
-            {% endfor %}
-
-            {% if page.has_previous or page.has_next %}
-                <div>
-                    {% if page.has_previous %}<a href="?q={{ query }}&amp;page={{ page.previous_page_number }}">{% endif %}&laquo; Previous{% if page.has_previous %}</a>{% endif %}
-                    |
-                    {% if page.has_next %}<a href="?q={{ query }}&amp;page={{ page.next_page_number }}">{% endif %}Next &raquo;{% if page.has_next %}</a>{% endif %}
-                </div>
-            {% endif %}
-        {% else %}
-            {# Show some example queries to run, maybe query syntax, something else? #}
-        {% endif %}
-        </div>
-        <input class="btn btn-default" type="submit" value="Confirmar Selección">
-    </form>
->>>>>>> 9e7de782c3a5c6ede37d2c7c9d405eb72727f14e
 
 
 <script type="text/javascript">
 
-<<<<<<< HEAD
 $("#detail-view p").mark("homicidio");
 
 function go(obj) {
@@ -82,218 +41,9 @@ function go(obj) {
 $('#paginate').easyPaginate({
     paginateElement: 'li',
     elementsPerPage: 10,
-    effect: 'slide'
+    effect: 'fade',
+    position: 'before'
 });
 
-=======
-var data = {{case_data|safe}}
-var sumdata = {{summary_votes|safe}}
-var casedates = {{case_dates|safe}}
-
-
-$.each(data, function(key, value) {
-$('#lista-casos').append($("<option></option>")
-        .attr("value", data[key]["texto"])
-        .attr("data-autos", data[key]["autos"])
-        .attr("data-tipo", data[key]["tipo"])
-        .attr("data-fecha", data[key]["fecha"])
-        .attr("data-actora", data[key]["actora"])
-        .attr("data-demandada", data[key]["demandada"])
-        .attr("data-deducido", data[key]["deducido"])
-        .attr("data-mayoria", data[key]["mayoria"])
-        .attr("data-disidencia", data[key]["disidencia"])
-        .attr("data-resultado", data[key]["resultado"])
-        .attr("data-origen", data[key]["origen"])
-        .attr("data-anterior", data[key]["anterior"])
-        .attr("data-legislacion", data[key]["legislacion"])
-        .attr("data-honorarios", data[key]["honorarios"])
-        .text(data[key]["autos"]));
-
-        $("#lista-casos").change(function () {
-		    var texto = $(this).find('option:selected').val();
-		    var autos = $(this).find('option:selected').data('autos');
-		    var tipo = $(this).find('option:selected').data('tipo');
-
-            var fecha = $(this).find("option:selected").data('fecha');
-            var fecha_split = $(this).find("option:selected").data('fecha').split('-');
-            var fecha_parse = new Date(fecha_split[0], fecha_split[1] - 1, fecha_split[2]);
-		    var fecha_string = (fecha_parse.getDate()) + '/' + (fecha_parse.getMonth() + 1) + '/' + fecha_parse.getFullYear();
-		    var actora = $(this).find('option:selected').data('actora');
-		    var demandada = $(this).find('option:selected').data('demandada');
-		    var deducido = $(this).find('option:selected').data('deducido');
-		    var mayoria = $(this).find('option:selected').data('mayoria');
-		    var disidencia = $(this).find('option:selected').data('disidencia');
-		    var resultado = $(this).find('option:selected').data('resultado');
-		    var origen = $(this).find('option:selected').data('origen');
-		    var anterior = $(this).find('option:selected').data('anterior');
-		    var legislacion = $(this).find('option:selected').data('legislacion');
-		    var honorarios = $(this).find('option:selected').data('honorarios');
-
-            $('#detail-view').text(texto);
-            $('#autos').text(autos);
-            $('#tipo').text(tipo);
-            $('#fecha').text(fecha_string);
-            $('#actora').text(actora);
-            $('#demandada').text(demandada);
-            $('#deducido').text(deducido);
-            $('#mayoria').text(mayoria);
-            $('#disidencia').text(disidencia);
-            $('#resultado').text(resultado);
-            $('#origen').text(origen);
-            $('#anterior').text(anterior);
-            $('#legislacion').text(legislacion);
-            $('#honorarios').text(honorarios);
-            $('#case-title').text(autos);
-
-    });
-});
-
-function tabulate(data, columns) {
-    var table = d3.select("#container").append("table"),
-        thead = table.append("thead"),
-        tbody = table.append("tbody");
-
-    // append the header row
-    thead.append("tr")
-        .selectAll("th")
-        .data(columns)
-        .enter()
-        .append("th")
-            .text(function(column) { return column; });
-
-    // create a row for each object in the data
-    var rows = tbody.selectAll("tr")
-        .data(data)
-        .enter()
-        .append("tr");
-
-    // create a cell in each row for each column
-    var cells = rows.selectAll("td")
-        .data(function(row) {
-            return columns.map(function(column) {
-                return {column: column, value: row[column]};
-            });
-        })
-        .enter()
-        .append("td")
-            .text(function(d) { return d.value; });
-
-    return table;
-}
-
-// render the table
-var peopleTable = tabulate(sumdata, ["jueces", "q_may", "p_may"]);
-
-// uppercase the column headers
-peopleTable.selectAll("thead th")
-    .text(function(column) {
-        return column.charAt(0).toUpperCase() + column.substr(1);
-    });
-
-// sort by age
-peopleTable.selectAll("tbody tr")
-    .sort(function(a, b) {
-        return d3.descending(a.may, b.may);
-    });
-
-may = [];
-$.each(sumdata, function(k, v) {
-    may.push(v.q_may);
-});
-
-var width = 420,
-    barHeight = 20;
-
-var x = d3.scaleLinear()
-    .domain([0, d3.max(may)])
-    .range([0, width]);
-
-var chart = d3.select(".chart")
-    .attr("width", width)
-    .attr("height", barHeight * may.length);
-
-var bar = chart.selectAll("g")
-    .data(may)
-  .enter().append("g")
-    .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
-
-bar.append("rect")
-    .attr("width", x)
-    .attr("height", barHeight - 1);
-
-bar.append("text")
-    .attr("x", function(d) { return x(d) - 3; })
-    .attr("y", barHeight / 2)
-    .attr("dy", ".35em")
-    .text(function(d) { return d; });
-
-
-//////////////////
-
-var margin = {
-  top: 30,
-  right: 20,
-  bottom: 30,
-  left: 50
-};
-var width = 600 - margin.left - margin.right;
-var height = 270 - margin.top - margin.bottom;
-
-var parseDate = d3.timeParse("%Y-%m-%d");
-
-var x = d3.scaleTime().range([0, width]);
-var y = d3.scaleLinear().range([height, 0]);
-
-var xAxis = d3.axisBottom()
-    .scale(x).ticks(5);
-
-var yAxis = d3.axisLeft()
-    .scale(y).ticks(5);
-
-var valueline = d3.line()
-  .x(function(d) {
-    return x(d.fecha);
-  })
-  .y(function(d) {
-    return y(d.count);
-  });
-
-var svg = d3.select("body")
-  .append("svg")
-  .attr("width", width + margin.left + margin.right)
-  .attr("height", height + margin.top + margin.bottom)
-  .append("g")
-  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-// Get the data
-var casedates = casedates.sort(function(a,b){return new Date(b.fecha) - new Date(a.fecha)});
-
-
-casedates.forEach(function(d) {
-  d.fecha = parseDate(d.fecha);
-  d.count = +d.count;
-});
-
-// Scale the range of the data
-x.domain(d3.extent(casedates, function(d) {
-  return d.fecha;
-}));
-y.domain([0, d3.max(casedates, function(d) {
-  return d.count;
-})]);
-
-svg.append("path") // Add the valueline path.
-  .attr("d", valueline(casedates));
-
-svg.append("g") // Add the X Axis
-  .attr("class", "x axis")
-  .attr("transform", "translate(0," + height + ")")
-  .call(xAxis);
-
-svg.append("g") // Add the Y Axis
-  .attr("class", "y axis")
-  .call(yAxis);
-
->>>>>>> 9e7de782c3a5c6ede37d2c7c9d405eb72727f14e
 </script>
 {% endblock %}

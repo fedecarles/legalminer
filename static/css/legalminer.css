@@ -128,11 +128,11 @@ div#details {
 #easyPaginate {
     width:300px;
 }
-.easyPaginateNav a {
+.easyPaginateNav {
     font-size: 14px;
     padding:5px;
-=======
->>>>>>> 9e7de782c3a5c6ede37d2c7c9d405eb72727f14e
+    width: 100%; 
+
 }
 #search-form{
     width: 45%;
@@ -145,4 +145,7 @@ div#details {
     float: right;
     width: 25%;
     font-size: 10px;
+}
+#paginate li:hover {
+    background-color: #e7e7e7;
 }
