@@ -27,11 +27,7 @@ urlpatterns = [
     url(r'^dbedit/', dbEdit),
     url(r'search/$',
         search_view_factory(view_class=FacetedSearchView,
-<<<<<<< HEAD
                             form_class=MySearchForm), name='haystack_search'),
-=======
-        form_class=MySearchForm), name='haystack_search'),
->>>>>>> 9e7de782c3a5c6ede37d2c7c9d405eb72727f14e
     url(r'analyzer/$', analyzer, name='analyzer'),
     url(r'details/(?P<slug>[\w-]+)/$', details, name='details'),
 ]

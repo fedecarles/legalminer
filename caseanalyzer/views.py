@@ -13,12 +13,8 @@ def details(request, slug):
     text_detail = instance.text
     autos_detail = instance.autos
     return render(request, 'details.html', {'text_detail': text_detail,
-<<<<<<< HEAD
                                             'autos_detail': autos_detail,
                                             'form': form})
-=======
-    'autos_detail': autos_detail, 'form': form})
->>>>>>> 9e7de782c3a5c6ede37d2c7c9d405eb72727f14e
 
 
 def analyzer(request, pk=None):
@@ -50,11 +46,7 @@ def analyzer(request, pk=None):
             'case_dates': json.dumps(case_dates, cls=DjangoJSONEncoder)
         }
 
-<<<<<<< HEAD
         return render(request, 'analyzer.html', context)
-=======
-        return render(request, 'search/search.html', context)
->>>>>>> 9e7de782c3a5c6ede37d2c7c9d405eb72727f14e
 
 
 # Summarize data by justice.
