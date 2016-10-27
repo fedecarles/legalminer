@@ -1,17 +1,26 @@
 {% load bootstrap3 %}
 {% block content %}
+
 <div id="detail-view" class="col-md-6 col-md-offset-3">
+
     <h3>{{ autos_detail }}</h3>
     <p>{{ text_detail }}</p>
 <div>
 <script type="text/javascript">
 
-$( document ).ready(function() {
+$(document).ready(function() {
     $('.highlighted').each(function() {
-        $("#detail-view p").mark($(this).text(),
+        $('#detail-view p').mark($(this).text(),
                 {"className": 'highlighted'});
     });
-    $('#detail-view p').markRegExp(/(["'])(.*?)\1'"])/);
+    $('#detail-view p').markRegExp(/ley\s\d+(\.\d+)?/,
+            {'className': 'ley'});
+
+    $('.ley').each(function() {
+        $('.leyes').append('<li>' + $(this).text() + '</li>');
+    });
+
 });
+
 </script>
 {% endblock %}

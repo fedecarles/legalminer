@@ -28,6 +28,7 @@
     text-align: justify;
     font-size: 12px;
     margin: 5px;
+    padding: 5px;
     width: 100%; 
 }
 #case-data{
@@ -96,7 +97,6 @@ body .highlighted{
     width: 100%;
     background-color: transparent;
     border: none;
-<<<<<<< HEAD
 }
 #search-form{
     width: 45%;
@@ -113,7 +113,7 @@ body .highlighted{
 }
 div#details {
     float: left;
-    width: 50%;
+    width: 45%;
     height: 100%;
     overflow:hidden;
 }
@@ -148,4 +148,7 @@ div#details {
 }
 #paginate li:hover {
     background-color: #e7e7e7;
+}
+.ley{
+    background-color: #8098ee;
 }

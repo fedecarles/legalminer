@@ -3,8 +3,9 @@
 {% load highlight %}
 {% block content %}
 
-<div id="details"></div>
 
+<div id="details" style="border: solid 2px";></div>
+<ul class="leyes col-md-1 col-md-offset-1" style="border: solid 2px";></ul>
 <form method="post" action="/analyzer/" name="seleccion">{% csrf_token %}
         {% for result in page.object_list %}
         <input type="hidden" name="seleccion" value="{{ result.object.pk }}"></input>
@@ -26,7 +27,6 @@
     </div>
     <input class="btn btn-default" type="submit" value="Confirmar Selección">
 </form>
-
 
 <script type="text/javascript">
 
