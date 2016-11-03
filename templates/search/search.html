@@ -4,8 +4,8 @@
 {% block content %}
 
 
-<div id="details" style="border: solid 2px";></div>
-<ul class="leyes col-md-1 col-md-offset-1" style="border: solid 2px";></ul>
+<div id="details";></div>
+
 <form method="post" action="/analyzer/" name="seleccion">{% csrf_token %}
         {% for result in page.object_list %}
         <input type="hidden" name="seleccion" value="{{ result.object.pk }}"></input>
@@ -17,20 +17,18 @@
         <div id="paginate">
             <ul>
         {% for result in page.object_list %}
-            <li value="{{ result.object.pk }}"><a href="{{ result.object.get_absolute_url }}" onclick="return go(this);">{{ result.object.autos }}</a><br/> {% highlight result.texto with request.GET.q %}</li>
+            <li class="box" value="{{ result.object.pk }}"><a href="{{ result.object.get_absolute_url }}" onclick="return go(this);">{{ result.object.autos }}</a><br/> {% highlight result.texto with request.GET.q %}</li>
         {% empty %}
             <p>Sin resultados.</p>
         {% endfor %}
             </ul>
         </div>
     {% endif %}
-    </div>
     <input class="btn btn-default" type="submit" value="Confirmar Selección">
+    </div>
 </form>
 
 <script type="text/javascript">
-
-$("#detail-view p").mark("homicidio");
 
 function go(obj) {
     var page=obj.href;
@@ -44,6 +42,7 @@ $('#paginate').easyPaginate({
     effect: 'fade',
     position: 'before'
 });
+
 
 </script>
 {% endblock %}

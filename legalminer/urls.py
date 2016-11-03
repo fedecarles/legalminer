@@ -17,12 +17,11 @@ from haystack.views import FacetedSearchView, search_view_factory
 from caseanalyzer.forms import MySearchForm
 from django.conf.urls import url
 from django.contrib import admin
-from textprocessor.views import fileManager, cij, dbEdit
+from textprocessor.views import cij, dbEdit
 from caseanalyzer.views import analyzer, details
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^filemanager/', fileManager),
     url(r'^cij/', cij),
     url(r'^dbedit/', dbEdit),
     url(r'search/$',

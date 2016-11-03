@@ -8,18 +8,14 @@ import pandas as pd
 
 
 def details(request, slug):
-    form = MySearchForm(request.POST or None)
     instance = get_object_or_404(Fallos, slug=slug)
-    text_detail = instance.text
-    autos_detail = instance.autos
-    return render(request, 'details.html', {'text_detail': text_detail,
-                                            'autos_detail': autos_detail,
-                                            'form': form})
+    return render(request, 'details.html', {'instance': instance})
 
 
 def analyzer(request, pk=None):
     form = MySearchForm(request.POST or None)
     if request.method == 'POST':
+
         # Get selected cases from checklist.
         pks = request.POST.getlist('seleccion')
 
@@ -43,7 +39,7 @@ def analyzer(request, pk=None):
             'case_data': json.dumps(case_data, ensure_ascii=False,
                                     cls=DjangoJSONEncoder),
             'summary_votes': summary_votes,
-            'case_dates': json.dumps(case_dates, cls=DjangoJSONEncoder)
+            'case_dates': json.dumps(case_dates, cls=DjangoJSONEncoder),
         }
 
         return render(request, 'analyzer.html', context)

@@ -1,26 +1,55 @@
 {% load bootstrap3 %}
 {% block content %}
+<button id="expand_desc" onclick="expand_desc();">Detalles &darr;</button>
+<table id="desc_table">
+    <tr>
+        <td>Carátula:</td>
+        <td>{{ instance.autos }}</td>
+    </tr>
+    <tr>
+        <td>Fecha:</td>
+        <td>{{ instance.fecha|date:"SHORT_DATE_FORMAT" }}</td>
+    </tr>
+    <tr>
+        <td>Tribunal:</td>
+        <td>{{ instance.corte }}</td>
+    </tr>
+    <tr>
+        <td>Jueces:</td>
+        <td>{{ instance.jueces }}</td>
+    </tr>
+    <tr>
+        <td>Legislación:</td>
+        <td>{{ instance.leyes }}</td>
+    </tr>
+    <tr>
+        <td>Fallos:</td>
+        <td>{{ instance.relacionados }}</td>
+    </tr>
+    <tr>
+        <td>Voces:</td>
+        <td>{{ instance.voces }}</td>
+    </tr>
+    <tr>
+        <td>Materia:</td>
+        <td>{{ instance.materia }}</td>
+    </tr>
+</table>
+    <h3>{{ instance.autos }}</h3>
+    <pre>{{ instance.text }}</pre>
 
-<div id="detail-view" class="col-md-6 col-md-offset-3">
-
-    <h3>{{ autos_detail }}</h3>
-    <p>{{ text_detail }}</p>
-<div>
 <script type="text/javascript">
-
 $(document).ready(function() {
     $('.highlighted').each(function() {
-        $('#detail-view p').mark($(this).text(),
+        $('#details pre').mark($(this).text(),
                 {"className": 'highlighted'});
     });
-    $('#detail-view p').markRegExp(/ley\s\d+(\.\d+)?/,
+    $('#details pre').markRegExp(/ley\s\d+(\.\d+)?/,
             {'className': 'ley'});
-
-    $('.ley').each(function() {
-        $('.leyes').append('<li>' + $(this).text() + '</li>');
-    });
-
 });
 
+function expand_desc(){
+    $('#desc_table').slideToggle('slow')
+}
 </script>
 {% endblock %}

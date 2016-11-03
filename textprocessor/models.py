@@ -16,6 +16,9 @@ class Fallos(models.Model):
     actora = models.CharField(max_length=150, blank=True, null=True)
     demandada = models.CharField(max_length=150, blank=True, null=True)
     jueces = models.CharField(max_length=150, blank=True, null=True)
+    leyes = models.CharField(max_length=999, blank=True, null=True)
+    relacionados = models.CharField(max_length=999, blank=True, null=True)
+    lugar = models.CharField(max_length=150, blank=True, null=True)
 
     voces = models.CharField(max_length=1000, blank=True, null=True)
     materia = models.CharField(max_length=9000, blank=True, null=True)
