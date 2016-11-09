@@ -1,224 +1,228 @@
 {% extends 'base.html' %}
 {% load bootstrap3 %}
 {% block content %}
+<button onclick="areaChart(fechas, 'fechas');">Casedates</button>
+<button onclick="barChart(leyes, 'leyes');">Casedates</button>
+<button onclick="barChart(jueces, 'jueces');">Casedates</button>
+<button onclick="barChart(citados, 'citados');">Casedates</button>
+<button onclick="barChart(sobre, 'sobre');">Casedates</button>
+<button onclick="barChart(actora, 'actora');">Casedates</button>
+<button onclick="barChart(demandada, 'demandada');">Casedates</button>
+<button onclick="barChart(voces, 'voces');">Casedates</button>
+<button onclick="barChart(materia, 'materia');">Casedates</button>
+<button onclick="addWidget();">Casedates</button>
+<nav class="navbar navbar-default sidebar" role="navigation">
+    <div class="container-fluid">
+    <div class="navbar-header">
+    </div>
+    <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li>
+            <a  href="#">Adicionar Widget
+                <i id="panel-icon" class="fa fa-plus fa-2x" aria-hidden="true"></i>
+            </a>
+        </li>
+        <li >
+            <a href="#">Guardar Panel
+                <i id="panel-icon" class="fa fa-floppy-o fa-2x" aria-hidden="true"></i>
+            </a>
+        </li>        
+      </ul>
+    </div>
+  </div>
+</nav>
 
-
-<button id="areaChart" onclick="areaChart();">Casedates</button>
 <div class="gridster">
-    <ul></ul>
+    <ul> </ul>
 </div>
 
 <script type="text/javascript">
 
-var sumdata = {{summary_votes|safe}}
-var casedates = {{case_dates|safe}}
+var fechas = {{fechas|safe}}
+var leyes = {{ leyes|safe }}
+var jueces = {{ jueces|safe }}
+var citados = {{ citados|safe }}
+var sobre = {{ sobre|safe }}
+var actora = {{ actora|safe }}
+var demandada = {{ demandada|safe }}
+var voces = {{ voces|safe }}
+var materia = {{ materia|safe }}
 
-// var parseDate = d3.timeParse("%Y-%m-%d");
-
-// function tabulate(data, columns) {
-//     var table = d3.select("#container").append("table"),
-//         thead = table.append("thead"),
-//         tbody = table.append("tbody");
-// 
-//     // append the header row
-//     thead.append("tr")
-//         .selectAll("th")
-//         .data(columns)
-//         .enter()
-//         .append("th")
-//             .text(function(column) { return column; });
-// 
-//     // create a row for each object in the data
-//     var rows = tbody.selectAll("tr")
-//         .data(data)
-//         .enter()
-//         .append("tr");
-// 
-//     // create a cell in each row for each column
-//     var cells = rows.selectAll("td")
-//         .data(function(row) {
-//             return columns.map(function(column) {
-//                 return {column: column, value: row[column]};
-//             });
-//         })
-//         .enter()
-//         .append("td")
-//             .text(function(d) { return d.value; });
-// 
-//     return table;
-// }
-// 
-// // render the table
-// var peopleTable = tabulate(sumdata, ["jueces", "q_may", "p_may"]);
-// 
-// // uppercase the column headers
-// peopleTable.selectAll("thead th")
-//     .text(function(column) {
-//         return column.charAt(0).toUpperCase() + column.substr(1);
-//     });
-// 
-// // sort by age
-// peopleTable.selectAll("tbody tr")
-//     .sort(function(a, b) {
-//         return d3.descending(a.may, b.may);
-//     });
-// 
-// may = [];
-// $.each(sumdata, function(k, v) {
-//     may.push(v.q_may);
-// });
-// 
-// var width = 420,
-//     barHeight = 20;
-// 
-// var x = d3.scaleLinear()
-//     .domain([0, d3.max(may)])
-//     .range([0, width]);
-// 
-// var chart = d3.select(".chart")
-//     .attr("width", width)
-//     .attr("height", barHeight * may.length);
-// 
-// var bar = chart.selectAll("g")
-//     .data(may)
-//   .enter().append("g")
-//     .attr("transform", function(d, i) { return "translate(0," + i * barHeight + ")"; });
-// 
-// bar.append("rect")
-//     .attr("width", x)
-//     .attr("height", barHeight - 1);
-// 
-// bar.append("text")
-//     .attr("x", function(d) { return x(d) - 3; })
-//     .attr("y", barHeight / 2)
-//     .attr("dy", ".35em")
-//     .text(function(d) { return d; });
-
-
-// Case count chart
-
-// var margin = {
-//   top: 30,
-//   right: 20,
-//   bottom: 30,
-//   left: 50
-// };
-// var width = 600 - margin.left - margin.right;
-// var height = 270 - margin.top - margin.bottom;
-// 
-// var parseDate = d3.timeParse("%Y-%m-%d");
-// 
-// var x = d3.scaleTime().range([0, width]);
-// var y = d3.scaleLinear().range([height, 0]);
-// 
-// var xAxis = d3.axisBottom()
-//     .scale(x).ticks(5);
-// 
-// var yAxis = d3.axisLeft()
-//     .scale(y).ticks(5);
-// 
-// var area = d3.area()
-//     .curve(d3.curveBasis)
-//     .x(function(d) { return x(d.fecha); })
-//     .y0(height)
-//     .y1(function(d) { return y(d.count); });
-// 
-// var valueline = d3.line()
-//   .curve(d3.curveBasis)
-//   .x(function(d) {
-//     return x(d.fecha);
-//   })
-//   .y(function(d) {
-//     return y(d.count);
-//   });
-// 
-// var svg = d3.select("body")
-//   .append("svg")
-//   .attr("width", width + margin.left + margin.right)
-//   .attr("height", height + margin.top + margin.bottom)
-//   .append("g")
-//   .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-// 
-// // Get the data
-// var casedates = casedates.sort(function(a,b){return new Date(b.fecha) - new Date(a.fecha)});
-// 
-// casedates.forEach(function(d) {
-//   d.fecha = parseDate(d.fecha);
-//   d.count = +d.count;
-// });
-// 
-// // Scale the range of the data
-// x.domain(d3.extent(casedates, function(d) {
-//   return d.fecha;
-// }));
-// y.domain([0, d3.max(casedates, function(d) {
-//   return d.count;
-// })]);
-// 
-// var tooltip = d3.select("body")
-// 	.append("div")
-// 	.style("position", "absolute")
-// 	.style("z-index", "10")
-// 	.style("visibility", "hidden")
-// 	.text("a simple tooltip");
-// 
-// svg.append("path")
-//         .datum(casedates)
-//         .attr("class", "area")
-//         .attr("d", area);
-// 
-// svg.append("path") // Add the valueline path.
-//   .attr("d", valueline(casedates))
-//   .on("mouseover", function(){return tooltip.style("visibility", "visible");})
-//   .on("mousemove", function(){return tooltip.style("top", (event.pageY-10)+"px").style("left",(event.pageX+10)+"px");})
-//   .on("mouseout", function(){return tooltip.style("visibility", "hidden");});
-// 
-// svg.append("g") // Add the X Axis
-//   .attr("class", "x axis")
-//   .attr("transform", "translate(0," + height + ")")
-//   .call(xAxis);
-// 
-// svg.append("g") // Add the Y Axis
-//   .attr("class", "y axis")
-//   .call(yAxis);
-
-
-
-function areaChart(e){
+function addWidget(){
     var gridster = $(".gridster ul").gridster().data('gridster');
-    var uid = "id" + Math.random().toString(16).slice(2)
-    gridster.add_widget.apply(gridster, ["<li id=" + uid + "></li>", 5, 3]);
+    var uid = "id" + Math.random().toString(10).slice(2)
+    gridster.add_widget.apply(gridster, ["<li" +
+            "><div class='w_toolbar'>" +
+            "<span></span>" +
+            "<i class='fa fa-table fa-lg' aria-hidden='true'></i>" + 
+            "<i class='fa fa-bar-chart fa-lg' aria-hidden='true'></i>" + 
+            "<i class='fa fa-times fa-lg' aria-hidden='true'></i>" +
+            "</div><div class='w_content' id=" + uid + "></div></li>", 5, 3]);
+};
+
+function areaChart(data, choice){
+    var gridster = $(".gridster ul").gridster().data('gridster');
+    var uid = "id" + Math.random().toString(10).slice(2)
+    gridster.add_widget.apply(gridster, ["<li" +
+            "><div class='w_toolbar'>" +
+            "<span>" + choice + "</span>" +
+            "<i class='fa fa-table fa-lg' aria-hidden='true'></i>" + 
+            "<i class='fa fa-bar-chart fa-lg' aria-hidden='true'></i>" + 
+            "<i class='fa fa-times fa-lg' aria-hidden='true'></i>" +
+            "</div><div class='w_content' id=" + uid + "></div></li>", 5, 3]);
 
     var svg = dimple.newSvg("#" + uid, "100%", "100%");
     
-    var myChart = new dimple.chart(svg, casedates);
-    myChart.setBounds(50, 10, 400, 200);
-    myChart.addTimeAxis("x", "fecha", "%Y-%m-%d", "%m-%Y");
-    myChart.addMeasureAxis("y", "count");
-    myChart.addSeries(null, dimple.plot.area);
+    var myChart = new dimple.chart(svg, data);
+    myChart.setBounds(100, 10, 350, 200);
+    myChart.addTimeAxis("x", "fecha", "%Y-%m-%d", "%d-%m-%Y");
+    myChart.addMeasureAxis("y", "cantidad");
     myChart.addSeries(null, dimple.plot.line);
+    myChart.addSeries(null, dimple.plot.area);
     myChart.draw();
     
-    myChart.svg.attr("height", "100%")
-        .attr("viewBox", "0 0 500 250")
+    myChart.svg.attr("viewBox", "0 0 500 300")
         .attr("width", "100%")
-        .attr("preserveAspectRatio", "xMidYMid meet");
-    
-   $('#dimple_line').onresize = function () {
-       myChart.draw(0, true);
-   };
+        .attr("preserveAspectRatio", "xMaxYMin meet");
 };
-
 
 $(function(){ 
     $(".gridster ul").gridster({
-       widget_margins: [10, 10],
+       widget_margins: [20, 20],
        widget_base_dimensions: [100, 100],
        resize: {
           enabled: true
+       },
+       draggable: {
+          handle: '.w_toolbar'
        }
     });
+
+    var gridster = $(".gridster ul").gridster().data('gridster');
+    
+    $('body').on( "click", ".gridster ul > li .fa-times", function() {
+      gridster.remove_widget($(this).closest('li'));
+    });
+
 });
+
+function barChart(data, choice){
+    var gridster = $(".gridster ul").gridster().data('gridster');
+    var uid = "id" + Math.random().toString(10).slice(2)
+    gridster.add_widget.apply(gridster, ["<li" +
+            "><div class='w_toolbar'>" +
+            "<span>" + choice + "</span>" +
+            "<i class='fa fa-table fa-lg' aria-hidden='true'></i>" + 
+            "<i class='fa fa-bar-chart fa-lg' aria-hidden='true'></i>" + 
+            "<i class='fa fa-times fa-lg' aria-hidden='true'></i>" +
+            "</div><div class='w_content' id=" + uid + "></div></li>", 5, 3]);
+    var svg = dimple.newSvg("#" + uid, "100%", "100%");
+    
+    var myChart = new dimple.chart(svg, data.slice(0,10));
+    myChart.setBounds(100, 10, 350, 200);
+    var x = myChart.addMeasureAxis("x", "cantidad");
+    var y = myChart.addCategoryAxis("y", choice);
+    y.addOrderRule('cantidad', false)
+    myChart.height = 200;
+    myChart.addSeries(null, dimple.plot.bar);
+    myChart.draw(1000);
+
+    myChart.svg.attr("viewBox", "0 0 500 300")
+        .attr("width", "100%")
+        .attr("preserveAspectRatio", "xMaxYMin meet");
+    
+};
+
+
+$(document).on('mouseover mouseout', '.w_toolbar', function(){  
+     $(".fa-bar-chart").click(function () {
+    
+        $(this).closest('li').find('svg').remove();
+        $(this).closest('li').find('table').remove();
+        $(this).closest('li').children('.w_content').css('overflowY', 'hidden');
+        $(this).closest('li').children('.w_content').css('overflowX', 'hidden');
+   
+        var uid = $(this).closest('li').children('.w_content').attr('id');
+        var w_data = eval($(this).closest('div').children('span').text());
+        var w_var = $(this).closest('div').children('span').text();
+    
+        var svg = dimple.newSvg("#" + uid, "100%", "100%");
+        
+        var myChart = new dimple.chart(svg, w_data.slice(0, 10));
+        myChart.setBounds(100, 10, 350, 200);
+        var x = myChart.addMeasureAxis("x", "cantidad");
+        var y = myChart.addCategoryAxis("y", w_var);
+        y.addOrderRule('cantidad', false)
+        myChart.height = 200;
+        myChart.addSeries(null, dimple.plot.bar);
+        myChart.draw(1000);
+    
+        myChart.svg.attr("viewBox", "0 0 500 300")
+            .attr("width", "100%")
+            .attr("preserveAspectRatio", "xMaxYMin meet");
+
+    
+    });
+
+    $(".fa-table").click(function () {
+        $(this).closest('li').find('svg').remove();
+        $(this).closest('li').find('table').remove();
+        $(this).closest('li').children('.w_content').css('overflowY', 'scroll');
+        $(this).closest('li').children('.w_content').css('overflowX', 'hidden');
+    
+        var uid = $(this).closest('li').children('.w_content').attr('id');
+        var w_data = eval($(this).closest('div').children('span').text());
+        var w_var = $(this).closest('div').children('span').text();
+    
+        var dataTable = tabulate(w_data, uid, [w_var, 'cantidad', 'porcentage']);
+        
+        // uppercase the column headers
+        dataTable.selectAll("thead th")
+            .text(function(column) {
+                return column.charAt(0).toUpperCase() + column.substr(1);
+            });
+            
+        // sort by age
+        dataTable.selectAll("tbody tr")
+            .sort(function(a, b) {
+                return d3.descending(a.cantidad, b.cantidad);
+            });
+    });
+});
+function tabulate(data, uid,  columns) {
+    var table = d3.select("#" + uid).append("table")
+        .attr('class', 'table table-hover')
+        .attr('id', 'table-data'),
+        thead = table.append("thead"),
+        tbody = table.append("tbody");
+
+    // append the header row
+    thead.append("tr")
+        .selectAll("th")
+        .data(columns)
+        .enter()
+        .append("th")
+            .text(function(column) { return column; });
+
+    // create a row for each object in the data
+    var rows = tbody.selectAll("tr")
+        .data(data)
+        .enter()
+        .append("tr");
+
+    // create a cell in each row for each column
+    var cells = rows.selectAll("td")
+        .data(function(row) {
+            return columns.map(function(column) {
+                return {column: column, value: row[column]};
+            });
+        })
+        .enter()
+        .append("td")
+            .text(function(d) { return d.value; });
+    
+    return table;
+};
 
 </script>
 {% endblock %}

@@ -18,10 +18,11 @@ from caseanalyzer.forms import MySearchForm
 from django.conf.urls import url
 from django.contrib import admin
 from textprocessor.views import cij, dbEdit
-from caseanalyzer.views import analyzer, details
+from caseanalyzer.views import inicio, analyzer, details
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^$', inicio),
     url(r'^cij/', cij),
     url(r'^dbedit/', dbEdit),
     url(r'search/$',

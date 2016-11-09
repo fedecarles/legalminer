@@ -33,21 +33,22 @@ def cij(request):
         if form.is_valid():
 
             file_names = form.cleaned_data["cij_input_list"]
+            input_path = os.path.join(settings.MEDIA_ROOT,
+                                      'input/CIJ/txt')
+            output_path = os.path.join(settings.MEDIA_ROOT,
+                                       'output/CIJ/txt')
 
-            for f in file_names:
-                input_path = os.path.join(settings.MEDIA_ROOT,
-                                          'input/CIJ/txt')
-                output_path = os.path.join(settings.MEDIA_ROOT,
-                                           'output/CIJ/txt')
-                fn = os.path.join(input_path, f)
+            with open(os.path.join(settings.MEDIA_ROOT,
+                                   'cij_16102016.csv'),
+                      'r') as fr:
+                reader = csv.reader(fr)
 
-                nr = f.replace('.txt', '')
+                for row in reader:
+                    for f in file_names:
+                        fn = os.path.join(input_path, f)
+                        nr = f.replace('.txt', '')
 
-                with open('cij_14-10-2016-22-10-2016.csv', 'r') as fr:
-                    reader = csv.reader(fr)
-                    for row in reader:
-                        if nr in row[5]:
-
+                        if row[5] in f:
                             # Run the data extracting functions.
                             text = cij_text(fn)
                             autos = row[2].upper()
@@ -59,7 +60,7 @@ def cij(request):
                             sobre = cij_sobre(autos)
                             actora = cij_actora(autos)
                             demandada = cij_demandada(autos)
-                            relacionados = cij_citas(text)
+                            citados = cij_citas(text)
                             leyes = cij_leyes(text)
                             materia = get_materia(d, text)
                             voces = get_voces(d, text)
@@ -75,19 +76,19 @@ def cij(request):
                                                          text=text,
                                                          actora=actora,
                                                          demandada=demandada,
-                                                         leyes = leyes,
-                                                         relacionados=relacionados,
+                                                         leyes=leyes,
+                                                         citados=citados,
                                                          jueces=jueces,
                                                          materia=materia,
                                                          voces=voces,
                                                          )
 
-                # Once the data is stored, move the TXT to the
-                # processed folder.
-                with open(os.path.join(output_path, f), 'w') as fw:
-                    fw.write(text)
-                shutil.move(os.path.join(input_path, f),
-                            os.path.join(output_path, f))
+                            # Once the data is stored, move the TXT to the
+                            # processed folder.
+                            with open(os.path.join(output_path, f), 'w') as fw:
+                                fw.write(text)
+                            shutil.move(os.path.join(input_path, f),
+                                        os.path.join(output_path, f))
 
         context = {
                 'form': form,
@@ -175,25 +176,24 @@ def cij_date(text):
 
 
 def cij_jueces(text):
-    text = re.sub('\s+', ' ', text)
     jueces = []
     try:
-        section = re.search(r'Firmado.*?por:.*', text).group(0)
-        section = section.replace(',', '')
-        section = section.replace('-', 'Firmado por: ').upper()
-        may = section.split("FIRMADO")
-        for m in may:
-            if ("SECRETARIO" not in m and "SECRETARIA" not in m and "(ANTE MI)" not in m):
-                m = re.sub(r'\,.*', '', m)
-                m = re.sub(r'POR:\s', '', m)
-                m = re.sub('JUEZ.*', '', m)
-                m = re.sub('JUEZ.*', '', m)
-                m = re.sub('PRESIDENTE.*', '', m)
-                m = re.sub(r'DRA\.', '', m)
-                m = re.sub(r'DRES\.', '', m)
-                m = re.sub(r'DR\.', '', m)
-                m = re.sub(r'^\,\s.', '', m)
-                jueces.append(m.strip())
+        juez = re.findall(r'Firmado.*?por:.*', text)
+        for j in juez:
+            j = j.upper()
+            if ("SECRETARIO" not in j and "SECRETARIA" not in j and "(ANTE MI)" not in j):
+                j = re.sub(r'.*?:', '', j)
+                j = re.sub(r'\,.*', '', j)
+                j = re.sub('JUEZ.*', '', j)
+                j = re.sub('JUEZ.*', '', j)
+                j = re.sub('PRESIDENTE.*', '', j)
+                j = re.sub(r'DRA\.', '', j)
+                j = re.sub(r'DRES\.', '', j)
+                j = re.sub(r'DR\.', '', j)
+                j = re.sub(r'^\,\s.', '', j)
+                j = j.strip()
+                if j not in jueces:
+                    jueces.append(j)
         jueces = ", ".join(jueces)
         jueces = re.sub(r'^\,\s', '', jueces)
     except Exception:

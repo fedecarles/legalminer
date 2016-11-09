@@ -12,6 +12,7 @@
         <link rel="stylesheet" type="text/css" href='/static/css/legalminer.css'/>
         <link rel="stylesheet" type="text/css" href='/static/css/jquery-ui.min.css'/>
         <link rel="stylesheet" type="text/css" href='/static/css/jquery.gridster.min.css'/>
+        <script src="https://use.fontawesome.com/89c0bf2750.js"></script>
         <script src="/static/js/jquery.js"></script>
         <script src="/static/js/jquery.easing.min.js"></script>
         <!-- <script src="https://d3js.org/d3.v4.min.js"></script> -->
@@ -22,12 +23,12 @@
         <script type="text/javascript" src="/static/js/jquery.easyPaginate.js"></script>
         <script type="text/javascript" src="/static/js/jquery.mark.min.js"></script>
         <script type="text/javascript" src="/static/js/jquery.gridster.min.js"></script>
-        <script src="https://d3js.org/d3.v3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.1.1/d3.min.js"></script>
         <script type="text/javascript" src="http://dimplejs.org/dist/dimple.v1.1.1.min.js"></script>
     </head>
 <body id="page-top">
 <nav class="navbar navbar-default">
-  <div class="container-fluid">
+  <div id="navbar-container" class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
@@ -36,7 +37,9 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">Brand</a>
+      <a id="home-link" class="navbar-brand" href="{% url 'caseanalyzer.views.inicio' %}">
+          <i class="fa fa-home fa-3x" aria-hidden="true"></i>
+      </a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -62,8 +65,12 @@
                   <div class="input-group">
                       {% bootstrap_field form.q show_label=False %}
                       <span class="input-group-btn">
-                          <input class="btn btn-default" id="id_filters" type="button" onclick="showFilters()" value="...">
-                          <input class="btn btn-default" id="id_q_submit" type="submit" value="Buscar">
+                          <button class="btn btn-default" id="id_filters" type="button" onclick="showFilters()">
+                              <i class="fa fa-filter" aria-hidden="true"></i>
+                          </button> 
+                          <button class="btn btn-default" id="id_q_submit" type="submit">
+                              <i class="fa fa-search" aria-hidden="true"></i>
+                          </button>
                       </span>
                   </div>
                   <div id="search-filters" class="form-group">
@@ -81,9 +88,9 @@
                               <td>{{ form.jueces }}</td>
                           </tr>
                           <tr>
-                              <td>Actora/Querellante:</td>
+                              <td>Accionante:</td>
                               <td>{{ form.actora }}</td>
-                              <td>Demandada/Imputada:</td>
+                              <td>Accionada:</td>
                               <td>{{ form.demandada }}</td>
                           </tr>
                           <tr>

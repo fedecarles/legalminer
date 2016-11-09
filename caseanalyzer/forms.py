@@ -3,6 +3,7 @@ from haystack.forms import FacetedSearchForm
 
 
 class MySearchForm(FacetedSearchForm):
+
     fecha_from = forms.DateField(required=False, input_formats=['%d/%m/%Y'])
     fecha_to = forms.DateField(required=False, input_formats=['%d/%m/%Y'])
 

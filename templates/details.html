@@ -1,7 +1,10 @@
 {% load bootstrap3 %}
 {% block content %}
-<button id="expand_desc" onclick="expand_desc();">Detalles &darr;</button>
-<table id="desc_table">
+<button id="expand_desc" onclick="expand_desc();">Detalles
+    <i class="fa fa-arrow-down" aria-hidden="true"></i>
+</button>
+<div id="desc_container">
+<table id="desc_table" class="table table-hover">
     <tr>
         <td>Carátula:</td>
         <td>{{ instance.autos }}</td>
@@ -24,7 +27,7 @@
     </tr>
     <tr>
         <td>Fallos:</td>
-        <td>{{ instance.relacionados }}</td>
+        <td>{{ instance.citados }}</td>
     </tr>
     <tr>
         <td>Voces:</td>
@@ -35,8 +38,9 @@
         <td>{{ instance.materia }}</td>
     </tr>
 </table>
-    <h3>{{ instance.autos }}</h3>
-    <pre>{{ instance.text }}</pre>
+</div>
+    <h3 id="titulo">{{ instance.autos }}</h3>
+    <pre id="texto-completo" class="col-lg-offset-2">{{ instance.text }}</pre>
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -49,7 +53,7 @@ $(document).ready(function() {
 });
 
 function expand_desc(){
-    $('#desc_table').slideToggle('slow')
+    $('#desc_container').slideToggle('slow')
 }
 </script>
 {% endblock %}

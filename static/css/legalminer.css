@@ -1,3 +1,6 @@
+#navbar-container{
+    padding-left: 0px;
+}
 #input_list{
     float: left;
     width: 300px;
@@ -97,10 +100,14 @@ body .highlighted{
 }
 div#details {
     float: left;
-    width: 70%;
+    width: 65%;
     height: 100vh;
     overflow: auto;
     font-family: initial;
+    margin-left: 5%;
+}
+#titulo{
+    text-align: center;
 }
 #results a {
     font-weight: bold;
@@ -139,8 +146,10 @@ div#details {
     background-color: #8098ee;
 }
 #desc_table{
-    display: none;
     font-size: 12px;
+}
+#desc_container{
+    display: none;
 }
 #expand_desc {
     width: 100%;
@@ -154,7 +163,7 @@ div#details {
     margin-bottom: 10px;
     list-style-type: none;
 }
-pre {
+#texto-completo {
     font-family: initial;
     font-size: 14px;
     background-color: transparent;
@@ -165,14 +174,195 @@ pre {
     stroke-width: 0;
 }
 .gs-w {
-    border: solid 1px;
-    color: #e2e2e2;
     background-color: #fff;
 }
 #dimple_line {
     width: 100%;
     height: 100%;
 }
-body {
+.gridster {
     background-color: #f2f2f2;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
 }
+.w_toolbar {
+    width: 100%;
+    height: 30px;
+    background-color: #e7e7e7;
+    padding: 5px;
+}
+.w_close{
+    float: right;
+}
+.w_content{
+    width: 100%;
+    height: 90%;
+}
+.table>tbody>tr>td{
+    padding: 0px;
+}
+#table-data{
+    font-size: 12px;
+}
+ol, ul{
+    list-style-type: none;
+}
+.fa-times{
+    float: right;
+}
+.fa-times:hover{
+    float: right;
+    background-color: #f2f2f2;
+    cursor: pointer; 
+}
+.fa-table{
+    margin-left: 35%;
+}
+.fa-table:hover{
+    background-color: #f2f2f2;
+    cursor: pointer; 
+}
+.fa-bar-chart{
+    margin-left: 5%;
+}
+.fa-bar-chart:hover{
+    background-color: #f2f2f2;
+    cursor: pointer; 
+}
+#home-link{
+    padding: 0px;
+}
+#proyecto{
+    width: 50%;
+    margin: 0 auto;
+    text-align: justify;
+}
+
+
+body,html{
+    height: 100%;
+  }
+
+ nav.sidebar, .main{
+   -webkit-transition: margin 200ms ease-out;
+     -moz-transition: margin 200ms ease-out;
+     -o-transition: margin 200ms ease-out;
+     transition: margin 200ms ease-out;
+ }
+
+ .main{
+   padding: 10px 10px 0 10px;
+ }
+
+@media (min-width: 765px) {
+
+   .main{
+     position: absolute;
+     width: calc(100% - 40px); 
+     margin-left: 40px;
+     float: right;
+   }
+
+   nav.sidebar:hover + .main{
+     margin-left: 200px;
+   }
+
+   nav.sidebar.navbar.sidebar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+     margin-left: 0px;
+   }
+
+   nav.sidebar .navbar-brand, nav.sidebar .navbar-header{
+     text-align: center;
+     width: 100%;
+     margin-left: 0px;
+   }
+   
+   nav.sidebar a{
+     padding-right: 13px;
+   }
+
+   nav.sidebar .navbar-nav > li:first-child{
+     border-top: 1px #e5e5e5 solid;
+   }
+
+   nav.sidebar .navbar-nav > li{
+     border-bottom: 1px #e5e5e5 solid;
+   }
+
+   nav.sidebar .navbar-nav .open .dropdown-menu {
+     position: static;
+     float: none;
+     width: auto;
+     margin-top: 0;
+     background-color: transparent;
+     border: 0;
+     -webkit-box-shadow: none;
+     box-shadow: none;
+   }
+
+   nav.sidebar .navbar-collapse, nav.sidebar .container-fluid{
+     padding: 0 0px 0 0px;
+   }
+
+   .navbar-inverse .navbar-nav .open .dropdown-menu>li>a {
+     color: #777;
+   }
+
+   nav.sidebar{
+     width: 200px;
+     margin-left: -150px;
+     float: left;
+     margin-bottom: 0px;
+   }
+
+   nav.sidebar li {
+     width: 100%;
+   }
+
+   nav.sidebar:hover{
+     margin-left: 0px;
+   }
+
+   .forAnimate{
+     opacity: 0;
+   }
+ }
+  
+ @media (min-width: 1330px) {
+
+   .main{
+     width: calc(100% - 200px);
+     margin-left: 200px;
+   }
+
+   nav.sidebar{
+     float: left;
+     position: absolute;
+     z-index: 999;
+   }
+
+   nav.sidebar .forAnimate{
+     opacity: 1;
+   }
+ }
+
+ nav.sidebar .navbar-nav .open .dropdown-menu>li>a:hover, nav.sidebar .navbar-nav .open .dropdown-menu>li>a:focus {
+   color: #CCC;
+   background-color: transparent;
+ }
+
+ nav:hover .forAnimate{
+   opacity: 1;
+ }
+ section{
+   padding-left: 15px;
+ }
+#panel-icon{
+    float: right;
+}
+#fav-icon{
+    float: right;
+    margin-right: 5px;
+}
+
+
