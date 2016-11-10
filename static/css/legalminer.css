@@ -247,7 +247,7 @@ body,html{
    -webkit-transition: margin 200ms ease-out;
      -moz-transition: margin 200ms ease-out;
      -o-transition: margin 200ms ease-out;
-     transition: margin 200ms ease-out;
+     transition: margin 201ms ease-out;
  }
 
  .main{
@@ -313,6 +313,7 @@ body,html{
      margin-left: -150px;
      float: left;
      margin-bottom: 0px;
+     position: absolute;
    }
 
    nav.sidebar li {

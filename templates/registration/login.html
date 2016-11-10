@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+{% block content %}
+<br>
+<br>
+<br>
+<br>
+<div class="container" id="registration">
+<form method="post" action=".">
+    <h1>Login</h1>
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        <input class="btn btn-default" type="submit" value="Ingresar" />
+        <input type="hidden" name="next" value="{{ next }}" />
+    <p>¿No eres miembro? <a href="{% url 'registration_register' %}">
+        Regístrate
+    </a>!</p>
+</form>
+</div>
+
+{% endblock %}

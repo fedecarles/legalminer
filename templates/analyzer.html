@@ -18,7 +18,7 @@
     <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li>
-            <a  href="#">Adicionar Widget
+            <a  href="#" data-toggle="modal" data-target="#myModal">Adicionar Widget
                 <i id="panel-icon" class="fa fa-plus fa-2x" aria-hidden="true"></i>
             </a>
         </li>
@@ -34,6 +34,57 @@
 
 <div class="gridster">
     <ul> </ul>
+</div>
+
+<!-- Modal -->
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Adicionar Widget</h4>
+      </div>
+      <div class="modal-body">
+          <select>
+              <option class="barras">Barras</option>
+              <option class="Línea">Línea</option>
+          </select>
+          <select>
+              <option class="widget-data">fechas</option>
+              <option class="widget-data">leyes</option>
+              <option class="widget-data">jueces</option>
+              <option class="widget-data">citados</option>
+              <option class="widget-data">sobre</option>
+              <option class="widget-data">actora</option>
+              <option class="widget-data">demandada</option>
+              <option class="widget-data">voces</option>
+              <option class="widget-data">materi</option>
+          </select>
+          <select>
+              <option class="valor" value="cantidad">Cantidad</option>
+              <option class="valor" value="porcentaje">Porcentaje</option>
+          </select>
+          <select>
+              <option class="orientacion">Vertical</option>
+              <option class="orientacion">Horizontal</option>
+          </select>
+          <select>
+              <option class="color" value="#80b1d3">Azul</option>
+              <option class="color" value="#d38088">Rojo</option>
+              <option class="color" value="#d3a280">Naranja</option>
+              <option class="color" value="#b1d380">Verde</option>
+              <option class="color" value="black">Negro</option>
+          </select>
+          <button id="crear-widget">Crear Widget</button>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+
+  </div>
 </div>
 
 <script type="text/javascript">
@@ -106,7 +157,7 @@ $(function(){
 
 });
 
-function barChart(data, choice){
+function barChart(data, choice, orientacion, color, valor){
     var gridster = $(".gridster ul").gridster().data('gridster');
     var uid = "id" + Math.random().toString(10).slice(2)
     gridster.add_widget.apply(gridster, ["<li" +
@@ -120,19 +171,39 @@ function barChart(data, choice){
     
     var myChart = new dimple.chart(svg, data.slice(0,10));
     myChart.setBounds(100, 10, 350, 200);
-    var x = myChart.addMeasureAxis("x", "cantidad");
-    var y = myChart.addCategoryAxis("y", choice);
-    y.addOrderRule('cantidad', false)
+    if (orientacion == "Horizontal"){
+        var x = myChart.addMeasureAxis("x", valor);
+        var y = myChart.addCategoryAxis("y", choice);
+        y.addOrderRule(valor, false)
+    } else{
+        var x = myChart.addMeasureAxis("y", valor);
+        var y = myChart.addCategoryAxis("x", choice);
+        x.addOrderRule(valor, false)
+    }
     myChart.height = 200;
     myChart.addSeries(null, dimple.plot.bar);
-    myChart.draw(1000);
 
+    myChart.defaultColors = [
+        new dimple.color(color, opacity=0.5) 
+    ];
+
+    myChart.draw(1000);
     myChart.svg.attr("viewBox", "0 0 500 300")
         .attr("width", "100%")
         .attr("preserveAspectRatio", "xMaxYMin meet");
     
 };
 
+$("#crear-widget").click(function () {
+    var w_data = eval($('.widget-data:selected').text());
+    var w_choice = $('.widget-data:selected').text();
+    var w_orientacion= $('.orientacion:selected').text();
+    var w_color= $('.color:selected').val();
+    var w_valor= $('.valor:selected').val();
+
+    barChart(w_data, w_choice, w_orientacion, w_color, w_valor);
+
+});
 
 $(document).on('mouseover mouseout', '.w_toolbar', function(){  
      $(".fa-bar-chart").click(function () {
@@ -174,7 +245,7 @@ $(document).on('mouseover mouseout', '.w_toolbar', function(){
         var w_data = eval($(this).closest('div').children('span').text());
         var w_var = $(this).closest('div').children('span').text();
     
-        var dataTable = tabulate(w_data, uid, [w_var, 'cantidad', 'porcentage']);
+        var dataTable = tabulate(w_data, uid, [w_var, 'cantidad', 'porcentaje']);
         
         // uppercase the column headers
         dataTable.selectAll("thead th")

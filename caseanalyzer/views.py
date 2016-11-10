@@ -69,8 +69,8 @@ def countDataTable(pks, var):
     result = pd.Series(temp).value_counts()
     result = pd.DataFrame(result).reset_index()
     result.columns = [var, 'cantidad']
-    result['porcentage'] = result['cantidad'] / result['cantidad'].sum() * 100
-    result['porcentage'] = result['porcentage'].round(2)
+    result['porcentaje'] = result['cantidad'] / result['cantidad'].sum() * 100
+    result['porcentaje'] = result['porcentaje'].round(2)
     return result
 
 

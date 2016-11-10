@@ -15,19 +15,39 @@ Including another URLconf
 """
 from haystack.views import FacetedSearchView, search_view_factory
 from caseanalyzer.forms import MySearchForm
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
 from textprocessor.views import cij, dbEdit
 from caseanalyzer.views import inicio, analyzer, details
 
 urlpatterns = [
+    # admin url
     url(r'^admin/', admin.site.urls),
+
+    # registration and login / logout urls
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login',
+        name='auth_login'),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout',
+        name='auth_logout'),
+    url(r'^accounts/', include('registration.backends.default.urls')),
+
+    # start page
     url(r'^$', inicio),
+
+    # file processor
     url(r'^cij/', cij),
+
+    # DB bulk edit
     url(r'^dbedit/', dbEdit),
+
+    # main search url
     url(r'search/$',
         search_view_factory(view_class=FacetedSearchView,
                             form_class=MySearchForm), name='haystack_search'),
+
+    # dashboard url
     url(r'analyzer/$', analyzer, name='analyzer'),
+
+    # Case full text url
     url(r'details/(?P<slug>[\w-]+)/$', details, name='details'),
 ]

@@ -63,7 +63,7 @@
       <div id="search-form">
       <form method="get" action="{% url 'haystack_search' %}"> {% csrf_token %}
                   <div class="input-group">
-                      {% bootstrap_field form.q show_label=False %}
+                      {% bootstrap_field search_form.q show_label=False %}
                       <span class="input-group-btn">
                           <button class="btn btn-default" id="id_filters" type="button" onclick="showFilters()">
                               <i class="fa fa-filter" aria-hidden="true"></i>
@@ -77,31 +77,31 @@
                       <table id="table-filters" class="table table-condensed">
                           <tr>
                               <td>Fecha desde:</td>
-                              <td>{{ form.fecha_from }}</td>
+                              <td>{{ search_form.fecha_from }}</td>
                               <td>Fecha hasta:</td>
-                              <td>{{ form.fecha_to }}</td>
+                              <td>{{ search_form.fecha_to }}</td>
                           </tr>
                           <tr>
                               <td>Corte:</td>
-                              <td>{{ form.corte }}</td>
+                              <td>{{ search_form.corte }}</td>
                               <td>Magistrado:</td>
-                              <td>{{ form.jueces }}</td>
+                              <td>{{ search_form.jueces }}</td>
                           </tr>
                           <tr>
                               <td>Accionante:</td>
-                              <td>{{ form.actora }}</td>
+                              <td>{{ search_form.actora }}</td>
                               <td>Accionada:</td>
-                              <td>{{ form.demandada }}</td>
+                              <td>{{ search_form.demandada }}</td>
                           </tr>
                           <tr>
                               <td>Voces:</td>
-                              <td>{{ form.voces }}</td>
+                              <td>{{ search_form.voces }}</td>
                               <td>Materia:</td>
-                              <td>{{ form.materia }}</td>
+                              <td>{{ search_form.materia }}</td>
                           </tr>
                           <tr>
                               <td>Asunto:</td>
-                              <td>{{ form.sobre }}</td>
+                              <td>{{ search_form.sobre }}</td>
                               <td></td>
                               <td></td>
 
@@ -111,18 +111,23 @@
       </div>
       </form>
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="#">Link</a></li>
+      {% if user.is_authenticated %}
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.username }}<span class="caret"></span></a>
           <ul class="dropdown-menu">
             <li><a href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
             <li><a href="#">Something else here</a></li>
             <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
+            <li><a href="{% url 'auth_logout' %}?next=/">{% trans "Log out" %}</a></li>
           </ul>
         </li>
       </ul>
+      {% else %}
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="{% url 'auth_login' %}" role="button">{% trans "Log in" %}</a></li>
+      </ul>
+      {% endif %}
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
