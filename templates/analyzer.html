@@ -48,6 +48,7 @@
           <select class="form-control">
               <option class="widget-data">fecha</option>
               <option class="widget-data">leyes</option>
+              <option class="widget-data">corte</option>
               <option class="widget-data">jueces</option>
               <option class="widget-data">citados</option>
               <option class="widget-data">sobre</option>
@@ -63,8 +64,8 @@
           </select>
           <label>Orientación</label>
           <select class="form-control">
-              <option class="orientacion">Vertical</option>
               <option class="orientacion">Horizontal</option>
+              <option class="orientacion">Vertical</option>
           </select>
           <label>Color</label>
           <select class="form-control">
@@ -96,6 +97,7 @@ var actora = {{ actora|safe }}
 var demandada = {{ demandada|safe }}
 var voces = {{ voces|safe }}
 var materia = {{ materia|safe }}
+var corte = {{ corte|safe }}
 
 // Load gridster options.
 $(function(){ 

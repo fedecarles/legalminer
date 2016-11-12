@@ -27,6 +27,7 @@ def analyzer(request, pk=None):
 
         fechas = tableToDict(countDataTable(pks, 'fecha'))
         leyes = tableToDict(countDataTable(pks, 'leyes'))
+        corte = tableToDict(countDataTable(pks, 'corte'))
         jueces = tableToDict(countDataTable(pks, 'jueces'))
         citados = tableToDict(countDataTable(pks, 'citados'))
         sobre = tableToDict(countDataTable(pks, 'sobre'))
@@ -44,6 +45,7 @@ def analyzer(request, pk=None):
             'query': q,
             'fechas': json.dumps(fechas, cls=DjangoJSONEncoder),
             'leyes': json.dumps(leyes),
+            'corte': json.dumps(corte),
             'jueces': json.dumps(jueces, cls=DjangoJSONEncoder),
             'citados': json.dumps(citados, cls=DjangoJSONEncoder),
             'sobre': json.dumps(sobre, cls=DjangoJSONEncoder),
