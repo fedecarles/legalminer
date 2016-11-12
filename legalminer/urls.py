@@ -14,6 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from haystack.views import FacetedSearchView, search_view_factory
+from django.contrib.auth import views as auth_views
 from caseanalyzer.forms import MySearchForm
 from django.conf.urls import url, include
 from django.contrib import admin
@@ -25,10 +26,8 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
 
     # registration and login / logout urls
-    url(r'^accounts/login/$', 'django.contrib.auth.views.login',
-        name='auth_login'),
-    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout',
-        name='auth_logout'),
+    url(r'^accounts/login/$', auth_views.login, name='auth_login'),
+    url(r'^accounts/logout/$', auth_views.logout, name='auth_logout'),
     url(r'^accounts/', include('registration.backends.default.urls')),
 
     # start page
