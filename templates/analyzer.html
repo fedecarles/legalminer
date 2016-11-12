@@ -1,16 +1,7 @@
 {% extends 'base.html' %}
 {% load bootstrap3 %}
 {% block content %}
-<button onclick="areaChart(fechas, 'fechas');">Casedates</button>
-<button onclick="barChart(leyes, 'leyes');">Casedates</button>
-<button onclick="barChart(jueces, 'jueces');">Casedates</button>
-<button onclick="barChart(citados, 'citados');">Casedates</button>
-<button onclick="barChart(sobre, 'sobre');">Casedates</button>
-<button onclick="barChart(actora, 'actora');">Casedates</button>
-<button onclick="barChart(demandada, 'demandada');">Casedates</button>
-<button onclick="barChart(voces, 'voces');">Casedates</button>
-<button onclick="barChart(materia, 'materia');">Casedates</button>
-<button onclick="addWidget();">Casedates</button>
+<h2 id="titulo-panel">Panel de búsqueda: "{{query}}"</h2>
 <nav class="navbar navbar-default sidebar" role="navigation">
     <div class="container-fluid">
     <div class="navbar-header">
@@ -18,7 +9,7 @@
     <div class="collapse navbar-collapse" id="bs-sidebar-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li>
-            <a  href="#" data-toggle="modal" data-target="#myModal">Adicionar Widget
+            <a  href="#" data-toggle="modal" data-target="#myModal">Propiedades
                 <i id="panel-icon" class="fa fa-plus fa-2x" aria-hidden="true"></i>
             </a>
         </li>
@@ -31,12 +22,11 @@
     </div>
   </div>
 </nav>
-
 <div class="gridster">
     <ul> </ul>
 </div>
 
-<!-- Modal -->
+<!-- Modal Chart Options-->
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
 
@@ -44,15 +34,19 @@
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title">Adicionar Widget</h4>
+        <h4 class="modal-title">Propiedades</h4>
       </div>
       <div class="modal-body">
-          <select>
-              <option class="barras">Barras</option>
-              <option class="Línea">Línea</option>
+          <label>Tipo</label>
+          <select class="form-control">
+            <option class="w_type" value="dimple.plot.bar">Barras</option>
+            <option class="w_type" value="dimple.plot.line">Línea</option>
+            <option class="w_type" value="dimple.plot.area">Área</option>
+            <option class="w_type" value="dimple.plot.bubble">Puntos</option>
           </select>
-          <select>
-              <option class="widget-data">fechas</option>
+          <label>Variable</label>
+          <select class="form-control">
+              <option class="widget-data">fecha</option>
               <option class="widget-data">leyes</option>
               <option class="widget-data">jueces</option>
               <option class="widget-data">citados</option>
@@ -60,36 +54,40 @@
               <option class="widget-data">actora</option>
               <option class="widget-data">demandada</option>
               <option class="widget-data">voces</option>
-              <option class="widget-data">materi</option>
+              <option class="widget-data">materia</option>
           </select>
-          <select>
+          <label>Valor</label>
+          <select class="form-control">
               <option class="valor" value="cantidad">Cantidad</option>
               <option class="valor" value="porcentaje">Porcentaje</option>
           </select>
-          <select>
+          <label>Orientación</label>
+          <select class="form-control">
               <option class="orientacion">Vertical</option>
               <option class="orientacion">Horizontal</option>
           </select>
-          <select>
+          <label>Color</label>
+          <select class="form-control">
               <option class="color" value="#80b1d3">Azul</option>
               <option class="color" value="#d38088">Rojo</option>
               <option class="color" value="#d3a280">Naranja</option>
               <option class="color" value="#b1d380">Verde</option>
               <option class="color" value="black">Negro</option>
           </select>
-          <button id="crear-widget">Crear Widget</button>
+          <br/>
+          <button id="crear-widget" class="btn btn-default">Crear Widget</button>
+          <button id="modificar-widget" class="btn btn-default">Modificar Widget</button>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
       </div>
     </div>
-
   </div>
 </div>
 
 <script type="text/javascript">
 
-var fechas = {{fechas|safe}}
+var fecha = {{fechas|safe}}
 var leyes = {{ leyes|safe }}
 var jueces = {{ jueces|safe }}
 var citados = {{ citados|safe }}
@@ -99,44 +97,7 @@ var demandada = {{ demandada|safe }}
 var voces = {{ voces|safe }}
 var materia = {{ materia|safe }}
 
-function addWidget(){
-    var gridster = $(".gridster ul").gridster().data('gridster');
-    var uid = "id" + Math.random().toString(10).slice(2)
-    gridster.add_widget.apply(gridster, ["<li" +
-            "><div class='w_toolbar'>" +
-            "<span></span>" +
-            "<i class='fa fa-table fa-lg' aria-hidden='true'></i>" + 
-            "<i class='fa fa-bar-chart fa-lg' aria-hidden='true'></i>" + 
-            "<i class='fa fa-times fa-lg' aria-hidden='true'></i>" +
-            "</div><div class='w_content' id=" + uid + "></div></li>", 5, 3]);
-};
-
-function areaChart(data, choice){
-    var gridster = $(".gridster ul").gridster().data('gridster');
-    var uid = "id" + Math.random().toString(10).slice(2)
-    gridster.add_widget.apply(gridster, ["<li" +
-            "><div class='w_toolbar'>" +
-            "<span>" + choice + "</span>" +
-            "<i class='fa fa-table fa-lg' aria-hidden='true'></i>" + 
-            "<i class='fa fa-bar-chart fa-lg' aria-hidden='true'></i>" + 
-            "<i class='fa fa-times fa-lg' aria-hidden='true'></i>" +
-            "</div><div class='w_content' id=" + uid + "></div></li>", 5, 3]);
-
-    var svg = dimple.newSvg("#" + uid, "100%", "100%");
-    
-    var myChart = new dimple.chart(svg, data);
-    myChart.setBounds(100, 10, 350, 200);
-    myChart.addTimeAxis("x", "fecha", "%Y-%m-%d", "%d-%m-%Y");
-    myChart.addMeasureAxis("y", "cantidad");
-    myChart.addSeries(null, dimple.plot.line);
-    myChart.addSeries(null, dimple.plot.area);
-    myChart.draw();
-    
-    myChart.svg.attr("viewBox", "0 0 500 300")
-        .attr("width", "100%")
-        .attr("preserveAspectRatio", "xMaxYMin meet");
-};
-
+// Load gridster options.
 $(function(){ 
     $(".gridster ul").gridster({
        widget_margins: [20, 20],
@@ -150,120 +111,173 @@ $(function(){
     });
 
     var gridster = $(".gridster ul").gridster().data('gridster');
-    
+
     $('body').on( "click", ".gridster ul > li .fa-times", function() {
       gridster.remove_widget($(this).closest('li'));
     });
-
 });
 
-function barChart(data, choice, orientacion, color, valor){
+// Add Chart Widget.
+function Chart(data, choice, orientacion, color, valor, type){
+    // Add gridster tile.
     var gridster = $(".gridster ul").gridster().data('gridster');
     var uid = "id" + Math.random().toString(10).slice(2)
     gridster.add_widget.apply(gridster, ["<li" +
             "><div class='w_toolbar'>" +
             "<span>" + choice + "</span>" +
             "<i class='fa fa-table fa-lg' aria-hidden='true'></i>" + 
-            "<i class='fa fa-bar-chart fa-lg' aria-hidden='true'></i>" + 
             "<i class='fa fa-times fa-lg' aria-hidden='true'></i>" +
+            "<i class='fa fa-cog fa-lg' aria-hidden='true' data-toggle='modal' data-target='#myModal'></i>" +
             "</div><div class='w_content' id=" + uid + "></div></li>", 5, 3]);
+
+    // Create svg element.
     var svg = dimple.newSvg("#" + uid, "100%", "100%");
     
+    // Begin DimpleJS chart creation.
     var myChart = new dimple.chart(svg, data.slice(0,10));
-    myChart.setBounds(100, 10, 350, 200);
-    if (orientacion == "Horizontal"){
-        var x = myChart.addMeasureAxis("x", valor);
-        var y = myChart.addCategoryAxis("y", choice);
-        y.addOrderRule(valor, false)
-    } else{
-        var x = myChart.addMeasureAxis("y", valor);
-        var y = myChart.addCategoryAxis("x", choice);
-        x.addOrderRule(valor, false)
+    myChart.setBounds(10, 10, 450, 200);
+
+    // If data is fecha, use TimeAxis. Else user CategoricalAxis.
+    if (data == "fecha"){
+        myChart.addTimeAxis("x", "fecha", "%Y-%m-%d", "%d-%m-%Y");
+        myChart.addMeasureAxis("y", valor);
+    } else {
+         if (orientacion == "Horizontal"){
+             var x = myChart.addMeasureAxis("x", valor);
+             var y = myChart.addCategoryAxis("y", choice);
+             y.addOrderRule(valor, false)
+         } else{
+             var x = myChart.addMeasureAxis("y", valor);
+             var y = myChart.addCategoryAxis("x", choice);
+             x.addOrderRule(valor, false)
+         }
     }
+
     myChart.height = 200;
-    myChart.addSeries(null, dimple.plot.bar);
+    myChart.addSeries(null, type);
 
     myChart.defaultColors = [
         new dimple.color(color, opacity=0.5) 
     ];
 
     myChart.draw(1000);
+
     myChart.svg.attr("viewBox", "0 0 500 300")
         .attr("width", "100%")
         .attr("preserveAspectRatio", "xMaxYMin meet");
+
+    // Generate Table.
+    var dataTable = tabulate(data, uid, [choice, 'cantidad', 'porcentaje']);
+    
+    // uppercase the column headers
+    dataTable.selectAll("thead th")
+        .text(function(column) {
+            return column.charAt(0).toUpperCase() + column.substr(1);
+        });
+        
+    // sort by age
+    dataTable.selectAll("tbody tr")
+        .sort(function(a, b) {
+            return d3.descending(a.cantidad, b.cantidad);
+        });
+    $('#' + uid + "-table").hide()
     
 };
 
+// Add Chart Widget button.
 $("#crear-widget").click(function () {
     var w_data = eval($('.widget-data:selected').text());
     var w_choice = $('.widget-data:selected').text();
     var w_orientacion= $('.orientacion:selected').text();
     var w_color= $('.color:selected').val();
     var w_valor= $('.valor:selected').val();
+    var w_type= eval($('.w_type:selected').val());
 
-    barChart(w_data, w_choice, w_orientacion, w_color, w_valor);
-
+    Chart(w_data, w_choice, w_orientacion, w_color, w_valor, w_type);
 });
 
+// Modify Chart Widget.
+function modifyChart(uid, data, choice, orientacion, color, valor, type){
+
+    // Create svg element.
+    var svg = dimple.newSvg("#" + uid, "100%", "100%");
+    
+    // Begin DimpleJS chart creation.
+    var myChart = new dimple.chart(svg, data.slice(0,10));
+    myChart.setBounds(10, 10, 450, 200);
+
+    // If data is fecha, use TimeAxis. Else user CategoricalAxis.
+    if (data == "fecha"){
+        myChart.addTimeAxis("x", "fecha", "%Y-%m-%d", "%d-%m-%Y");
+        myChart.addMeasureAxis("y", valor);
+    } else {
+         if (orientacion == "Horizontal"){
+             var x = myChart.addMeasureAxis("x", valor);
+             var y = myChart.addCategoryAxis("y", choice);
+             y.addOrderRule(valor, false)
+         } else{
+             var x = myChart.addMeasureAxis("y", valor);
+             var y = myChart.addCategoryAxis("x", choice);
+             x.addOrderRule(valor, false)
+         }
+    }
+
+    myChart.height = 200;
+    myChart.addSeries(null, type);
+
+    myChart.defaultColors = [
+        new dimple.color(color, opacity=0.5) 
+    ];
+
+    myChart.draw(1000);
+
+    myChart.svg.attr("viewBox", "0 0 500 300")
+        .attr("width", "100%")
+        .attr("preserveAspectRatio", "xMaxYMin meet");
+};
+
+// Modify Chart Widget button.
+$("#modificar-widget").click(function () {
+
+    var uid = $(this).closest('.modal-body').parent('.modal-content').attr('id')
+    $('#' + uid).find('svg').remove();
+
+
+    var w_data = eval($('.widget-data:selected').text());
+    var w_choice = $('.widget-data:selected').text();
+    var w_orientacion= $('.orientacion:selected').text();
+    var w_color= $('.color:selected').val();
+    var w_valor= $('.valor:selected').val();
+    var w_type= eval($('.w_type:selected').val());
+
+    modifyChart(uid, w_data, w_choice, w_orientacion, w_color, w_valor, w_type);
+});
+
+
+// This load the actions for the widgets toolbar.
 $(document).on('mouseover mouseout', '.w_toolbar', function(){  
-     $(".fa-bar-chart").click(function () {
-    
-        $(this).closest('li').find('svg').remove();
-        $(this).closest('li').find('table').remove();
-        $(this).closest('li').children('.w_content').css('overflowY', 'hidden');
-        $(this).closest('li').children('.w_content').css('overflowX', 'hidden');
-   
-        var uid = $(this).closest('li').children('.w_content').attr('id');
-        var w_data = eval($(this).closest('div').children('span').text());
-        var w_var = $(this).closest('div').children('span').text();
-    
-        var svg = dimple.newSvg("#" + uid, "100%", "100%");
-        
-        var myChart = new dimple.chart(svg, w_data.slice(0, 10));
-        myChart.setBounds(100, 10, 350, 200);
-        var x = myChart.addMeasureAxis("x", "cantidad");
-        var y = myChart.addCategoryAxis("y", w_var);
-        y.addOrderRule('cantidad', false)
-        myChart.height = 200;
-        myChart.addSeries(null, dimple.plot.bar);
-        myChart.draw(1000);
-    
-        myChart.svg.attr("viewBox", "0 0 500 300")
-            .attr("width", "100%")
-            .attr("preserveAspectRatio", "xMaxYMin meet");
 
-    
-    });
+     // Pass the widget id to the modal window in order to use it on the
+     // modifyChart function. 
+     $(".fa-cog").click(function () {
+             var uid = $(this).closest('li').children('.w_content').attr('id');
+             $('.modal-content').attr('id', uid);
+     }); 
 
+    // Toggle table / chart.
     $(".fa-table").click(function () {
-        $(this).closest('li').find('svg').remove();
-        $(this).closest('li').find('table').remove();
+        $(this).closest('li').find('svg').toggle();
+        $(this).closest('li').find('table').toggle();
         $(this).closest('li').children('.w_content').css('overflowY', 'scroll');
         $(this).closest('li').children('.w_content').css('overflowX', 'hidden');
-    
-        var uid = $(this).closest('li').children('.w_content').attr('id');
-        var w_data = eval($(this).closest('div').children('span').text());
-        var w_var = $(this).closest('div').children('span').text();
-    
-        var dataTable = tabulate(w_data, uid, [w_var, 'cantidad', 'porcentaje']);
-        
-        // uppercase the column headers
-        dataTable.selectAll("thead th")
-            .text(function(column) {
-                return column.charAt(0).toUpperCase() + column.substr(1);
-            });
-            
-        // sort by age
-        dataTable.selectAll("tbody tr")
-            .sort(function(a, b) {
-                return d3.descending(a.cantidad, b.cantidad);
-            });
     });
 });
+
+// Tabulate chart data.
 function tabulate(data, uid,  columns) {
     var table = d3.select("#" + uid).append("table")
         .attr('class', 'table table-hover')
-        .attr('id', 'table-data'),
+        .attr('id', uid + "-table"),
         thead = table.append("thead"),
         tbody = table.append("tbody");
 

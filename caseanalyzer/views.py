@@ -23,6 +23,7 @@ def analyzer(request, pk=None):
 
         # Get selected cases from checklist.
         pks = request.POST.getlist('seleccion')
+        q = request.POST.get('query')
 
         fechas = tableToDict(countDataTable(pks, 'fecha'))
         leyes = tableToDict(countDataTable(pks, 'leyes'))
@@ -34,10 +35,13 @@ def analyzer(request, pk=None):
         voces = tableToDict(countDataTable(pks, 'voces'))
         materia = tableToDict(countDataTable(pks, 'materia'))
 
+        # leyes = tableToDict(groupDataTable(pks, 'leyes', 'jueces', 'nr'))
+
         case_data = caseData(pks)
 
         context = {
             'form': form,
+            'query': q,
             'fechas': json.dumps(fechas, cls=DjangoJSONEncoder),
             'leyes': json.dumps(leyes),
             'jueces': json.dumps(jueces, cls=DjangoJSONEncoder),
@@ -51,6 +55,29 @@ def analyzer(request, pk=None):
         }
 
         return render(request, 'analyzer.html', context)
+
+
+def groupDataTable(pks, var, groupby, indexby):
+    variable = []
+    group = []
+    nr = []
+    for pk in pks:
+        selec = get_object_or_404(Fallos, pk=pk)
+        variable.append(getattr(selec, var))
+        group.append(getattr(selec, groupby))
+        nr.append(getattr(selec, indexby))
+
+    df = pd.DataFrame({'variable': variable, 'group': group, 'nr': nr})
+    df_var = pd.concat([pd.Series(row['nr'], row['variable'].split(','))
+                        for _, row in df.iterrows()]).reset_index()
+    df_group = pd.concat([pd.Series(row['nr'], row['group'].split(','))
+                         for _, row in df.iterrows()]).reset_index()
+    df_merge = pd.merge(df_var, df_group, on=[0])
+    df_group = df_merge.groupby(['index_x', 'index_y']).size()
+    result = df_group.reset_index()
+    result.columns = [var, groupby, 'cantidad']
+
+    return result
 
 
 # Summarize data by count.

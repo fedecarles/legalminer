@@ -201,9 +201,6 @@ div#details {
 .table>tbody>tr>td{
     padding: 0px;
 }
-#table-data{
-    font-size: 12px;
-}
 ol, ul{
     list-style-type: none;
 }
@@ -222,10 +219,10 @@ ol, ul{
     background-color: #f2f2f2;
     cursor: pointer; 
 }
-.fa-bar-chart{
+.fa-cog{
     margin-left: 5%;
 }
-.fa-bar-chart:hover{
+.fa-cog:hover{
     background-color: #f2f2f2;
     cursor: pointer; 
 }
@@ -314,6 +311,7 @@ body,html{
      float: left;
      margin-bottom: 0px;
      position: absolute;
+     z-index: 999;
    }
 
    nav.sidebar li {
@@ -339,7 +337,6 @@ body,html{
    nav.sidebar{
      float: left;
      position: absolute;
-     z-index: 999;
    }
 
    nav.sidebar .forAnimate{
@@ -364,6 +361,11 @@ body,html{
 #fav-icon{
     float: right;
     margin-right: 5px;
+}
+#titulo-panel{
+    text-align: center;
+    font-family: initial;
+    background-color: #f2f2f2;
 }
 
 

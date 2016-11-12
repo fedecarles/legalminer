@@ -3,7 +3,6 @@
 {% load highlight %}
 {% block content %}
 
-
 <div id="details";></div>
 
 <form method="post" action="/analyzer/" name="seleccion">{% csrf_token %}
@@ -11,6 +10,7 @@
         <input type="hidden" name="seleccion" value="{{ result.object.pk }}"></input>
         {% endfor %}
 
+        <input name="query" value="{{ query }}" type=hidden></input>
     <div id="results">
     {% if query %}
         {{ page.paginator.count }} resultados
