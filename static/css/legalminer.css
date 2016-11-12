@@ -181,9 +181,11 @@ div#details {
     height: 100%;
 }
 .gridster {
+    height: 100%;
     background-color: #f2f2f2;
     margin-left: 2.5%;
     margin-right: 2.5%;
+    overflow: auto;
 }
 .w_toolbar {
     width: 100%;
@@ -238,6 +240,7 @@ ol, ul{
 
 body,html{
     height: 100%;
+    overflow: hidden;
   }
 
  nav.sidebar, .main{
