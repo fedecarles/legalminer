@@ -201,42 +201,6 @@ def cij_jueces(text):
     return jueces
 
 
-def dbEdit(request):
-    FallosFormset = modelformset_factory(Fallos, exclude=('origen',
-                                                          'anterior',
-                                                          'date_image',
-                                                          'signature_image',
-                                                          'nr',
-                                                          'tomo',
-                                                          'legislacion',
-                                                          'voces',
-                                                          'materia'),
-                                         extra=0)
-    formset = FallosFormset(request.POST or None)
-    if request.method == 'POST':
-        context = {'formset': formset}
-        if formset.is_valid():
-            for form in formset:
-                if form.is_valid():
-                    instance = form.save(commit=False)
-                    instance.save()
-    else:
-        query = Fallos.objects.all()
-        paginator = Paginator(query, 50)
-        page = request.GET.get('page')
-        try:
-            objects = paginator.page(page)
-        except PageNotAnInteger:
-            objects = paginator.page(1)
-        except EmptyPage:
-            objects = paginator.page(paginator.num_pages)
-        page_query = query.filter(id__in=[object.id for object in objects])
-        formset = FallosFormset(queryset=page_query)
-        context = {'objects': objects, 'formset': formset}
-    return render_to_response('dbedit.html', context,
-                              context_instance=RequestContext(request))
-
-
 def cij_actora(text):
     try:
         patterns = re.search('(.*?)C\/|S\/|ACTOR:(.*?)S\/', text).groups()

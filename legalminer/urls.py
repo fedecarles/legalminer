@@ -31,13 +31,10 @@ urlpatterns = [
     url(r'^accounts/', include('registration.backends.default.urls')),
 
     # start page
-    url(r'^$', inicio),
+    url(r'^$', inicio, name='inicio'),
 
     # file processor
-    url(r'^cij/', cij),
-
-    # DB bulk edit
-    url(r'^dbedit/', dbEdit),
+    url(r'^cij/', cij, name='cij'),
 
     # main search url
     url(r'search/$',
