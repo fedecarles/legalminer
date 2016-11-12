@@ -18,7 +18,7 @@ from django.contrib.auth import views as auth_views
 from caseanalyzer.forms import MySearchForm
 from django.conf.urls import url, include
 from django.contrib import admin
-from textprocessor.views import cij, dbEdit
+from textprocessor.views import cij
 from caseanalyzer.views import inicio, analyzer, details
 
 urlpatterns = [
