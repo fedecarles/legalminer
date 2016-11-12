@@ -43,17 +43,12 @@
     <pre id="texto-completo" class="col-lg-offset-2">{{ instance.text }}</pre>
 
 <script type="text/javascript">
+// Highlight search word in case text.
 $(document).ready(function() {
     $('.highlighted').each(function() {
         $('#details pre').mark($(this).text(),
                 {"className": 'highlighted'});
     });
-    $('#details pre').markRegExp(/ley\s\d+(\.\d+)?/,
-            {'className': 'ley'});
 });
-
-function expand_desc(){
-    $('#desc_container').slideToggle('slow')
-}
 </script>
 {% endblock %}
