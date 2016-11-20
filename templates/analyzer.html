@@ -23,7 +23,8 @@
   </div>
 </nav>
 <div class="gridster">
-    <ul> </ul>
+    <ul>
+    </ul>
 </div>
 
 <!-- Modal Chart Options-->
@@ -75,6 +76,8 @@
               <option class="color" value="#b1d380">Verde</option>
               <option class="color" value="black">Negro</option>
           </select>
+          <label>Cantidad</label>
+          <input class="cantidad form-control" value="10"></input>
           <br/>
           <button id="crear-widget" class="btn btn-default">Crear Widget</button>
           <button id="modificar-widget" class="btn btn-default">Modificar Widget</button>
@@ -98,6 +101,7 @@ var demandada = {{ demandada|safe }}
 var voces = {{ voces|safe }}
 var materia = {{ materia|safe }}
 var corte = {{ corte|safe }}
+// var group = {{ group|safe }}
 </script>
 
 {% endblock %}

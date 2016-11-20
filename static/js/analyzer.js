@@ -8,12 +8,24 @@ $(document).ready(function(){
            resize: {
               enabled: true
            },
+           serialize_params: function($w, wgd) {
+               return {
+                   id: $w.attr('id'), 
+                   col: wgd.col, 
+                   row: wgd.row, 
+                   size_x: wgd.size_x, 
+                   size_y: wgd.size_y 
+                       };
+               },
            draggable: {
               handle: '.w_toolbar'
            }
         });
     
         var gridster = $(".gridster ul").gridster().data('gridster');
+        gridData = gridster.serialize();
+        alert(JSON.stringify(gridData))
+
     
         $('body').on( "click", ".gridster ul > li .fa-times", function() {
           gridster.remove_widget($(this).closest('li'));
@@ -21,10 +33,10 @@ $(document).ready(function(){
     });
     
     // Add Chart Widget.
-    function Chart(data, choice, orientacion, color, valor, type){
+    function Chart(data, choice, orientacion, color, valor, type, cantidad){
         // Add gridster tile.
         var gridster = $(".gridster ul").gridster().data('gridster');
-        var uid = "id" + Math.random().toString(10).slice(2)
+        var uid = "id" + choice
         gridster.add_widget.apply(gridster, ["<li" +
                 "><div class='w_toolbar'>" +
                 "<span>" + choice + "</span>" +
@@ -37,8 +49,8 @@ $(document).ready(function(){
         var svg = dimple.newSvg("#" + uid, "100%", "100%");
         
         // Begin DimpleJS chart creation.
-        var myChart = new dimple.chart(svg, data.slice(0,10));
-        myChart.setBounds(10, 10, 450, 200);
+        var myChart = new dimple.chart(svg, data.slice(0,cantidad));
+        myChart.setBounds(10, 10, 450, 10);
     
         // If data is fecha, use TimeAxis. Else user CategoricalAxis.
         if (data == "fecha"){
@@ -62,9 +74,10 @@ $(document).ready(function(){
         myChart.defaultColors = [
             new dimple.color(color, opacity=0.5) 
         ];
-    
+
         myChart.draw(1000);
-    
+        x.titleShape.remove();
+
         myChart.svg.attr("viewBox", "0 0 500 300")
             .attr("width", "100%")
             .attr("preserveAspectRatio", "xMaxYMin meet");
@@ -95,19 +108,20 @@ $(document).ready(function(){
         var w_color= $('.color:selected').val();
         var w_valor= $('.valor:selected').val();
         var w_type= eval($('.w_type:selected').val());
+        var w_cantidad= $('.cantidad').val();
     
-        Chart(w_data, w_choice, w_orientacion, w_color, w_valor, w_type);
+        Chart(w_data, w_choice, w_orientacion, w_color, w_valor, w_type, w_cantidad);
     });
     
     // Modify Chart Widget.
-    function modifyChart(uid, data, choice, orientacion, color, valor, type){
+    function modifyChart(uid, data, choice, orientacion, color, valor, type, cantidad){
     
         // Create svg element.
         var svg = dimple.newSvg("#" + uid, "100%", "100%");
         
         // Begin DimpleJS chart creation.
-        var myChart = new dimple.chart(svg, data.slice(0,10));
-        myChart.setBounds(10, 10, 450, 200);
+        var myChart = new dimple.chart(svg, data.slice(0,cantidad));
+        myChart.setBounds(10, 10, 450, 10);
     
         // If data is fecha, use TimeAxis. Else user CategoricalAxis.
         if (data == "fecha"){
@@ -133,7 +147,8 @@ $(document).ready(function(){
         ];
     
         myChart.draw(1000);
-    
+        x.titleShape.remove();
+
         myChart.svg.attr("viewBox", "0 0 500 300")
             .attr("width", "100%")
             .attr("preserveAspectRatio", "xMaxYMin meet");
@@ -152,8 +167,9 @@ $(document).ready(function(){
         var w_color= $('.color:selected').val();
         var w_valor= $('.valor:selected').val();
         var w_type= eval($('.w_type:selected').val());
+        var w_cantidad= $('.cantidad').val();
     
-        modifyChart(uid, w_data, w_choice, w_orientacion, w_color, w_valor, w_type);
+        modifyChart(uid, w_data, w_choice, w_orientacion, w_color, w_valor, w_type, w_cantidad);
     });
     
     

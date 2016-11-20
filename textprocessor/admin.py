@@ -6,3 +6,8 @@ from .models import Fallos
 class FallosAdmin(admin.ModelAdmin):
     list_display = ('nr', 'autos', 'jueces')
 admin.site.register(Fallos, FallosAdmin)
+
+
+
+
+

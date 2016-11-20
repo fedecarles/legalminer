@@ -19,7 +19,7 @@ from caseanalyzer.forms import MySearchForm
 from django.conf.urls import url, include
 from django.contrib import admin
 from textprocessor.views import cij
-from caseanalyzer.views import inicio, analyzer, details
+from caseanalyzer.views import inicio, analyzer, details, dashboard, filterData
 
 urlpatterns = [
     # admin url
@@ -43,6 +43,9 @@ urlpatterns = [
 
     # dashboard url
     url(r'analyzer/$', analyzer, name='analyzer'),
+
+    url(r'dashboard/$', dashboard, name='dashboard'),
+    url(r'dashboard/filter/$', filterData, name='filterData'),
 
     # Case full text url
     url(r'details/(?P<slug>[\w-]+)/$', details, name='details'),

@@ -1,0 +1,300 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Bootstrap 3, from LayoutIt!</title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+  </head>
+  <body>
+    <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<h3 class="text-center">
+                Panel para búsqueda: {{ query }}
+			</h3>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-3">
+			<blockquote>
+            <small>Total de fallos</small>
+				<p>
+                {{ total }}
+				</p> <small>Someone famous <cite>Source Title</cite></small>
+			</blockquote>
+		</div>
+		<div class="col-md-3">
+			<blockquote>
+            <small>Fallos por semana</small>
+				<p>
+				</p> <small>Someone famous <cite>Source Title</cite></small>
+			</blockquote>
+		</div>
+		<div class="col-md-3">
+			<blockquote>
+				<p>
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+				</p> <small>Someone famous <cite>Source Title</cite></small>
+			</blockquote>
+		</div>
+		<div class="col-md-3">
+			<blockquote>
+				<p>
+					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
+				</p> <small>Someone famous <cite>Source Title</cite></small>
+			</blockquote>                                                                                        
+		</div>                                                                                           	</div>
+	<div class="row">
+		<div id="main-chart" class="col-md-8">
+			<h4>
+				Heading
+			</h4>
+		</div>
+		<div class="col-md-4">
+			<h4>
+				Heading
+			</h4>
+			<p>
+				Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
+			</p>
+			<p>
+				<a class="btn" href="#">View details »</a>
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div id="medium-left-chart">
+			<h4>
+				Heading
+			</h4>
+		</div>
+		<div id="medium-center-chart">
+			<h4>
+				Heading
+			</h4>
+		</div>
+        <div id="medium-right-chart">
+			<h4>
+				Heading
+			</h4>
+		</div>
+	</div>
+</div>
+  <script type="text/javascript">
+
+var fecha = {{ fecha|safe }}
+var jueces = {{ jueces|safe }}
+var citados = {{ citados|safe }}
+var graph = {{ force_layout|safe }}
+var pks = {{ pks|safe }}
+
+$(document).ready(function () {
+    Chart("#main-chart", eval(fecha), "100%", 250, "fecha", "Vertical", "#80b1d3", "cantidad", eval("dimple.plot.line"), "1000");
+    Chart("#medium-left-chart", eval(jueces),"100%", 550, "jueces", "Horizontal", "#80b1d3", "cantidad", eval("dimple.plot.bar"), "20");
+});
+
+function Chart(uid, data, width, height, choice, orientacion, color, valor, type, count){
+
+    // Create svg element.
+    var svg = dimple.newSvg(uid, width, height);
+    
+    // Begin DimpleJS chart creation.
+    var myChart = new dimple.chart(svg, data.slice(0,count));
+    myChart.setMargins(20, 10, 10, 20);
+
+    // If data is fecha, use TimeAxis. Else user CategoricalAxis.
+    if (data == fecha){
+        var x = myChart.addTimeAxis("x", choice, "%Y-%m-%d", "%d-%m-%Y");
+        x.timePeriod = d3.time.days;
+        x.timeInterval = 5;
+        var y = myChart.addMeasureAxis("y", valor);
+        myChart.addSeries(null, dimple.plot.area);
+    } else {
+         if (orientacion == "Horizontal"){
+             var x = myChart.addMeasureAxis("x", valor);
+             var y = myChart.addCategoryAxis("y", choice);
+             y.addOrderRule(valor, false)
+         } else{
+             var x = myChart.addMeasureAxis("y", valor);
+             var y = myChart.addCategoryAxis("x", choice);
+             x.addOrderRule(valor, false)
+         }
+    }
+
+    myChart.addSeries(null, type);
+
+    myChart.defaultColors = [
+        new dimple.color(color, opacity=0.5) 
+    ];
+
+    myChart.draw(1000);
+    x.titleShape.remove();
+    y.titleShape.remove();
+    y.shapes.selectAll("#medium-left-chart text").remove();
+};
+
+var dataTable = tabulate(citados.slice(0, 10), "medium-center-chart", ['cantidad', 'citados']);
+
+// uppercase the column headers
+
+                                                                       
+// sort by age                                                         
+//dataTable.selectAll("tbody tr")
+//    .sort(function(a, b) {
+//        return d3.descending(a.cantidad, b.cantidad);
+//    });
+
+function tabulate(data, uid,  columns) {
+    var table = d3.select("#" + uid).append("table")
+        .attr('class', 'table table-hover')
+        tbody = table.append("tbody");
+
+    // create a row for each object in the data
+    var rows = tbody.selectAll("tr")
+        .data(data)
+        .enter()
+        .append("tr");
+
+    rows.append('td')
+        .append('div')
+        .attr('class', 'left-cell')
+        .html(function(m) { return m.cantidad; });
+     
+    rows.append('td')
+        .append('div')
+        .attr('class', 'right-cell')
+        .html(function(m) { return m.citados; });
+
+    return table;
+};
+
+// FORCE LAYOUT WITH SVG
+
+var width = 600,
+    height = 550;
+
+var xScale = d3.scale.linear()
+        .domain([0, width])
+        .range([0, width]);
+var yScale = d3.scale.linear()
+        .domain([0, height])
+        .range([0, height]);
+
+var zoomer = d3.behavior.zoom().x(xScale).y(yScale).scaleExtent([0.1, 8]);
+
+var color = d3.scale.category20();
+
+var force = d3.layout.force()
+   .gravity(0.5)
+    .charge(-500)
+    .linkDistance(50)
+    .size([width, height]);
+
+var svg = d3.select("#medium-right-chart").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+svg.call(zoomer);
+
+//d3.json("miserables.json", function(error, graph) {
+  force
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .start();
+
+  var tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .offset([-10, 0])
+      .html(function(d) { return d.name; })
+
+  var link = svg.selectAll(".link")
+      .data(graph.links)
+    .enter().append("line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+  svg.call(tip)
+
+  var node = svg.selectAll(".node")
+      .data(graph.nodes)
+    .enter().append("circle")
+      .attr("class", "node")
+      // .attr("r", function(d) {return d.weight * .5})
+      .attr("r", 5)
+      .style("fill", function(d) { return color(d.group); })
+      .on('mouseover', tip.show)
+      .on('mouseout', tip.hide)
+      .call(force.drag);
+
+  node.append("title")
+      .text(function(d) { return d.name; });
+
+  force.on("tick", function() {
+        link.attr("x1", function (d) { return  xScale(d.source.x); })
+            .attr("y1", function (d) { return yScale(d.source.y);  })
+            .attr("x2", function (d) { return xScale(d.target.x); })
+            .attr("y2", function (d) { return yScale(d.target.y); });
+
+        node.attr("transform", function (d) {
+            return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")";
+        });
+           // .attr('r', function(d){return d.weight*.3});
+
+  });
+
+// FORCE LAYOUT WITH CANVAS
+
+// var width = 600,
+//     height = 600;
+// 
+// var canvas = d3.select("#medium-right-chart").append("canvas")
+//     .attr("width", width)
+//     .attr("height", height);
+// 
+// var force = d3.layout.force()
+//     .gravity(1)
+//     .size([width, height]);
+// 
+//   var context = canvas.node().getContext("2d");
+// 
+//   force
+//       .nodes(graph.nodes)
+//       .links(graph.links)
+//       .on("tick", tick)
+//       .start();
+// 
+//   function tick() {
+//     context.clearRect(0, 0, width, height);
+// 
+//     // draw links
+//     context.strokeStyle = "#ccc";
+//     context.beginPath();
+//     graph.links.forEach(function(d) {
+//       context.moveTo(d.source.x, d.source.y);
+//       context.lineTo(d.target.x, d.target.y);
+//     });
+//     context.stroke();
+// 
+//     // draw nodes
+//     context.fillStyle = "steelblue";
+//     context.beginPath();
+//     graph.nodes.forEach(function(d) {
+//       context.moveTo(d.x, d.y);
+//       context.arc(d.x, d.y, 4.5, 0, 2 * Math.PI);
+//     });
+//     context.fill();
+//   }
+
+    </script>
+</body>
+</html>
+{% endblock %}

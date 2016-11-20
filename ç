@@ -20,17 +20,13 @@ def details(request, slug):
 def dashboard(request, pk=None):
     if request.method == 'POST':
         pks = request.POST.getlist('seleccion')
-        q = request.POST.get('query')
 
         fecha = tableToDict(countDataTable(pks, 'fecha'))
         jueces = tableToDict(countDataTable(pks, 'jueces'))
         citados = tableToDict(countDataTable(pks, 'citados'))
         force_layout = forceLayoutData(pks)
-        total = len(pks)
 
         context = {
-            'query': q,
-            'total': total,
             'fecha': json.dumps(fecha, cls=DjangoJSONEncoder),
             'jueces': json.dumps(jueces, cls=DjangoJSONEncoder),
             'citados': json.dumps(citados, cls=DjangoJSONEncoder),
@@ -145,17 +141,14 @@ def forceLayoutData(pks):
 
     for pk in pks:
         instance = get_object_or_404(Fallos, pk=pk)
-        autos.append(instance.autos)
-        citas.append(instance.citados)
+        autos.append({"autos": instance.autos})
+        citas.append({"autos": instance.citados})
 
     df = pd.DataFrame({"autos": autos, "citas": citas})
-    dffilter = df["citas"] != ""
-    df = df[dffilter]
-    df = df[:500]
     links = pd.concat([pd.Series(row['autos'], row['citas'].split('; '))
-                       for _i, row in df.iterrows()]).reset_index()
+                       for _, row in df.iterrows]).reset_index()
     links.columns = ["target", "source"]
-    grouped_links = links.groupby(["target", "source"]).size().reset_index()
+    grouped_links = links.groupby(["source", "target"]).size().reset_index()
 
     unique_id = pd.Index(grouped_links['source']
                          .append(grouped_links['target'])
