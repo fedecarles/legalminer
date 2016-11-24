@@ -258,3 +258,15 @@ def cij_sobre(text):
     except Exception:
         sobre = ""
     return sobre
+
+
+def cij_lugar(autos):
+    lugares = ["BAHÍA BLANCA", "BAHIA BLANCA", "COMODORO RIVADAVIA",
+               "CORDOBA", "CÓRDOBA", "CORRIENTES", "FORMOSA", "GENERAL ROCA",
+               "JUJUY", "LA PLATA", "MAR DEL PLATA", "MENDOZA", "PARANA",
+               "PARANÁ", "POSADAS", "SANTA FE", "MISIONES", "NEUQUEN",
+               "RESISTENCIA", "ROSARIO", "SALTA", "SAN MARTÍN", "SAN MARTIN",
+               "SANTA ROSA", "TIERRA DEL FUEGO", "TUCUMAN", "TUCUMÁN",
+               "CAPITAL FEDERAL"]
+    lugar = next((l for l in lugares if l in autos), "CAPITAL FEDERAL")
+    return lugar

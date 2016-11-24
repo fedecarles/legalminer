@@ -26,6 +26,7 @@ def dashboard(request, pk=None):
         jueces = tableToDict(countDataTable(pks, 'jueces'))
         citados = tableToDict(countDataTable(pks, 'citados'))
         force_layout = forceLayoutData(pks)
+        map_count = tableToDict(countDataTable(pks, 'lugar'))
         total = len(pks)
 
         context = {
@@ -35,7 +36,7 @@ def dashboard(request, pk=None):
             'jueces': json.dumps(jueces, cls=DjangoJSONEncoder),
             'citados': json.dumps(citados, cls=DjangoJSONEncoder),
             'force_layout': json.dumps(force_layout),
-            'pks': json.dumps(pks, cls=DjangoJSONEncoder),
+            'map_count': json.dumps(map_count, cls=DjangoJSONEncoder)
         }
 
     return render(request, 'dashboard.html', context)

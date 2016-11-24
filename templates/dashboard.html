@@ -18,16 +18,16 @@
     <div class="container-fluid">
 	<div class="row">
 		<div class="col-md-12">
-			<h3 class="text-center">
+			<h4 class="text-center">
                 Panel para búsqueda: {{ query }}
-			</h3>
+			</h4>
 		</div>
 	</div>
 	<div class="row">
 		<div class="col-md-3">
 			<blockquote>
             <small>Total de fallos</small>
-				<p>
+				<p class="blockquote-number">
                 {{ total }}
 				</p> <small>Someone famous <cite>Source Title</cite></small>
 			</blockquote>
@@ -41,9 +41,9 @@
 		</div>
 		<div class="col-md-3">
 			<blockquote>
+            <small>Juez:</small>
 				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
-				</p> <small>Someone famous <cite>Source Title</cite></small>
+				</p> <small>% del fallos.</small>
 			</blockquote>
 		</div>
 		<div class="col-md-3">
@@ -59,16 +59,10 @@
 				Heading
 			</h4>
 		</div>
-		<div class="col-md-4">
+		<div id="map" class="col-md-4">
 			<h4>
 				Heading
 			</h4>
-			<p>
-				Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui.
-			</p>
-			<p>
-				<a class="btn" href="#">View details »</a>
-			</p>
 		</div>
 	</div>
 	<div class="row">
@@ -95,7 +89,7 @@ var fecha = {{ fecha|safe }}
 var jueces = {{ jueces|safe }}
 var citados = {{ citados|safe }}
 var graph = {{ force_layout|safe }}
-var pks = {{ pks|safe }}
+var map_count = {{ map_count|safe }}
 
 $(document).ready(function () {
     Chart("#main-chart", eval(fecha), "100%", 250, "fecha", "Vertical", "#80b1d3", "cantidad", eval("dimple.plot.line"), "1000");
@@ -179,9 +173,14 @@ function tabulate(data, uid,  columns) {
 
 // FORCE LAYOUT WITH SVG
 
-var width = 600,
-    height = 550;
+// Graph size.
+var width = $('#medium-right-chart').width(),
+    height = $('#medium-right-chart').height();
 
+// Toggle var for node/link opacity.
+var toggle = 0;
+
+// Scales values for zoom function.
 var xScale = d3.scale.linear()
         .domain([0, width])
         .range([0, width]);
@@ -193,63 +192,109 @@ var zoomer = d3.behavior.zoom().x(xScale).y(yScale).scaleExtent([0.1, 8]);
 
 var color = d3.scale.category20();
 
+// Initiate force layout.
 var force = d3.layout.force()
-   .gravity(0.5)
+    .gravity(0.5)
     .charge(-500)
     .linkDistance(50)
     .size([width, height]);
 
+// Append svg element to html.
 var svg = d3.select("#medium-right-chart").append("svg")
     .attr("width", width)
     .attr("height", height);
-
 svg.call(zoomer);
 
-//d3.json("miserables.json", function(error, graph) {
+// Force config. Get node and link data from json graph var.
   force
       .nodes(graph.nodes)
       .links(graph.links)
       .start();
 
+
+// Load tootip function to display node name.
   var tip = d3.tip()
       .attr('class', 'd3-tip')
       .offset([-10, 0])
       .html(function(d) { return d.name; })
+  svg.call(tip)
 
+// Append links and setup links details.
   var link = svg.selectAll(".link")
       .data(graph.links)
     .enter().append("line")
       .attr("class", "link")
       .style("stroke-width", function(d) { return Math.sqrt(d.value); });
 
-  svg.call(tip)
 
+// Append nodes and setup nodes details.
   var node = svg.selectAll(".node")
       .data(graph.nodes)
-    .enter().append("circle")
+      .enter().append("circle")
       .attr("class", "node")
       // .attr("r", function(d) {return d.weight * .5})
       .attr("r", 5)
       .style("fill", function(d) { return color(d.group); })
-      .on('mouseover', tip.show)
+      .on('click', connectedNodes)
+      .on('mouseover.tip', tip.show)
       .on('mouseout', tip.hide)
       .call(force.drag);
 
-  node.append("title")
-      .text(function(d) { return d.name; });
+// Append title to nodes.
+//  node.append("title")
+//      .text(function(d) { return d.name; });
 
+// Draw nodes and linnks on svg.
   force.on("tick", function() {
         link.attr("x1", function (d) { return  xScale(d.source.x); })
             .attr("y1", function (d) { return yScale(d.source.y);  })
             .attr("x2", function (d) { return xScale(d.target.x); })
             .attr("y2", function (d) { return yScale(d.target.y); });
 
+        // Nodes with scale factors for zoom.
         node.attr("transform", function (d) {
             return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")";
         });
-           // .attr('r', function(d){return d.weight*.3});
-
+            // .attr('r', function(d){return Math.sqrt(d.weight)});
   });
+
+// Index links and get neighboring nodes. This solution is form Mike Bostock in
+// http://stackoverflow.com/questions/8739072/highlight-selected-node-its-links-and-its-children-in-a-d3-force-directed-grap
+var linkedByIndex = {};
+for (i = 0; i < graph.nodes.length; i++) {
+    linkedByIndex[i + "," + i] = 1;
+};
+
+graph.links.forEach(function (d) {
+    linkedByIndex[d.source.index + "," + d.target.index] = 1;
+ });
+
+function neighboring(a, b) {
+    return linkedByIndex[a.index + "," + b.index];
+}
+
+// Function to highlight connected links and nodes.
+function connectedNodes() {
+
+    if (toggle == 0) {
+    
+            d = d3.select(this).node().__data__;
+            node.style("opacity", function (o) {
+                                return neighboring(d, o) | neighboring(o, d) ?
+                                1 : 0.15;
+                                        });
+
+            link.style("opacity", function (o) {
+                    return o.source === d || o.target === d ?
+                    1 : 0.15;
+                            });                                               
+            toggle = 1;
+        } else {
+                node.style("opacity", 1);
+                link.style("opacity", 1);
+                toggle = 0;
+            }
+}
 
 // FORCE LAYOUT WITH CANVAS
 
@@ -293,6 +338,130 @@ svg.call(zoomer);
 //     });
 //     context.fill();
 //   }
+
+/// MAPA 
+// https://gist.github.com/jkutianski/6532516#file-argentina_indec-json
+var width = $('#map').width() / 2,
+    height = $('#map').height(),
+    active = d3.select(null);
+
+var projection = d3.geo.transverseMercator()
+                       .center([4, -40.5])
+                       .rotate([66, 0])
+                       .scale((height * 45) / 33)
+                       .translate([(width / 2), (height / 2)]);
+
+var path = d3.geo.path()
+                 .projection(projection);
+
+var svg = d3.select("#map")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+var g = svg.append("g")
+    .style("stroke-width", "1.5px");
+
+var mtool = d3.select('#map ').append('div')
+    .attr('class', 'mtool');
+
+var color = d3.scale.linear()
+             .domain([0, 100])
+             .range(["#fff", "#4682b4"]);
+
+d3.json("/static/js/argentina.json", function(error, json) {
+
+  for (var i = 0; i < map_count.length; i++) {
+      var data2id = map_count[i].lugar;
+      var dataValue = map_count[i].porcentaje;
+      for (var j = 0; j < json.features.length; j++) {
+          var jsonCountryCode = json.features[j].properties.NAME_1.toUpperCase();
+          if (data2id == jsonCountryCode) {
+              json.features[j].properties.color = dataValue;
+              break;
+          }
+      }
+  }
+
+
+  g.selectAll("path")
+     .data(json.features)
+     .enter()
+        .append("path")
+        .attr("d", path)
+        .on("click", clicked)
+        .on("mouseover", maptooltip)
+        .on("mouseout", hlout)
+        .attr("class", "land")
+        .style("fill", function(d) {
+                var value = d.properties.color;
+                if (value) {
+                    return color(value);
+                    } else {
+                    return "#ccc";
+                    }
+                });
+});
+
+function clicked(d) {
+  if (active.node() === this) return reset();
+  active.classed("active", false);
+  active = d3.select(this).classed("active", true);
+
+  var bounds = path.bounds(d),
+      dx = bounds[1][0] - bounds[0][0],
+      dy = bounds[1][1] - bounds[0][1],
+      x = (bounds[0][0] + bounds[1][0]) / 2,
+      y = (bounds[0][1] + bounds[1][1]) / 2,
+      scale = .9 / Math.max(dx / width, dy / height),
+      translate = [width / 2 - scale * x, height / 2 - scale * y];
+
+  g.transition()
+      .duration(750)
+      .style("stroke-width", 1.5 / scale + "px")
+      .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
+
+}
+
+function reset() {
+  active.classed("active", false);
+  active = d3.select(null);
+
+  g.transition()
+      .duration(750)
+      .style("stroke-width", "1.5px")
+      .attr("transform", "");
+}
+
+// d3.select(self.frameElement).style("height", height + "px");
+
+function hlprov(d, i) {
+    var currentState = this;
+    d3.select(this).style('fill-opacity', .7);
+}
+function hlout(d, i) {
+    d3.selectAll('path')
+       .style({
+            'fill-opacity':1
+       });
+}
+function maptooltip(d, i) {
+    var mouse = d3.mouse(svg.node()).map(function(d) {
+        return parseInt(d);
+    });
+    mtool.classed('hidden', false)
+        .html(d.properties.NAME_1);
+
+    var currentState = this;
+    d3.select(this).style('fill-opacity', .7);
+}
+function mapout(d, i) {
+    tooltip.classed('hidden', true);
+    d3.selectAll('path')
+       .style({
+            'fill-opacity':1
+       });
+}
 
     </script>
 </body>

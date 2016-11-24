@@ -33,25 +33,25 @@
     width: 50%;
 }
 .chart rect {
-  fill: steelblue;
+    fill: steelblue;
 }
 .chart text {
-  fill: white;
-  font: 10px sans-serif;
-  text-anchor: end;
+    fill: white;
+    font: 10px sans-serif;
+    text-anchor: end;
 }
 path {
-  stroke: steelblue;
-  stroke-width: 2;
-  fill: none;
+    stroke: steelblue;
+    stroke-width: 2;
+    fill: none;
 }
 
 .axis path,
 .axis line{
-  fill: none;
-  stroke: grey;
-  stroke-width: 1;
-  shape-rendering: crispEdges;
+    fill: none;
+    stroke: grey;
+    stroke-width: 1;
+    shape-rendering: crispEdges;
 }
 #id_q {
     border-top-left-radius: 2em;
@@ -237,123 +237,123 @@ ol, ul{
 body,html{
     height: 100%;
     overflow: auto;
-  }
+}
 
- nav.sidebar, .main{
-   -webkit-transition: margin 200ms ease-out;
-     -moz-transition: margin 200ms ease-out;
-     -o-transition: margin 200ms ease-out;
-     transition: margin 201ms ease-out;
- }
+nav.sidebar, .main{
+    -webkit-transition: margin 200ms ease-out;
+    -moz-transition: margin 200ms ease-out;
+    -o-transition: margin 200ms ease-out;
+    transition: margin 201ms ease-out;
+}
 
- .main{
-   padding: 10px 10px 0 10px;
- }
+.main{
+    padding: 10px 10px 0 10px;
+}
 
 @media (min-width: 765px) {
 
-   .main{
-     position: absolute;
-     width: calc(100% - 40px); 
-     margin-left: 40px;
-     float: right;
-   }
+    .main{
+        position: absolute;
+        width: calc(100% - 40px); 
+        margin-left: 40px;
+        float: right;
+    }
 
-   nav.sidebar:hover + .main{
-     margin-left: 200px;
-   }
+    nav.sidebar:hover + .main{
+        margin-left: 200px;
+    }
 
-   nav.sidebar.navbar.sidebar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
-     margin-left: 0px;
-   }
+    nav.sidebar.navbar.sidebar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+        margin-left: 0px;
+    }
 
-   nav.sidebar .navbar-brand, nav.sidebar .navbar-header{
-     text-align: center;
-     width: 100%;
-     margin-left: 0px;
-   }
-   
-   nav.sidebar a{
-     padding-right: 13px;
-   }
+    nav.sidebar .navbar-brand, nav.sidebar .navbar-header{
+        text-align: center;
+        width: 100%;
+        margin-left: 0px;
+    }
 
-   nav.sidebar .navbar-nav > li:first-child{
-     border-top: 1px #e5e5e5 solid;
-   }
+    nav.sidebar a{
+        padding-right: 13px;
+    }
 
-   nav.sidebar .navbar-nav > li{
-     border-bottom: 1px #e5e5e5 solid;
-   }
+    nav.sidebar .navbar-nav > li:first-child{
+        border-top: 1px #e5e5e5 solid;
+    }
 
-   nav.sidebar .navbar-nav .open .dropdown-menu {
-     position: static;
-     float: none;
-     width: auto;
-     margin-top: 0;
-     background-color: transparent;
-     border: 0;
-     -webkit-box-shadow: none;
-     box-shadow: none;
-   }
+    nav.sidebar .navbar-nav > li{
+        border-bottom: 1px #e5e5e5 solid;
+    }
 
-   nav.sidebar .navbar-collapse, nav.sidebar .container-fluid{
-     padding: 0 0px 0 0px;
-   }
+    nav.sidebar .navbar-nav .open .dropdown-menu {
+        position: static;
+        float: none;
+        width: auto;
+        margin-top: 0;
+        background-color: transparent;
+        border: 0;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+    }
 
-   .navbar-inverse .navbar-nav .open .dropdown-menu>li>a {
-     color: #777;
-   }
+    nav.sidebar .navbar-collapse, nav.sidebar .container-fluid{
+        padding: 0 0px 0 0px;
+    }
 
-   nav.sidebar{
-     width: 200px;
-     margin-left: -150px;
-     float: left;
-     margin-bottom: 0px;
-     position: absolute;
-     z-index: 999;
-   }
+    .navbar-inverse .navbar-nav .open .dropdown-menu>li>a {
+        color: #777;
+    }
 
-   nav.sidebar li {
-     width: 100%;
-   }
+    nav.sidebar{
+        width: 200px;
+        margin-left: -150px;
+        float: left;
+        margin-bottom: 0px;
+        position: absolute;
+        z-index: 999;
+    }
 
-   nav.sidebar:hover{
-     margin-left: 0px;
-   }
+    nav.sidebar li {
+        width: 100%;
+    }
 
-   .forAnimate{
-     opacity: 0;
-   }
- }
-  
- @media (min-width: 1330px) {
+    nav.sidebar:hover{
+        margin-left: 0px;
+    }
 
-   .main{
-     width: calc(100% - 200px);
-     margin-left: 200px;
-   }
+    .forAnimate{
+        opacity: 0;
+    }
+}
 
-   nav.sidebar{
-     float: left;
-     position: absolute;
-   }
+@media (min-width: 1330px) {
 
-   nav.sidebar .forAnimate{
-     opacity: 1;
-   }
- }
+    .main{
+        width: calc(100% - 200px);
+        margin-left: 200px;
+    }
 
- nav.sidebar .navbar-nav .open .dropdown-menu>li>a:hover, nav.sidebar .navbar-nav .open .dropdown-menu>li>a:focus {
-   color: #CCC;
-   background-color: transparent;
- }
+    nav.sidebar{
+        float: left;
+        position: absolute;
+    }
 
- nav:hover .forAnimate{
-   opacity: 1;
- }
- section{
-   padding-left: 15px;
- }
+    nav.sidebar .forAnimate{
+        opacity: 1;
+    }
+}
+
+nav.sidebar .navbar-nav .open .dropdown-menu>li>a:hover, nav.sidebar .navbar-nav .open .dropdown-menu>li>a:focus {
+    color: #CCC;
+    background-color: transparent;
+}
+
+nav:hover .forAnimate{
+    opacity: 1;
+}
+section{
+    padding-left: 15px;
+}
 #panel-icon{
     float: right;
 }
@@ -393,32 +393,32 @@ body,html{
     margin-top: 10px;
 }
 .d3-tip {
-  line-height: 1;
-  font-weight: bold;
-  padding: 12px;
-  background: rgba(0, 0, 0, 0.8);
-  color: #fff;
-  border-radius: 2px;
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
 }
 
 /* Creates a small triangle extender for the tooltip */
 .d3-tip:after {
-  box-sizing: border-box;
-  display: inline;
-  font-size: 10px;
-  width: 100%;
-  line-height: 1;
-  color: rgba(0, 0, 0, 0.8);
-  content: "\25BC";
-  position: absolute;
-  text-align: center;
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
 }
 
 /* Style northward tooltips differently */
 .d3-tip.n:after {
-  margin: -1px 0 0 0;
-  top: 100%;
-  left: 0;
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
 }
 #medium-left-chart{
     margin: 5px;
@@ -449,4 +449,30 @@ body,html{
 #main-chart{
     background-color: #fff;
     border: 1px solid #E6E9ED;
+}
+#map{
+    height: 296px;
+    background-color: #fff;
+    border: 1px solid #E6E9ED;
+}
+.blockquote-number{
+    font-size: 40px;
+    line-height: 47px;
+    font-weight: 600;
+    color: #73879C;
+}
+.land {
+    fill: steelblue;
+    stroke: white;
+    stroke-width: .5px;
+    cursor: pointer; 
+}
+div.mtool {
+    float: right;
+    color: #222;
+    background-color: #ccc;
+    padding: .5em;
+    text-shadow: #f5f5f5 0 1px 0;
+    border-radius: 2px;
+    opacity: 0.9;
 }
