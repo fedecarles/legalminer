@@ -94,3 +94,7 @@ media/
 # Settings file
 legalminer/settings.py
 whoosh/
+
+# swap files
+*.swp
+*.swn
