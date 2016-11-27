@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
 import locale
@@ -32,10 +31,6 @@ class Fallos(models.Model):
         # slug_str = "%s %s" % (self.autos, self.nr)
         self.slug = '%i-%s' % (self.pk, slugify(self.autos))
         # self.slug = slugify(slug_str) + str(self.pk)
-        self.autos = self.autos.upper()
-        self.actora = self.actora.upper()
-        self.demandada = self.demandada.upper()
-        self.corte = self.corte.upper()
         super(Fallos, self).save()
 
     def get_absolute_url(self):

@@ -168,8 +168,7 @@ def cij_date(text):
     try:
         fecha_regex = re.compile('Fecha de firma:\s(\d+\/\d+\/\d+)')
         fecha = re.search(fecha_regex, text).group(1)
-        fecha = datetime.strptime(fecha, '%d/%m/%Y')
-        fecha = fecha.date()
+        fecha = datetime.strptime(fecha, '%d/%m/%Y').date()
         return fecha
     except Exception:
         pass

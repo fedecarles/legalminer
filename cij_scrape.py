@@ -1,14 +1,19 @@
+#!/usr/bin/python3
 import os
+import io
 import sys
 import re
-import csv
-import math
 from datetime import datetime
+from collections import Counter
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-
+from urllib.request import urlopen
+from pdfminer.pdfparser import PDFParser, PDFDocument
+from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
+from pdfminer.converter import PDFPageAggregator
+from pdfminer.layout import LAParams, LTTextBox
 
 proj_path = "/home/federico/Dropbox/legalminer/"
 # This is so Django knows where to find stuff.
@@ -39,17 +44,195 @@ browser.get("http://www.cij.gov.ar/sentencias.html")
 #
 # browser.find_element_by_xpath('//form/div[6]/input[1]').submit()
 
+# nr = browser.find_element_by_xpath('//div[5]/div[1]/span').text
+# loops = 1  # math.ceil(int(nr) / 20)
 
-nr = browser.find_element_by_xpath('//div[5]/div[1]/span').text
-loops = 1 # math.ceil(int(nr) / 20)
+
+def get_materia(tesauro, text):
+    materia = []
+    for k, v in tesauro.items():
+        te = tesauro.get(k).get("te").split(',')
+        # tg = tesauro.get(k).get("tg").split(',')
+        # use = tesauro.get(k).get("use").split(',')
+        # up = tesauro.get(k).get("up").split(',')
+        terms = te  # + tg + use + up
+        for t in terms:
+            pattern = re.compile(r'\b%s\b' % t)
+            try:
+                term = re.search(pattern, text).group(0)
+                if term:
+                    m = tesauro.get(k).get("ma")
+                    materia.append(m)
+            except Exception:
+                pass
+    counts = Counter(materia)
+    materia = list(set(sorted(materia, key=counts.get, reverse=True)))
+    materia = ", ".join(materia)
+    materia = re.sub(r'^\,\s', "", materia)
+    materia = re.sub(r'\,\s\,', ", ", materia)
+    return materia.upper()
+
+
+def get_voces(tesauro, text):
+    voces = []
+    for k, v in tesauro.items():
+        te = tesauro.get(k).get("te").split(',')
+        # tg = tesauro.get(k).get("tg").split(',')
+        # use = tesauro.get(k).get("use").split(',')
+        # up = tesauro.get(k).get("up").split(',')
+        terms = te  # + use + up + tg
+        for t in terms:
+            pattern = re.compile(r'\b%s\b' % t)
+            try:
+                term = re.search(pattern, text).group(0)
+                if term:
+                    voces.append(k)
+            except Exception:
+                pass
+    counts = Counter(voces)
+    voces = list(set(sorted(voces, key=counts.get, reverse=True)))
+    voces = ", ".join(voces)
+    voces = re.sub(r'^\,\s', "", voces)
+    voces = re.sub(r'\,\s\,', ", ", voces)
+    return voces
+
+
+def cij_jueces(text):
+    jueces = []
+    try:
+        juez = re.findall(r'Firmado.*?por:.*', text)
+        for j in juez:
+            j = j.upper()
+            if ("SECRETARIO" not in j and "SECRETARIA" not in j and "(ANTE MI)" not in j):
+                j = re.sub(r'.*?:', '', j)
+                j = re.sub(r'\,.*', '', j)
+                j = re.sub('JUEZ.*', '', j)
+                j = re.sub('JUEZ.*', '', j)
+                j = re.sub('PRESIDENTE.*', '', j)
+                j = re.sub(r'DRA\.', '', j)
+                j = re.sub(r'DRES\.', '', j)
+                j = re.sub(r'DR\.', '', j)
+                j = re.sub(r'^\,\s.', '', j)
+                j = j.strip()
+                if j not in jueces:
+                    jueces.append(j)
+        jueces = ", ".join(jueces)
+        jueces = re.sub(r'^\,\s', '', jueces)
+    except Exception:
+        pass
+    return jueces
+
+
+def cij_actora(text):
+    try:
+        patterns = re.search('(.*?)C\/|S\/|ACTOR:(.*?)S\/', text).groups()
+        actora = [p for p in patterns if p is not None]
+        actora = "".join(actora).strip()
+    except Exception:
+        actora = ""
+    return actora
+
+
+def cij_demandada(text):
+    try:
+        patterns = re.search('C\/(.*?)S\/|IMPUTADO:(.*?)S\/|DEMANDADO:(.*?)S\/',
+                             text).groups()
+        demandada = [p for p in patterns if p is not None]
+        demandada = "".join(demandada).strip()
+    except Exception:
+        demandada = ""
+    return demandada
+
+
+def cij_leyes(text):
+    leyes = []
+    text = text.replace('\s+', ' ').lower()
+    try:
+        ley = re.findall('ley\s\d+\.?\d+', text)
+        for l in ley:
+            if l not in leyes:
+                leyes.append(l)
+        leyes = ", ".join(leyes).upper()
+    except Exception:
+        leyes = ""
+    return leyes
+
+
+def cij_citas(text):
+    citas = []
+    text = re.sub('\s+', ' ', text)
+    try:
+        cita = re.findall('\"([^\"]*)\"', text)
+        for c in cita:
+            if "s/" in c or "c/" in c:
+                if len(c) < 100:
+                    if c not in citas:
+                        citas.append(c)
+        citas = "; ".join(citas).upper()
+    except Exception:
+        pass
+    return citas
+
+
+def cij_sobre(text):
+    try:
+        sobre = re.search('S\/(.*)', text).group(1).strip()
+    except Exception:
+        sobre = ""
+    return sobre
+
+
+def cij_lugar(autos):
+    lugares = ["BAHÍA BLANCA", "BAHIA BLANCA", "COMODORO RIVADAVIA",
+               "CORDOBA", "CÓRDOBA", "CORRIENTES", "FORMOSA", "GENERAL ROCA",
+               "JUJUY", "LA PLATA", "MAR DEL PLATA", "MENDOZA", "PARANA",
+               "PARANÁ", "POSADAS", "SANTA FE", "MISIONES", "NEUQUEN",
+               "RESISTENCIA", "ROSARIO", "SALTA", "SAN MARTÍN", "SAN MARTIN",
+               "SANTA ROSA", "TIERRA DEL FUEGO", "TUCUMAN", "TUCUMÁN",
+               "CAPITAL FEDERAL"]
+    lugar = next((l for l in lugares if l in autos), "CAPITAL FEDERAL")
+    return lugar
+
+
+# http://stackoverflow.com/questions/26413216/pdfminer3k-has-no-method-named-create-pages-in-pdfpage
+def pdf_url_to_txt(url):
+    text = ""
+    f = urlopen(url).read()
+    fp = io.BytesIO(f)
+    parser = PDFParser(fp)
+    doc = PDFDocument()
+    parser.set_document(doc)
+    doc.set_parser(parser)
+    doc.initialize('')
+    rsrcmgr = PDFResourceManager()
+    laparams = LAParams()
+    device = PDFPageAggregator(rsrcmgr, laparams=laparams)
+    interpreter = PDFPageInterpreter(rsrcmgr, device)
+    # Process each page contained in the document.
+    for page in doc.get_pages():
+        interpreter.process_page(page)
+        layout = device.get_result()
+        for lt_obj in layout:
+            if isinstance(lt_obj, LTTextBox):
+                text += lt_obj.get_text()
+    return text
+
+
+# Start Scraping
+date1 = browser.find_element_by_xpath("//div[6]/ul/li[4]").text
+date2 = browser.find_element_by_xpath("//div[25]/ul/li[4]").text
+
+counter = 0
 
 tri = []
 exp = []
 aut = []
 fec = []
 url = []
+nro = []
+txt = []
 
-for l in range(0, loops):
+while (date1 == date2):
     tribunal = browser.find_elements_by_xpath("//div/ul[@class='info']/li[1]")
     expediente = browser.find_elements_by_xpath("//div/ul[@class='info']/li[2]")
     autos = browser.find_elements_by_xpath("//div/ul[@class='info']/li[3]")
@@ -61,24 +244,40 @@ for l in range(0, loops):
     [aut.append(i.text) for i in autos]
     [fec.append(i.text) for i in fecha]
     [url.append(i.get_attribute('href')) for i in links]
+    [nro.append(re.search('\d+', i).group(0)) for i in url]
+    [txt.append(pdf_url_to_txt(i)) for i in url]
+
     element = WebDriverWait(browser, 5).until(
       EC.presence_of_element_located((By.XPATH, "//*")))
     try:
         browser.find_element_by_class_name("next").click()
     except Exception:
         pass
-    print (autos)
-    print ("pag " + str(l) + " de " + str(loops))
+    date1 = browser.find_element_by_xpath("//div[6]/ul/li[4]").text
+    date2 = browser.find_element_by_xpath("//div[25]/ul/li[4]").text
+    counter = counter + 1
+    print ("pag" + str(counter))
+    print (url)
 
-nro = [re.search('\d+', i).group(0) for i in url]
-
-
-for o in range(len(tri)):
+for o in range(len(nro)):
     corte = tri[o].replace('Tribunal: ', '')
-    exp = exp[o].replace('Expediente N°: ', '')
-    autos = aut[o].replace('Carátula: ', '')
+    expediente = exp[o].replace('Expediente N°: ', '')
+    autos = aut[o].replace('Carátula: ', '').upper()
     fecha = fec[o].replace('Fecha de sentencia: ', '')
     fecha = datetime.strptime(fecha, '%d/%m/%Y')
-    instance = Fallos(nr=nro[o], corte=corte, exp=exp, autos=autos,
-                      fecha=fecha)
+    sobre = cij_sobre(autos)
+    actora = cij_actora(autos)
+    demandada = cij_demandada(autos)
+    jueces = cij_jueces(txt[o])
+    leyes = cij_leyes(txt[o])
+    citas = cij_citas(txt[o])
+    lugar = cij_lugar(txt[o])
+    materia = get_materia(txt[o])
+    voces = get_voces(txt[o])
+
+    instance = Fallos(nr=nro[o], corte=corte, exp=expediente, autos=autos,
+                      fecha=fecha, text=txt[o], sobre=sobre, actora=actora,
+                      demandada=demandada, jueces=jueces, leyes=leyes,
+                      citados=citas, lugar=lugar, voces=voces,
+                      materia=materia)
     instance.save()
