@@ -19,6 +19,7 @@ class Fallos(models.Model):
     leyes = models.CharField(max_length=999, blank=True, null=True)
     citados = models.CharField(max_length=999, blank=True, null=True)
     lugar = models.CharField(max_length=150, blank=True, null=True)
+    provincia = models.CharField(max_length=150, blank=True, null=True)
 
     voces = models.CharField(max_length=1000, blank=True, null=True)
     materia = models.CharField(max_length=9000, blank=True, null=True)

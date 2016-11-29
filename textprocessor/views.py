@@ -269,3 +269,53 @@ def cij_lugar(autos):
                "CAPITAL FEDERAL"]
     lugar = next((l for l in lugares if l in autos), "CAPITAL FEDERAL")
     return lugar
+
+def cij_provincia(lugar):
+    if ("BLANCA" in lugar or "ROCA" in lugar or
+        "PLATA" in lugar or "SAN MARTÍN" in lugar or
+        "SAN MARTIN" in lugar):
+        provincia = "BUENOS AIRES"
+    elif ("COMODORO" in lugar):
+        provincia = "CHUBUT"
+    elif ("CÓRDOBA" in lugar or "CORDOBA" in lugar):
+        provincia = "CÓRDOBA"
+    elif ("CORRIENTES" in lugar):
+        provincia = "CORRIENTES"
+    elif ("FORMOSA" in lugar):
+        provincia = "FORMOSA"
+    elif ("JUJUY" in lugar):
+        provincia = "JUJUY"
+    elif ("MENDOZA" in lugar):
+        provincia = "MENDOZA"
+    elif ("PARANÁ" in lugar or "PARANA" in lugar):
+        provincia = "ENTRE RIOS"
+    elif ("POSADAS" in lugar or "MISIONES" in lugar):
+        provincia = "MISIONES"
+    elif ("SANTA FE" in lugar or "ROSARIO" in lugar):
+        provincia = "SANTA FE"
+    elif ("NEUQUEN" in lugar):
+        provincia = "NEUQUEN"
+    elif ("RESISTENCIA" in lugar):
+        provincia = "CHACO"
+    elif ("SALTA" in lugar):
+        provincia = "SALTA"
+    elif ("SANTA ROSA" in lugar):
+        provincia = "LA PAMPA"
+    elif ("FUEGO" in lugar):
+        provincia = "TIERRA DEL FUEGO"
+    elif ("TUCUMÁN" in lugar or "TUCUMAN" in lugar):
+        provincia = "TUCUMÁN"
+    elif ("FEDERAL" in lugar or "CIUDAD" in lugar):
+        provincia = "CAPITAL FEDERAL"
+    elif ("SAN JUAN" in lugar):
+        provincia = "SAN JUAN"
+    elif ("SAN LUIS" in lugar):
+        provincia = "SAN LUIS"
+    elif ("LA RIOJA" in lugar):
+        provincia = "LA RIOJA"
+    elif ("CATAMARCA" in lugar):
+        provincia = "CATAMARCA"
+    elif ("SANTIAGO" in lugar):
+        provincia = "SANTIAGO DEL ESTERO"
+
+    return provincia

@@ -432,16 +432,19 @@ section{
     width: 32%;
     background-color: #fff;
     float: left;
-    height: 594px;
     border: 1px solid #E6E9ED;
+    height: 477px;
 }
 #medium-center-chart{
     margin: 5px;
     width: 32%;
     background-color: #fff;
     float: left;
-    height: 594px;
     border: 1px solid #E6E9ED;
+}
+#medium-center-chart td{
+    padding: 1px;
+    vertical-align: middle;
 }
 #page-top{
     background-color: #F7F7F7;
@@ -476,3 +479,4 @@ div.mtool {
     border-radius: 2px;
     opacity: 0.9;
 }
+

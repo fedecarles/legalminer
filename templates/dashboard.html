@@ -93,7 +93,7 @@ var map_count = {{ map_count|safe }}
 
 $(document).ready(function () {
     Chart("#main-chart", eval(fecha), "100%", 250, "fecha", "Vertical", "#80b1d3", "cantidad", eval("dimple.plot.line"), "1000");
-    Chart("#medium-left-chart", eval(jueces),"100%", 550, "jueces", "Horizontal", "#80b1d3", "cantidad", eval("dimple.plot.bar"), "20");
+    Chart("#medium-left-chart", eval(jueces),"100%", 431, "jueces", "Horizontal", "#80b1d3", "cantidad", eval("dimple.plot.bar"), "10");
 });
 
 function Chart(uid, data, width, height, choice, orientacion, color, valor, type, count){
@@ -175,7 +175,7 @@ function tabulate(data, uid,  columns) {
 
 // Graph size.
 var width = $('#medium-right-chart').width(),
-    height = $('#medium-right-chart').height();
+    height = $('#medium-right-chart').height() * .9;
 
 // Toggle var for node/link opacity.
 var toggle = 0;
@@ -367,13 +367,25 @@ var mtool = d3.select('#map ').append('div')
 
 var color = d3.scale.linear()
              .domain([0, 100])
-             .range(["#fff", "#4682b4"]);
+             .range(["#ecf2f7", "#4682b4"]);
+
+var map_count_nest = d3.nest()
+  .key(function(d) { return d.provincia; })
+  .rollup(function(v) { return d3.mean(v, function(d) { return d.cantidad; }); })
+  .entries(map_count);
+
+var map_court_nest = d3.nest()
+  .key(function(d) { return d.provincia; })
+  .key(function(d) { return d.corte; })
+  .rollup(function(v) { return d3.sum(v, function(d) { return d.cantidad; }); })
+  .map(map_count);
 
 d3.json("/static/js/argentina.json", function(error, json) {
 
-  for (var i = 0; i < map_count.length; i++) {
-      var data2id = map_count[i].lugar;
-      var dataValue = map_count[i].porcentaje;
+  for (var i = 0; i < map_count_nest.length; i++) {
+      var data2id = map_count_nest[i].key;
+      var dataValue = map_count_nest[i].values;
+
       for (var j = 0; j < json.features.length; j++) {
           var jsonCountryCode = json.features[j].properties.NAME_1.toUpperCase();
           if (data2id == jsonCountryCode) {
@@ -449,12 +461,14 @@ function maptooltip(d, i) {
     var mouse = d3.mouse(svg.node()).map(function(d) {
         return parseInt(d);
     });
+
     mtool.classed('hidden', false)
         .html(d.properties.NAME_1);
 
     var currentState = this;
     d3.select(this).style('fill-opacity', .7);
 }
+
 function mapout(d, i) {
     tooltip.classed('hidden', true);
     d3.selectAll('path')

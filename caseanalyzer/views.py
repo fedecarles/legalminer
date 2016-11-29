@@ -26,7 +26,8 @@ def dashboard(request, pk=None):
         jueces = tableToDict(countDataTable(pks, 'jueces'))
         citados = tableToDict(countDataTable(pks, 'citados'))
         force_layout = forceLayoutData(pks)
-        map_count = tableToDict(countDataTable(pks, 'lugar'))
+        map_count = tableToDict(groupDataTable(pks, 'corte', 'provincia',
+                                               'corte'))
         total = len(pks)
 
         context = {
