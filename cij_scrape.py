@@ -27,6 +27,10 @@ from textprocessor.models import Fallos
 # This is so my local_settings.py gets loaded.
 os.chdir(proj_path)
 
+# Load SAIJ Tesauro.
+with open('tesauro_dict.txt', 'r') as inf:
+    d = eval(inf.read())
+
 browser = webdriver.PhantomJS(
     "/home/federico/PhantomJS/phantomjs-1.9.8-linux-x86_64/bin/phantomjs")
 
@@ -194,6 +198,38 @@ def cij_lugar(autos):
     return lugar
 
 
+def cij_provincia(lugar):
+    prov_dict = {
+        "BUENOS AIRES": ["BLANCA", "ROCA", "PLATA", "SAN MARTÍN", "SAN MARTIN"],
+        "CHUBUT": ["COMODORO"],
+        "CÓRDOBA": ["CÓRDOBA", "CORDOBA"],
+        "CORRIENTES": ["CORRIENTES"],
+        "FORMOSA": ["FORMOSA"],
+        "JUJUY": ["JUJUY"],
+        "MENDOZA": ["MENDOZA"],
+        "ENTRE RÍOS": ["PARANÁ", "PARANA"],
+        "MISIONES": ["POSADAS"],
+        "SANTA FE": ["SANTA FE", "ROSARIO"],
+        "NEUQUÉN": ["NEUQUEN", "NEUQUÉN"],
+        "CHACO": ["RESISTENCIA"],
+        "SALTA": ["SALTA"],
+        "LA PAMPA": ["SANTA ROSA"],
+        "TIERRA DEL FUEGO": ["FUEGO"],
+        "TUCUMÁN": ["TUCUMAN", "TUCUMÁN"],
+        "CAPITAL FEDERAL": ["FEDERAL"],
+        "SAN JUAN": ["SAN JUAN"],
+        "SAN LUIS": ["SAN LUIS"],
+        "SANTA CRUZ": ["GALLEGOS", "SANTA CRUZ"],
+        "LA RIOJA": ["LA RIOJA"],
+        "CATAMARCA": ["CATAMARCA"],
+        "SANTIAGO DEL ESTERO": ["SANTIAGO"]
+        }
+    for k, v in prov_dict.items():
+        for i in v:
+            if i in lugar:
+                return k
+
+
 # http://stackoverflow.com/questions/26413216/pdfminer3k-has-no-method-named-create-pages-in-pdfpage
 def pdf_url_to_txt(url):
     text = ""
@@ -260,6 +296,7 @@ while (date1 == date2):
     print (url)
 
 for o in range(len(nro)):
+    text = re.sub('“|”', '"', txt[o])
     corte = tri[o].replace('Tribunal: ', '')
     expediente = exp[o].replace('Expediente N°: ', '')
     autos = aut[o].replace('Carátula: ', '').upper()
@@ -268,16 +305,17 @@ for o in range(len(nro)):
     sobre = cij_sobre(autos)
     actora = cij_actora(autos)
     demandada = cij_demandada(autos)
-    jueces = cij_jueces(txt[o])
-    leyes = cij_leyes(txt[o])
-    citas = cij_citas(txt[o])
-    lugar = cij_lugar(txt[o])
-    materia = get_materia(txt[o])
-    voces = get_voces(txt[o])
+    jueces = cij_jueces(text)
+    leyes = cij_leyes(text)
+    citas = cij_citas(text)
+    lugar = cij_lugar(text)
+    provincia = cij_provincia(lugar)
+    materia = get_materia(d, text)
+    voces = get_voces(d, text)
 
     instance = Fallos(nr=nro[o], corte=corte, exp=expediente, autos=autos,
-                      fecha=fecha, text=txt[o], sobre=sobre, actora=actora,
+                      fecha=fecha, text=text, sobre=sobre, actora=actora,
                       demandada=demandada, jueces=jueces, leyes=leyes,
-                      citados=citas, lugar=lugar, voces=voces,
-                      materia=materia)
+                      citados=citas, lugar=lugar, provincia=provincia,
+                      voces=voces, materia=materia)
     instance.save()

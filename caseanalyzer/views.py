@@ -30,6 +30,8 @@ def dashboard(request, pk=None):
                                                'corte'))
         total = len(pks)
 
+        case_data = caseData(pks)
+
         context = {
             'query': q,
             'total': total,
@@ -37,10 +39,27 @@ def dashboard(request, pk=None):
             'jueces': json.dumps(jueces, cls=DjangoJSONEncoder),
             'citados': json.dumps(citados, cls=DjangoJSONEncoder),
             'force_layout': json.dumps(force_layout),
-            'map_count': json.dumps(map_count, cls=DjangoJSONEncoder)
+            'map_count': json.dumps(map_count, cls=DjangoJSONEncoder),
+            'case_data': json.dumps(case_data, cls=DjangoJSONEncoder),
         }
 
     return render(request, 'dashboard.html', context)
+
+
+def dashboard2(request, pk=None):
+    context = {}
+    if request.method == 'POST':
+        pks = request.POST.getlist('seleccion')
+        q = request.POST.get('query')
+
+        case_data = caseData(pks)
+
+        context = {
+            'query': q,
+            'case_data': json.dumps(case_data, cls=DjangoJSONEncoder),
+        }
+
+    return render(request, 'dashboard2.html', context)
 
 
 def filterData(request):
@@ -194,28 +213,32 @@ def tableToDict(table):
 
 # Get selection data and return a dict.
 def caseData(pks):
-    # Dict data placeholders.
-    fecha = []
     leyes = []
-    citados = []
-    num = []
+    jueces = []
 
     # Get data from database.
-    for pk in pks:
-        instance = get_object_or_404(Fallos, pk=pk)
-        fecha.append(instance.fecha)
-        leyes.append(instance.leyes)
-        citados.append(instance.citados)
-        num.append(instance.nr)
+    instances = [get_object_or_404(Fallos, pk=i) for i in pks]
+    fecha = [i.fecha for i in instances]
+    autos = [i.autos for i in instances]
+    corte = [i.corte for i in instances]
+    sobre = [i.sobre for i in instances]
+    provincia = [i.provincia for i in instances]
+    [leyes.append(i.leyes) for i in instances]
+    [jueces.append(i.jueces) for i in instances]
+    num = [i.nr for i in instances]
 
     # Build dictionary with case data.
-    case_data = {}
+    case_data = []
 
     for p in range(len(num)):
         sub = {
-                'fecha': fecha[p],
-                'leyes': leyes[p],
-                'citados': citados[p],
-                }
-        case_data[num[p]] = sub
+            'fecha': fecha[p],
+            'autos': autos[p],
+            'corte': corte[p],
+            'sobre': sobre[p],
+            'provincia': provincia[p],
+            'leyes': leyes[p].split(', '),
+            'jueces': jueces[p].split(', '),
+            }
+        case_data.append(sub)
     return case_data

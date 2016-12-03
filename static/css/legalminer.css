@@ -423,6 +423,7 @@ section{
 #medium-left-chart{
     margin: 5px;
     width: 32%;
+    height: 295px;
     background-color: #fff;
     float: left;
     border: 1px solid #E6E9ED;
@@ -452,8 +453,9 @@ section{
 #main-chart{
     background-color: #fff;
     border: 1px solid #E6E9ED;
+    height: 295px;
 }
-#map{
+#main-right-chart {
     height: 296px;
     background-color: #fff;
     border: 1px solid #E6E9ED;
@@ -479,4 +481,6 @@ div.mtool {
     border-radius: 2px;
     opacity: 0.9;
 }
-
+#medium-center-chart {
+    height: 295px;
+}

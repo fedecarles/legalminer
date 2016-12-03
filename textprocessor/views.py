@@ -270,6 +270,7 @@ def cij_lugar(autos):
     lugar = next((l for l in lugares if l in autos), "CAPITAL FEDERAL")
     return lugar
 
+
 def cij_provincia(lugar):
     if ("BLANCA" in lugar or "ROCA" in lugar or
         "PLATA" in lugar or "SAN MARTÍN" in lugar or
