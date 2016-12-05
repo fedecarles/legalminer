@@ -10,20 +10,17 @@
 			</h4>
 		</div>
 	</div>
-	<div class="row">
+	<div class="dc-data-count row">
 		<div class="col-md-3">
 			<blockquote>
-            <small>Total de fallos</small>
-				<p class="blockquote-number">
-                {{ total }}
-				</p> <small>Someone famous <cite>Source Title</cite></small>
+            <small>Total</small>
+			<span class="total-count bq-number"></span> 
 			</blockquote>
 		</div>
 		<div class="col-md-3">
 			<blockquote>
-            <small>Fallos por semana</small>
-				<p>
-				</p> <small>Someone famous <cite>Source Title</cite></small>
+            <small>Filtrado</small>
+			<span class="filter-count bq-number"></span> 
 			</blockquote>
 		</div>
 		<div class="col-md-3">
@@ -74,6 +71,7 @@
 
 <script type="text/javascript">
 var data = {{ case_data|safe }}
+var map_count = {{ map_count|safe }}
 
 var dtgFormat = d3.time.format("%Y-%m-%d");
 
@@ -106,11 +104,14 @@ var dateDim = ndx.dimension(function(d) {return d.fecha;});
 var corteDim = ndx.dimension(function(d) {return d.corte;});
 var provinciaDim = ndx.dimension(function(d) {return d.provincia;});
 var juecesDim = ndx.dimension(function(d) {return d.jueces;});
+var mapDim = ndx.dimension(function(d) {return d.provincia;});
 
 var dateGroup = dateDim.group()
 var corteGroup = corteDim.group().reduceCount(function(d) {return d.corte;});
 var provinciaGroup = provinciaDim.group().reduceCount(function(d) {return d.provincia;});
 var juecesGroup = juecesDim.groupAll().reduce(reduceAdd, reduceRemove, reduceInitial).value();
+var mapGroup = mapDim.group().reduceCount(function(d) {return d.provincia;});
+var all = ndx.groupAll();
 
 // hack to make dc.js charts work
 juecesGroup.all = function() {
@@ -140,6 +141,7 @@ var mainChart  = dc.lineChart("#main-chart");
 var leftChart  = dc.rowChart("#medium-left-chart");
 var centerChart  = dc.rowChart("#medium-center-chart");
 var mainRightChart  = dc.rowChart("#main-right-chart");
+var totalCount = dc.dataCount(".dc-data-count");
 
 var mainChart_width = $('#main-chart').width(),
     mainChart_height = $('#main-chart').height() * .9;
@@ -201,7 +203,41 @@ centerChart
     .colors("#4682b4")
     .xAxis().ticks(4);
 
+totalCount
+    .dimension(ndx)
+    .group(all);
+
 dc.renderAll(); 
 
+var width = $('#medium-right-chart').width() / 2,
+    height = $('#medium-right-chart').height(),
+    active = d3.select(null);
+
+var argMap = dc.geoChoroplethChart("#medium-right-chart");
+
+d3.json("/static/js/argentina.json", function(geojson){
+        argMap
+            .dimension(mapDim)
+            .group(mapGroup)
+            .width(400)
+            .height(400)
+            .colors(d3.scale.linear()
+                   .range(["#ecf2f7", "#4682b4"])
+                    )
+            .colorDomain([0, 500])
+            .colorCalculator(function (d) { return d ? argMap.colors()(d) : '#ccc';}) 
+            .transitionDuration(1000)
+            .projection(d3.geo.transverseMercator()
+                    .center([4, -40.5])
+                    .rotate([66, 0])
+                    .scale((height * 45) / 33)
+                    .translate([(width / 2), (height / 2)])
+                    )
+            .overlayGeoJson(geojson.features, 'NAME_1', function(d) {
+                return d.properties.NAME_1.toUpperCase();
+            }) 
+
+            dc.renderAll();
+        });
 </script>
 {% endblock %}
