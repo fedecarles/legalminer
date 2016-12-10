@@ -417,34 +417,34 @@ section{
     left: 0;
 }
 #medium-left-chart{
-    height: 300px;
+    height: 250px;
     background-color: #fff;
     border: 1px solid #E6E9ED;
 }
 #map-chart{
     border: 1px solid #E6E9ED;
-    height: 600px;
+    height: 500px;
     background-color: white;
 }
 #medium-center-chart{
     background-color: #fff;
     border: 1px solid #E6E9ED;
-    height: 300px;
+    height: 250px;
 }
 #bottom-left-chart {
-    height: 300px;
+    height: 250px;
     background-color: #fff;
     border: 1px solid #E6E9ED;
 }
 #bottom-right-chart {
     border: 1px solid #E6E9ED;
-    height: 300px;
+    height: 250px;
     background-color: white;
 }
 #bottom-center-chart {
     background-color: #fff;
     border: 1px solid #E6E9ED;
-    height: 300px;
+    height: 250px;
 }
 #page-top{
     background-color: #F7F7F7;
@@ -452,12 +452,7 @@ section{
 #main-chart{
     background-color: #fff;
     border: 1px solid #E6E9ED;
-    height: 300px;
-}
-#main-right-chart {
-    height: 600px;
-    background-color: #fff;
-    border: 1px solid #E6E9ED;
+    height: 250px;
 }
 .bq-number{
     font-size: 40px;
