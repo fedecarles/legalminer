@@ -280,8 +280,6 @@ while (date1 == date2):
     [aut.append(i.text) for i in autos]
     [fec.append(i.text) for i in fecha]
     [url.append(i.get_attribute('href')) for i in links]
-    [nro.append(re.search('\d+', i).group(0)) for i in url]
-    [txt.append(pdf_url_to_txt(i)) for i in url]
 
     element = WebDriverWait(browser, 5).until(
       EC.presence_of_element_located((By.XPATH, "//*")))
@@ -293,7 +291,17 @@ while (date1 == date2):
     date2 = browser.find_element_by_xpath("//div[25]/ul/li[4]").text
     counter = counter + 1
     print ("pag" + str(counter))
-    print (url)
+
+[nro.append(re.search('\d+', i).group(0)) for i in url]
+[txt.append(pdf_url_to_txt(i)) for i in url]
+
+print (len(tri))
+print (len(exp))
+print (len(aut))
+print (len(fec))
+print (len(url))
+print (len(nro))
+print (len(txt))
 
 for o in range(len(nro)):
     text = re.sub('“|”', '"', txt[o])

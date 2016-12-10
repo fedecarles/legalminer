@@ -3,75 +3,111 @@
 {% block content %}
 <body>
     <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-			<h4 class="text-center">
-                Panel para búsqueda: {{ query }}
-			</h4>
-		</div>
-	</div>
-	<div class="dc-data-count row">
-		<div class="col-md-3">
+	<div class="dc-data-count row col-md-12">
+		<div class="col-md-2">
 			<blockquote>
             <small>Total</small>
 			<span class="total-count bq-number"></span> 
 			</blockquote>
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-2">
 			<blockquote>
             <small>Filtrado</small>
 			<span class="filter-count bq-number"></span> 
 			</blockquote>
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-4">
 			<blockquote>
-            <small>Juez:</small>
-				<p>
-				</p> <small>% del fallos.</small>
+            <small>Búsqueda</small>
+				<p id="busqueda">{{ query }}</p>
 			</blockquote>
 		</div>
-		<div class="col-md-3">
+		<div class="col-md-4">
 			<blockquote>
 				<p>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
 				</p> <small>Someone famous <cite>Source Title</cite></small>
 			</blockquote>                                                                                        
-		</div>                                                                                           	</div>
-	<div class="row">
-		<div id="main-chart" class="col-md-8">
-			<h4>
-				Heading
-			</h4>
-		</div>
-		<div id="main-right-chart" class="col-md-4">
-			<h4>
-				Heading
-			</h4>
-		</div>
-	</div>
-	<div class="row">
-		<div id="medium-left-chart">
-			<h4>
-				Heading
-			</h4>
-		</div>
-		<div id="medium-center-chart">
-			<h4>
-				Heading
-			</h4>
-		</div>
-        <div id="medium-right-chart">
-			<h4>
-				Heading
-			</h4>
-		</div>
-	</div>
+		</div>                                                                                           
+    </div>
+    <div class="col-md-8">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="main-chart" class="col-md-12">
+                    <h4>
+                        Heading
+                    </h4>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div class="row">
+            <div class="col-md-6">
+                <div id="left-square">
+                    <div  id="medium-left-chart" class="col-md-12">
+                    	<h4>
+                    		Heading
+                    	</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="center-square">
+                    <div  id="medium-center-chart" class="col-md-12">
+                    	<h4>
+                    		Heading
+                    	</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <br/>
+    </div>
+    <div class="col-md-4">
+        <div id="right-map-chart">
+            <div  id="map-chart" class="col-md-12">
+            	<h4>                                               
+            		Heading
+            	</h4>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-4">
+                <div id="bottom-left-div">
+                    <div  id="bottom-left-chart" class="col-md-12">
+                    	<h4>                                               
+                    		Heading
+                    	</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div id="bottom-center-div">
+                    <div  id="bottom-center-chart" class="col-md-12">
+                    	<h4>                                               
+                    		Heading
+                    	</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div id="bottom-right-div">
+                    <div  id="bottom-right-chart" class="col-md-12">
+                    	<h4>                                               
+                    		Heading
+                    	</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 </body>
 
 <script type="text/javascript">
 var data = {{ case_data|safe }}
-var map_count = {{ map_count|safe }}
 
 var dtgFormat = d3.time.format("%Y-%m-%d");
 
@@ -80,22 +116,44 @@ data.forEach(function(d) {
 });
 
 // http://stackoverflow.com/questions/17524627/is-there-a-way-to-tell-crossfilter-to-treat-elements-of-array-as-separate-record
-function reduceAdd(p, v) {
-  v.jueces.forEach (function(val, idx) {
-     p[val] = (p[val] || 0) + 1; //increment counts
-  });
-  return p;
+function reduceAdd(attr) {
+  return function(p,v) {
+    ++p.count
+    p.sum += v[attr];
+    return p;
+  };
 }
 
-function reduceRemove(p, v) {
-  v.jueces.forEach (function(val, idx) {
-     p[val] = (p[val] || 0) - 1; //decrement counts
-  });
-  return p;
+function reduceRemove(attr) {
+  return function(p,v) {
+    --p.count
+    p.sum -= v[attr];
+    return p;
+  };
 }
 
 function reduceInitial() {
   return {};  
+}
+
+function reduceAddArray(attr) {
+    return function (p, v) {
+      if (v[attr][0] === "") return p;    // skip empty values
+      v[attr].forEach (function(val, idx) {
+         p[val] = (p[val] || 0) + 1; //increment counts
+      });
+      return p;
+    }
+}
+
+function reduceRemoveArray(attr) {
+    return function (p, v) {
+      if (v[attr][0] === "") return p;    // skip empty values
+      v[attr].forEach (function(val, idx) {
+         p[val] = (p[val] || 0) - 1; //decrement counts
+      });
+      return p;
+    }
 }
 
 var ndx = crossfilter(data); 
@@ -105,16 +163,22 @@ var corteDim = ndx.dimension(function(d) {return d.corte;});
 var provinciaDim = ndx.dimension(function(d) {return d.provincia;});
 var juecesDim = ndx.dimension(function(d) {return d.jueces;});
 var mapDim = ndx.dimension(function(d) {return d.provincia;});
+var sobreDim = ndx.dimension(function(d) {return d.sobre;});
+var vocesDim = ndx.dimension(function(d) {return d.voces;});
+var materiaDim = ndx.dimension(function(d) {return d.materia;});
 
+var all = ndx.groupAll();
 var dateGroup = dateDim.group()
 var corteGroup = corteDim.group().reduceCount(function(d) {return d.corte;});
 var provinciaGroup = provinciaDim.group().reduceCount(function(d) {return d.provincia;});
-var juecesGroup = juecesDim.groupAll().reduce(reduceAdd, reduceRemove, reduceInitial).value();
-var mapGroup = mapDim.group().reduceCount(function(d) {return d.provincia;});
-var all = ndx.groupAll();
+var juecesGroup = juecesDim.groupAll().reduce(reduceAddArray("jueces"), reduceRemoveArray("jueces"), reduceInitial).value();
+var mapGroup = mapDim.group();
+var sobreGroup = sobreDim.group().reduceCount(function(d) {return d.sobre;});
+var vocesGroup = vocesDim.groupAll().reduce(reduceAddArray("voces"), reduceRemoveArray("voces"), reduceInitial).value();
+var materiaGroup = materiaDim.groupAll().reduce(reduceAddArray("materia"), reduceRemoveArray("materia"), reduceInitial).value();
 
 // hack to make dc.js charts work
-juecesGroup.all = function() {
+function arrayGroupAll() {
   var newObject = [];
   for (var key in this) {
     if (this.hasOwnProperty(key) && key != "all" && key != "top") {
@@ -127,51 +191,13 @@ juecesGroup.all = function() {
   return newObject;
 };
 
-
-juecesGroup.top = function(count) {
+function arrayGroupTop(count) {
     var newObject = this.all();
      newObject.sort(function(a, b){return b.value - a.value});
     return newObject.slice(0, count);
 };
 
-var minDate = dateDim.bottom(1)[0].fecha;
-var maxDate = dateDim.top(1)[0].fecha;
-
-var mainChart  = dc.lineChart("#main-chart");
-var leftChart  = dc.rowChart("#medium-left-chart");
-var centerChart  = dc.rowChart("#medium-center-chart");
-var mainRightChart  = dc.rowChart("#main-right-chart");
-var totalCount = dc.dataCount(".dc-data-count");
-
-var mainChart_width = $('#main-chart').width(),
-    mainChart_height = $('#main-chart').height() * .9;
-
-var mainRigthChart_width = $('#main-right-chart').width(),
-    mainRightChart_height = $('#main-right-chart').height() * .9;
-
-var leftChart_width = $('#medium-left-chart').width(),
-    leftChart_height = $('#medium-left-chart').height() * .9;
-
-var centerChart_width = $('#medium-center-chart').width(),
-    centerChart_height = $('#medium-center-chart').height() * .9;
-
-mainChart
-	.width(mainChart_width).height(mainChart_height)
-	.dimension(dateDim)
-	.group(dateGroup)
-	.x(d3.time.scale().domain([minDate,maxDate]))
-    .xUnits(function(){return 100;});
-
-mainRightChart
-	.width(mainRigthChart_width).height(mainRightChart_height)
-	.dimension(juecesDim)
-	.group(juecesGroup)
-    .cap(9)
-    .ordering(function(d){ return -d.value })
-    .colors("#4682b4")
-    .xAxis().ticks(4);
-
-mainRightChart.filterHandler (function (dimension, filters) {
+function arrayFilterHandler(dimension, filters) {
    dimension.filter(null);   
     if (filters.length === 0)
         dimension.filter(null);
@@ -180,28 +206,32 @@ mainRightChart.filterHandler (function (dimension, filters) {
             for (var i=0; i < d.length; i++) {
                 if (filters.indexOf(d[i]) >= 0) return true;
             }
-            return false; 
+            return false;
         });
-  return filters; 
-  }
-);
+    return filters; 
+}
 
-leftChart
-	.width(leftChart_width).height(leftChart_height)
-    .data(function (group) {return corteGroup.top(10);})
-	.dimension(corteDim)
-	.group(corteGroup)
-    .ordering(function(d){ return -d.value })
-    .colors("#4682b4")
-    .xAxis().ticks(4);
+var minDate = dateDim.bottom(1)[0].fecha;
+var maxDate = dateDim.top(1)[0].fecha;
 
-centerChart
-	.width(centerChart_width).height(centerChart_height)
-	.dimension(provinciaDim)
-	.group(provinciaGroup)
-    .ordering(function(d){ return -d.value })
-    .colors("#4682b4")
-    .xAxis().ticks(4);
+var mainChart  = dc.lineChart("#main-chart");
+var totalCount = dc.dataCount(".dc-data-count");
+
+var mainChart_width = $('#main-chart').width(),
+    mainChart_height = $('#main-chart').height() * .9;
+
+var mainRigthChart_width = $('#main-right-chart').width(),
+    mainRightChart_height = $('#main-right-chart').height() * .9;
+
+var squareChart_width = $('#medium-left-chart').width(),
+    squareChart_height = $('#medium-left-chart').height() * .9;
+
+mainChart
+	.width(mainChart_width).height(mainChart_height)
+	.dimension(dateDim)
+	.group(dateGroup)
+	.x(d3.time.scale().domain([minDate,maxDate]))
+    .xUnits(function(){return 100;});
 
 totalCount
     .dimension(ndx)
@@ -209,29 +239,27 @@ totalCount
 
 dc.renderAll(); 
 
-var width = $('#medium-right-chart').width() / 2,
-    height = $('#medium-right-chart').height(),
-    active = d3.select(null);
-
-var argMap = dc.geoChoroplethChart("#medium-right-chart");
+var argMap = dc.geoChoroplethChart("#map-chart");
 
 d3.json("/static/js/argentina.json", function(geojson){
         argMap
             .dimension(mapDim)
             .group(mapGroup)
             .width(400)
-            .height(400)
-            .colors(d3.scale.linear()
-                   .range(["#ecf2f7", "#4682b4"])
+            .height(600)
+            .colors(d3.scale.quantize()
+                   .range(["#ecf2f7", "#dae6f0", "#c7d9e8", "#b5cde1",
+                       "#a2c0d9", "#90b4d2", "#7da7ca", "#6a9bc3", "#588ebb",
+                       "#4682b4"])
                     )
-            .colorDomain([0, 500])
-            .colorCalculator(function (d) { return d ? argMap.colors()(d) : '#ccc';}) 
+            .colorDomain([0, 100])
+            .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';}) 
             .transitionDuration(1000)
             .projection(d3.geo.transverseMercator()
-                    .center([4, -40.5])
+                    .center([5, -30])
                     .rotate([66, 0])
-                    .scale((height * 45) / 33)
-                    .translate([(width / 2), (height / 2)])
+                    .scale((squareChart_height * 110) / 33)
+                    .translate([(squareChart_width / 2), (squareChart_height / 2)])
                     )
             .overlayGeoJson(geojson.features, 'NAME_1', function(d) {
                 return d.properties.NAME_1.toUpperCase();
@@ -239,5 +267,57 @@ d3.json("/static/js/argentina.json", function(geojson){
 
             dc.renderAll();
         });
+
+function barChart(uid, dim, color) {
+
+    var Dim = ndx.dimension(function(d) {return d[dim];});
+    var Group = Dim.group().reduceCount(function(d) {return d[dim];});
+
+    var barChart  = dc.rowChart(uid);
+
+    width = $(uid).width();
+    height = $(uid).height() * .9;
+
+    barChart
+	    .width(width).height(height)
+	    .dimension(Dim)
+	    .group(Group)
+        .cap(10)
+        .ordering(function(d){ return -d.value })
+        .colors(color)
+        .xAxis().ticks(4);
+}
+
+function barChartArray(uid, dim, color) {
+
+    var Dim = ndx.dimension(function(d) {return d[dim];});
+    var Group = Dim.groupAll().reduce(reduceAddArray(dim), reduceRemoveArray(dim), reduceInitial).value();
+
+    Group.all = arrayGroupAll;
+    Group.top =  arrayGroupTop;
+
+    var barChart  = dc.rowChart(uid);
+
+    var width = $(uid).width();
+    var height = $(uid).height() * .9;
+
+    barChart
+	    .width(width).height(height)
+	    .dimension(Dim)
+	    .group(Group)
+        .cap(10)
+        .ordering(function(d){ return -d.value })
+        .filterHandler(arrayFilterHandler)
+        .colors(color)
+        .xAxis().ticks(4);
+}
+
+barChart("#medium-left-chart", "corte", "#4682b4");
+barChartArray("#medium-center-chart", "citados", "#4682b4");
+barChart("#bottom-left-chart", "sobre", "#4682b4");
+barChartArray("#bottom-center-chart", "voces", "#4682b4");
+barChartArray("#bottom-right-chart", "materia", "#4682b4");
+
+dc.renderAll();
 </script>
 {% endblock %}

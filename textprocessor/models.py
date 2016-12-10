@@ -26,6 +26,8 @@ class Fallos(models.Model):
 
     slug = models.SlugField(unique=True, editable=False)
 
+    updated = models.DateTimeField(auto_now=True)
+
     def save(self, **kwargs):
         super(Fallos, self).save()
         # return reverse('details', (), {"slug": self.slug})

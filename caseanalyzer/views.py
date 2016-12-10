@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, get_object_or_404, HttpResponse
+from django.shortcuts import render, get_object_or_404
 from textprocessor.models import Fallos
 from caseanalyzer.forms import MySearchForm
 from django.core.serializers.json import DjangoJSONEncoder
@@ -22,24 +22,12 @@ def dashboard(request, pk=None):
         pks = request.POST.getlist('seleccion')
         q = request.POST.get('query')
 
-        fecha = tableToDict(countDataTable(pks, 'fecha'))
-        jueces = tableToDict(countDataTable(pks, 'jueces'))
-        citados = tableToDict(countDataTable(pks, 'citados'))
         force_layout = forceLayoutData(pks)
-        map_count = tableToDict(groupDataTable(pks, 'corte', 'provincia',
-                                               'corte'))
-        total = len(pks)
-
         case_data = caseData(pks)
 
         context = {
             'query': q,
-            'total': total,
-            'fecha': json.dumps(fecha, cls=DjangoJSONEncoder),
-            'jueces': json.dumps(jueces, cls=DjangoJSONEncoder),
-            'citados': json.dumps(citados, cls=DjangoJSONEncoder),
             'force_layout': json.dumps(force_layout),
-            'map_count': json.dumps(map_count, cls=DjangoJSONEncoder),
             'case_data': json.dumps(case_data, cls=DjangoJSONEncoder),
         }
 
@@ -60,14 +48,6 @@ def dashboard2(request, pk=None):
         }
 
     return render(request, 'dashboard2.html', context)
-
-
-def filterData(request):
-    if request.is_ajax():
-        pks = [16595, 23301, 20019]
-        fecha = tableToDict(countDataTable(pks, 'fecha'))
-        fecha = json.dumps(fecha, cls=DjangoJSONEncoder),
-        return HttpResponse(fecha, content_type='application/json')
 
 
 def analyzer(request, pk=None):
@@ -215,6 +195,9 @@ def tableToDict(table):
 def caseData(pks):
     leyes = []
     jueces = []
+    voces = []
+    materia = []
+    citados = []
 
     # Get data from database.
     instances = [get_object_or_404(Fallos, pk=i) for i in pks]
@@ -225,6 +208,9 @@ def caseData(pks):
     provincia = [i.provincia for i in instances]
     [leyes.append(i.leyes) for i in instances]
     [jueces.append(i.jueces) for i in instances]
+    [voces.append(i.voces) for i in instances]
+    [materia.append(i.materia) for i in instances]
+    [citados.append(i.citados) for i in instances]
     num = [i.nr for i in instances]
 
     # Build dictionary with case data.
@@ -239,6 +225,9 @@ def caseData(pks):
             'provincia': provincia[p],
             'leyes': leyes[p].split(', '),
             'jueces': jueces[p].split(', '),
+            'voces': voces[p].split(', '),
+            'materia': materia[p].split(', '),
+            'citados': citados[p].split('; '),
             }
         case_data.append(sub)
     return case_data

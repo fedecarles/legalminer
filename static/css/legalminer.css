@@ -41,7 +41,7 @@
     text-anchor: end;
 }
 .layer0 path {
-    stroke: white ;
+    stroke: black ;
     cursor: pointer; 
 }
 
@@ -417,32 +417,34 @@ section{
     left: 0;
 }
 #medium-left-chart{
-    margin: 5px;
-    width: 32%;
-    height: 477px;
+    height: 300px;
     background-color: #fff;
-    float: left;
     border: 1px solid #E6E9ED;
 }
-#medium-right-chart{
-    margin: 5px;
-    width: 32%;
-    float: left;
+#map-chart{
     border: 1px solid #E6E9ED;
-    height: 477px;
+    height: 600px;
     background-color: white;
 }
 #medium-center-chart{
-    margin: 5px;
-    width: 32%;
     background-color: #fff;
-    float: left;
     border: 1px solid #E6E9ED;
-    height: 477px;
+    height: 300px;
 }
-#medium-center-chart td{
-    padding: 1px;
-    vertical-align: middle;
+#bottom-left-chart {
+    height: 300px;
+    background-color: #fff;
+    border: 1px solid #E6E9ED;
+}
+#bottom-right-chart {
+    border: 1px solid #E6E9ED;
+    height: 300px;
+    background-color: white;
+}
+#bottom-center-chart {
+    background-color: #fff;
+    border: 1px solid #E6E9ED;
+    height: 300px;
 }
 #page-top{
     background-color: #F7F7F7;
@@ -450,21 +452,22 @@ section{
 #main-chart{
     background-color: #fff;
     border: 1px solid #E6E9ED;
-    height: 295px;
-    margin-left: 5px;
-    width: 1228px;
+    height: 300px;
 }
 #main-right-chart {
-    height: 296px;
-    margin-left: 10px;
+    height: 600px;
     background-color: #fff;
     border: 1px solid #E6E9ED;
 }
 .bq-number{
     font-size: 40px;
-    line-height: 47px;
-    font-weight: 600;
+    font-weight: 700;
     color: #73879C;
+}
+#busqueda {
+    font-size: 40px;
+    color: #73879C;
+    font-weight: 700;
 }
 div.mtool {
     float: right;

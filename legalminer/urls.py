@@ -19,7 +19,7 @@ from caseanalyzer.forms import MySearchForm
 from django.conf.urls import url, include
 from django.contrib import admin
 from textprocessor.views import cij
-from caseanalyzer.views import inicio, analyzer, details, dashboard, dashboard2, filterData
+from caseanalyzer.views import inicio, analyzer, details, dashboard, dashboard2
 
 urlpatterns = [
     # admin url

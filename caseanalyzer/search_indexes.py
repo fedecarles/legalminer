@@ -18,6 +18,9 @@ class FallosIndex(indexes.SearchIndex, indexes.Indexable):
     def get_model(self):
         return Fallos
 
+    def get_updated_field(self):
+        return "updated"
+
     def index_queryset(self, using=None):
         """Used when the entire index for model is updated."""
         return self.get_model().objects.all()

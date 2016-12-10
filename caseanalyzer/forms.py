@@ -32,6 +32,9 @@ class MySearchForm(FacetedSearchForm):
         if self.cleaned_data['jueces']:
             sqs = sqs.filter(jueces=self.cleaned_data['jueces'])
 
+        if self.cleaned_data['corte']:
+            sqs = sqs.filter(corte__exact=self.cleaned_data['corte'])
+
         if self.cleaned_data['actora']:
             sqs = sqs.filter(actora=self.cleaned_data['actora'])
 
@@ -42,9 +45,9 @@ class MySearchForm(FacetedSearchForm):
             sqs = sqs.filter(sobre=self.cleaned_data['sobre'])
 
         if self.cleaned_data['materia']:
-            sqs = sqs.filter(materia=self.cleaned_data['materia'])
+            sqs = sqs.filter(materia__exact=self.cleaned_data['materia'])
 
         if self.cleaned_data['voces']:
-            sqs = sqs.filter(voces=self.cleaned_data['voces'])
+            sqs = sqs.filter(voces__exact=self.cleaned_data['voces'])
 
         return sqs
