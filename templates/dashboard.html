@@ -4,39 +4,41 @@
 <body>
     <div class="container-fluid">
 	<div class="dc-data-count row col-md-12">
-		<div class="col-md-2">
-			<blockquote>
-            <small>Total</small>
-			<span class="total-count bq-number"></span> 
-			</blockquote>
+		<div id="header-chart-div" class="col-md-6">
+            <div id="header-chart" class="col-md-12">
+            </div>
 		</div>
 		<div class="col-md-2">
-			<blockquote>
-            <small>Filtrado</small>
-			<span class="filter-count bq-number"></span> 
-			</blockquote>
+            <p><small>Búsqueda</small></p>
+        	<p id="busqueda">{{ query }}</p>
 		</div>
-		<div class="col-md-4">
-			<blockquote>
-            <small>Búsqueda</small>
-				<p id="busqueda">{{ query }}</p>
-			</blockquote>
+		<div class="col-md-2">
+            <p><small>Total</small></p>
+            <span class="total-count bq-number"></span> 
 		</div>
-		<div class="col-md-4">
-			<blockquote>
-				<p>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.
-				</p> <small>Someone famous <cite>Source Title</cite></small>
-			</blockquote>                                                                                        
+		<div class="col-md-2">
+            <p><small>Filtrado</small></p>
+            <span class="filter-count bq-number"></span> 
 		</div>                                                                                           
     </div>
     <div class="col-md-8">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div id="main-chart" class="col-md-12">
-                    <h4>
-                        Heading
-                    </h4>
+                    <div id="heading">
+                        <h4>
+                            Cortes (10)
+                        </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div id="main-right-chart" class="col-md-12">
+                    <div id="heading">
+                        <h4>
+                            Jueces (10)
+                        </h4>
+                    </div>
                 </div>
             </div>
         </div>
@@ -45,18 +47,22 @@
             <div class="col-md-6">
                 <div id="left-square">
                     <div  id="medium-left-chart" class="col-md-12">
-                    	<h4>
-                    		Heading
-                    	</h4>
+                        <div id="heading">
+                            <h4>
+                               Fallos Citados (10) 
+                            </h4>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div id="center-square">
                     <div  id="medium-center-chart" class="col-md-12">
-                    	<h4>
-                    		Heading
-                    	</h4>
+                        <div id="heading">
+                            <h4>
+                                Leyes Citadas (10)
+                            </h4>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -66,9 +72,13 @@
     <div class="col-md-4">
         <div id="right-map-chart">
             <div  id="map-chart" class="col-md-12">
-            	<h4>                                               
-            		Heading
-            	</h4>
+                <div id="heading">
+                    <h4>
+                        Cantidad por Provincia
+                    </h4>
+                    <div id="capital">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -77,31 +87,54 @@
             <div class="col-md-4">
                 <div id="bottom-left-div">
                     <div  id="bottom-left-chart" class="col-md-12">
-                    	<h4>                                               
-                    		Heading
-                    	</h4>
+                        <div id="heading">
+                            <h4>
+                                Asuntos (10)
+                            </h4>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div id="bottom-center-div">
                     <div  id="bottom-center-chart" class="col-md-12">
-                    	<h4>                                               
-                    		Heading
-                    	</h4>
+                        <div id="heading">
+                            <h4>
+                                Voces (10)
+                            </h4>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div id="bottom-right-div">
                     <div  id="bottom-right-chart" class="col-md-12">
-                    	<h4>                                               
-                    		Heading
-                    	</h4>
+                        <div id="heading">
+                            <h4>
+                                Materia (10)
+                            </h4>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        <br/>
+    </div>
+    <div class="col-md-12">
+        Mostrando <span id="begin"></span>-<span id="end"></span> de <span id="size"></span>
+        <input id="last" class="btn btn-default" type="button" value="Anterior" onclick="javascript:last()" />
+        <input id="next" class="btn btn-default" type="button" value="Siguiente" onclick="javascript:next()"/>
+        <table id="dc-data-table" class="table-hover table-condensed table-striped">
+            <thead>
+                <tr class="header">
+                    <th>Autos</th>
+                    <th>Fecha</th>
+                    <th>Corte</th>
+                    <th>Jueces</th>
+                    <th>Sobre</th>
+                </tr>
+            </thead>
+        </table>
     </div>
 </div>
 </body>
@@ -112,7 +145,7 @@ var data = {{ case_data|safe }}
 var dtgFormat = d3.time.format("%Y-%m-%d");
 
 data.forEach(function(d) { 
-  d.fecha   = dtgFormat.parse(d.fecha); 
+  d.fechas   = dtgFormat.parse(d.fecha); 
 });
 
 // http://stackoverflow.com/questions/17524627/is-there-a-way-to-tell-crossfilter-to-treat-elements-of-array-as-separate-record
@@ -158,11 +191,12 @@ function reduceRemoveArray(attr) {
 
 var ndx = crossfilter(data); 
 
-var dateDim = ndx.dimension(function(d) {return d.fecha;});
+var dateDim = ndx.dimension(function(d) {return d.fechas;});
 var corteDim = ndx.dimension(function(d) {return d.corte;});
 var provinciaDim = ndx.dimension(function(d) {return d.provincia;});
 var juecesDim = ndx.dimension(function(d) {return d.jueces;});
 var mapDim = ndx.dimension(function(d) {return d.provincia;});
+var cfDim = ndx.dimension(function(d) {return d.provincia;});
 var sobreDim = ndx.dimension(function(d) {return d.sobre;});
 var vocesDim = ndx.dimension(function(d) {return d.voces;});
 var materiaDim = ndx.dimension(function(d) {return d.materia;});
@@ -173,6 +207,7 @@ var corteGroup = corteDim.group().reduceCount(function(d) {return d.corte;});
 var provinciaGroup = provinciaDim.group().reduceCount(function(d) {return d.provincia;});
 var juecesGroup = juecesDim.groupAll().reduce(reduceAddArray("jueces"), reduceRemoveArray("jueces"), reduceInitial).value();
 var mapGroup = mapDim.group();
+var cfGroup = cfDim.group();
 var sobreGroup = sobreDim.group().reduceCount(function(d) {return d.sobre;});
 var vocesGroup = vocesDim.groupAll().reduce(reduceAddArray("voces"), reduceRemoveArray("voces"), reduceInitial).value();
 var materiaGroup = materiaDim.groupAll().reduce(reduceAddArray("materia"), reduceRemoveArray("materia"), reduceInitial).value();
@@ -211,62 +246,102 @@ function arrayFilterHandler(dimension, filters) {
     return filters; 
 }
 
-var minDate = dateDim.bottom(1)[0].fecha;
-var maxDate = dateDim.top(1)[0].fecha;
+var minDate = dateDim.bottom(1)[0].fechas;
+var maxDate = dateDim.top(1)[0].fechas;
 
-var mainChart  = dc.lineChart("#main-chart");
+var mainChart  = dc.barChart("#header-chart");
 var totalCount = dc.dataCount(".dc-data-count");
 
-var mainChart_width = $('#main-chart').width(),
-    mainChart_height = $('#main-chart').height() * .9;
-
-var mainRigthChart_width = $('#main-right-chart').width(),
-    mainRightChart_height = $('#main-right-chart').height() * .9;
-
-var squareChart_width = $('#medium-left-chart').width(),
-    squareChart_height = $('#medium-left-chart').height() * .9;
+var mainChart_width = $('#header-chart-div').width(),
+    mainChart_height = $('#header-chart').height() * .85;
 
 mainChart
 	.width(mainChart_width).height(mainChart_height)
 	.dimension(dateDim)
 	.group(dateGroup)
 	.x(d3.time.scale().domain([minDate,maxDate]))
-    .xUnits(function(){return 100;});
+    .xUnits(function(){return 100;})
+    .xAxis().ticks(7);
+mainChart.yAxis().ticks(2)
 
 totalCount
     .dimension(ndx)
     .group(all);
 
-dc.renderAll(); 
-
 var argMap = dc.geoChoroplethChart("#map-chart");
+var capMap = dc.geoChoroplethChart("#capital");
 
-d3.json("/static/js/argentina.json", function(geojson){
-        argMap
-            .dimension(mapDim)
-            .group(mapGroup)
-            .width(400)
-            .height(600)
-            .colors(d3.scale.quantize()
-                   .range(["#ecf2f7", "#dae6f0", "#c7d9e8", "#b5cde1",
-                       "#a2c0d9", "#90b4d2", "#7da7ca", "#6a9bc3", "#588ebb",
-                       "#4682b4"])
-                    )
-            .colorDomain([0, 100])
-            .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';}) 
-            .transitionDuration(1000)
-            .projection(d3.geo.transverseMercator()
-                    .center([5, -30])
-                    .rotate([66, 0])
-                    .scale((squareChart_height * 110) / 33)
-                    .translate([(squareChart_width / 2), (squareChart_height / 2)])
-                    )
-            .overlayGeoJson(geojson.features, 'NAME_1', function(d) {
-                return d.properties.NAME_1.toUpperCase();
-            }) 
+d3.json("/static/js/argentina.json", function(geojson1){
+    d3.json("/static/js/cf.geojson", function(geojson2){
 
-            dc.renderAll();
-        });
+    argMap
+        .dimension(mapDim)
+        .group(mapGroup)
+        .width(300)
+        .height(600)
+        .colors(d3.scale.quantize()
+               .range(["#ecf2f7", "#dae6f0", "#c7d9e8", "#b5cde1",
+                   "#a2c0d9", "#90b4d2", "#7da7ca", "#6a9bc3", "#588ebb",
+                   "#4682b4"])
+                )
+        .colorDomain([0, 100])
+        .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';}) 
+        .transitionDuration(1000)
+        .projection(d3.geo.transverseMercator()
+                .center([5, -30])
+                .rotate([66, 0])
+                .scale((24200) / 33)
+                .translate([200, 125])
+                )
+        .overlayGeoJson(geojson1.features, 'NAME_1', function(d) {
+            return d.properties.NAME_1.toUpperCase();
+        }) 
+
+    capMap
+        .dimension(cfDim)
+        .group(cfGroup)
+        .width(148)
+        .height(148)
+        .colors(d3.scale.quantize()
+               .range(["#ecf2f7", "#dae6f0", "#c7d9e8", "#b5cde1",
+                   "#a2c0d9", "#90b4d2", "#7da7ca", "#6a9bc3", "#588ebb",
+                   "#4682b4"])
+                )
+        .colorDomain([0, 100])
+        .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';}) 
+        .transitionDuration(1000)
+        .projection(d3.geo.transverseMercator()
+                .center([7.9, -34.66])
+                .rotate([66, 0])
+                .scale(1562000 / 33)
+                .translate([300, 125])
+                )
+        .overlayGeoJson(geojson2.features, 'NAME_1', function(d) {
+            return d.properties.NAME_1.toUpperCase();
+        }) 
+    dc.renderAll();
+    });
+});
+
+var datatable   = dc.dataTable("#dc-data-table");
+
+datatable
+    .dimension(dateDim)
+    .group(function(d) {return "";})
+    .size(data.length)
+    // dynamic columns creation using an array of closures
+    .columns([
+        function(d) {return d.autos;},
+        function(d) {return d.fecha;},
+        function(d) {return d.corte;},
+        function(d) {return d.jueces;},
+        function(d) {return d.sobre;}
+    ]).sortBy(function(d) {
+        return d.Value;
+    })
+    .order(d3.descending);
+    next();
+
 
 function barChart(uid, dim, color) {
 
@@ -276,7 +351,7 @@ function barChart(uid, dim, color) {
     var barChart  = dc.rowChart(uid);
 
     width = $(uid).width();
-    height = $(uid).height() * .9;
+    height = $(uid).height() * .85;
 
     barChart
 	    .width(width).height(height)
@@ -285,7 +360,7 @@ function barChart(uid, dim, color) {
         .cap(10)
         .ordering(function(d){ return -d.value })
         .colors(color)
-        .xAxis().ticks(4);
+        .xAxis().ticks(10);
 }
 
 function barChartArray(uid, dim, color) {
@@ -299,7 +374,7 @@ function barChartArray(uid, dim, color) {
     var barChart  = dc.rowChart(uid);
 
     var width = $(uid).width();
-    var height = $(uid).height() * .9;
+    var height = $(uid).height() * .85;
 
     barChart
 	    .width(width).height(height)
@@ -309,15 +384,47 @@ function barChartArray(uid, dim, color) {
         .ordering(function(d){ return -d.value })
         .filterHandler(arrayFilterHandler)
         .colors(color)
-        .xAxis().ticks(4);
+        .xAxis().ticks(10);
+}
+barChart("#main-chart", "corte", "#6a9bc3");
+barChartArray("#main-right-chart", "jueces", "#6a9bc3");
+barChartArray("#medium-left-chart", "citados", "#6a9bc3");
+barChartArray("#medium-center-chart", "leyes", "#6a9bc3");
+barChart("#bottom-left-chart", "sobre", "#6a9bc3");
+barChartArray("#bottom-center-chart", "voces", "#6a9bc3");
+barChartArray("#bottom-right-chart", "materia", "#6a9bc3");
+
+var ofs = 0, pag = 20;
+function display() {
+    d3.select('#begin')
+        .text(ofs);
+    d3.select('#end')
+        .text(ofs+pag-1);
+    d3.select('#last')
+        .attr('disabled', ofs-pag<0 ? 'true' : null);
+    d3.select('#next')
+        .attr('disabled', ofs+pag>=ndx.size() ? 'true' : null);
+    d3.select('#size').text(ndx.size());
+}
+function update() {
+    datatable.beginSlice(ofs);
+    datatable.endSlice(ofs+pag);
+    display();
+}
+function next() {
+    ofs += pag;
+    update();
+    datatable.redraw();
+}
+function last() {
+    ofs -= pag;
+    update();
+    datatable.redraw();
 }
 
-barChart("#medium-left-chart", "corte", "#4682b4");
-barChartArray("#medium-center-chart", "citados", "#4682b4");
-barChart("#bottom-left-chart", "sobre", "#4682b4");
-barChartArray("#bottom-center-chart", "voces", "#4682b4");
-barChartArray("#bottom-right-chart", "materia", "#4682b4");
+$(document).ready(function(){
+    update();
+});
 
-dc.renderAll();
 </script>
 {% endblock %}

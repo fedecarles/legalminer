@@ -1,6 +1,9 @@
 #navbar-container{
     padding-left: 0px;
 }
+.navbar {
+    margin-bottom: 0px;
+}
 #input_list{
     float: left;
     width: 300px;
@@ -41,7 +44,7 @@
     text-anchor: end;
 }
 .layer0 path {
-    stroke: black ;
+    stroke: white ;
     cursor: pointer; 
 }
 
@@ -426,6 +429,14 @@ section{
     height: 500px;
     background-color: white;
 }
+#capital {
+    float: right;
+    width: 150px;
+    height: 150px;
+    margin-top: 30%;
+    margin-right: 100px;
+    border: solid 1px;
+}
 #medium-center-chart{
     background-color: #fff;
     border: 1px solid #E6E9ED;
@@ -449,7 +460,18 @@ section{
 #page-top{
     background-color: #F7F7F7;
 }
+#header-chart {
+    height: 150px;
+    width: 100%;
+    margin: auto 0px;
+    padding: auto 0px;
+}
 #main-chart{
+    background-color: #fff;
+    border: 1px solid #E6E9ED;
+    height: 250px;
+}
+#main-right-chart{
     background-color: #fff;
     border: 1px solid #E6E9ED;
     height: 250px;
@@ -460,7 +482,7 @@ section{
     color: #73879C;
 }
 #busqueda {
-    font-size: 40px;
+    font-size: 24px;
     color: #73879C;
     font-weight: 700;
 }
@@ -472,4 +494,34 @@ div.mtool {
     text-shadow: #f5f5f5 0 1px 0;
     border-radius: 2px;
     opacity: 0.9;
+}
+#heading {
+    border-bottom: 2px solid #E6E9ED;
+}
+h4 {
+    color: #73879C;
+}
+.dc-data-count {
+    height: 130px;
+}
+#dc-data-table {
+    background-color: #fff;
+    font-size: 10px;
+    color: #73879C;
+    table-layout: fixed;
+    width: 100%;
+    margin-bottom: 15px;
+}
+#dc-data-table td{
+    padding-left: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 30%;
+    border: solid 1px;
+}
+#dc-data-table th{
+    padding-left: 15px;
+    font-size: 18px;
+    border: solid 1px;
 }
