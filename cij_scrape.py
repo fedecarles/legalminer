@@ -6,6 +6,7 @@ import re
 from datetime import datetime
 from collections import Counter
 from selenium import webdriver
+from pyvirtualdisplay import Display
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -15,7 +16,7 @@ from pdfminer.pdfinterp import PDFResourceManager, PDFPageInterpreter
 from pdfminer.converter import PDFPageAggregator
 from pdfminer.layout import LAParams, LTTextBox
 
-proj_path = "/home/federico/Dropbox/legalminer/"
+proj_path = "/home/fedecarles/legalminer/"
 # This is so Django knows where to find stuff.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "legalminer.settings")
 sys.path.append(proj_path)
@@ -31,8 +32,18 @@ os.chdir(proj_path)
 with open('tesauro_dict.txt', 'r') as inf:
     d = eval(inf.read())
 
-browser = webdriver.PhantomJS(
-    "/home/federico/PhantomJS/phantomjs-1.9.8-linux-x86_64/bin/phantomjs")
+display = Display(visible=0, size=(800, 600))
+display.start()
+# browser = webdriver.PhantomJS(
+#     "/home/fedecarles/legalminer/node_modules/phantomjs/bin/phantomjs")
+# browser = webdriver.Firefox()
+
+for retry in range(3):
+    try:
+        browser = webdriver.Firefox()
+        break
+    except:
+        time.sleep(3)
 
 # Ir a la página inicial de CIJ y realizar la búsqueda de fallos por voz simple
 # de inconstitucionalidad.
@@ -291,6 +302,9 @@ while (date1 == date2):
     date2 = browser.find_element_by_xpath("//div[25]/ul/li[4]").text
     counter = counter + 1
     print ("pag" + str(counter))
+
+browser.quit()
+display.stop()
 
 [nro.append(re.search('\d+', i).group(0)) for i in url]
 [txt.append(pdf_url_to_txt(i)) for i in url]
