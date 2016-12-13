@@ -14,12 +14,12 @@
 		</div>
 		<div class="col-md-2">
             <p><small>Total</small></p>
-            <span class="total-count bq-number"></span> 
+            <span class="total-count bq-number"></span>
 		</div>
 		<div class="col-md-2">
             <p><small>Filtrado</small></p>
-            <span class="filter-count bq-number"></span> 
-		</div>                                                                                           
+            <span class="filter-count bq-number"></span>
+		</div>
     </div>
     <div class="col-md-8">
         <div class="row">
@@ -49,7 +49,7 @@
                     <div  id="medium-left-chart" class="col-md-12">
                         <div id="heading">
                             <h4>
-                               Fallos Citados (10) 
+                               Fallos Citados (10)
                             </h4>
                         </div>
                     </div>
@@ -70,15 +70,15 @@
     <br/>
     </div>
     <div class="col-md-4">
-        <div id="right-map-chart">
-            <div  id="map-chart" class="col-md-12">
-                <div id="heading">
-                    <h4>
-                        Cantidad por Provincia
-                    </h4>
-                    <div id="capital">
-                    </div>
-                </div>
+        <div  id="map-chart" class="col-md-12">
+            <div id="heading">
+                <h4>
+                    Cantidad por Provincia
+                </h4>
+            </div>
+            <div id="pais">
+            </div>
+            <div id="capital">
             </div>
         </div>
     </div>
@@ -144,8 +144,8 @@ var data = {{ case_data|safe }}
 
 var dtgFormat = d3.time.format("%Y-%m-%d");
 
-data.forEach(function(d) { 
-  d.fechas   = dtgFormat.parse(d.fecha); 
+data.forEach(function(d) {
+  d.fechas   = dtgFormat.parse(d.fecha);
 });
 
 // http://stackoverflow.com/questions/17524627/is-there-a-way-to-tell-crossfilter-to-treat-elements-of-array-as-separate-record
@@ -166,7 +166,7 @@ function reduceRemove(attr) {
 }
 
 function reduceInitial() {
-  return {};  
+  return {};
 }
 
 function reduceAddArray(attr) {
@@ -189,7 +189,7 @@ function reduceRemoveArray(attr) {
     }
 }
 
-var ndx = crossfilter(data); 
+var ndx = crossfilter(data);
 
 var dateDim = ndx.dimension(function(d) {return d.fechas;});
 var corteDim = ndx.dimension(function(d) {return d.corte;});
@@ -233,7 +233,7 @@ function arrayGroupTop(count) {
 };
 
 function arrayFilterHandler(dimension, filters) {
-   dimension.filter(null);   
+   dimension.filter(null);
     if (filters.length === 0)
         dimension.filter(null);
     else
@@ -243,7 +243,7 @@ function arrayFilterHandler(dimension, filters) {
             }
             return false;
         });
-    return filters; 
+    return filters;
 }
 
 var minDate = dateDim.bottom(1)[0].fechas;
@@ -254,6 +254,12 @@ var totalCount = dc.dataCount(".dc-data-count");
 
 var mainChart_width = $('#header-chart-div').width(),
     mainChart_height = $('#header-chart').height() * .85;
+
+var mapChart_width = $('#pais').width(),
+    mapChart_height = $('#pais').height() * .85;
+
+var minimapChart_width = $('#capital').width(),
+    minimapChart_height = $('#capital').height() * .85;
 
 mainChart
 	.width(mainChart_width).height(mainChart_height)
@@ -268,7 +274,7 @@ totalCount
     .dimension(ndx)
     .group(all);
 
-var argMap = dc.geoChoroplethChart("#map-chart");
+var argMap = dc.geoChoroplethChart("#pais");
 var capMap = dc.geoChoroplethChart("#capital");
 
 d3.json("/static/js/argentina.json", function(geojson1){
@@ -277,15 +283,15 @@ d3.json("/static/js/argentina.json", function(geojson1){
     argMap
         .dimension(mapDim)
         .group(mapGroup)
-        .width(300)
-        .height(600)
+        .width(mapChart_width)
+        .height(mapChart_height)
         .colors(d3.scale.quantize()
                .range(["#ecf2f7", "#dae6f0", "#c7d9e8", "#b5cde1",
                    "#a2c0d9", "#90b4d2", "#7da7ca", "#6a9bc3", "#588ebb",
                    "#4682b4"])
                 )
         .colorDomain([0, 100])
-        .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';}) 
+        .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';})
         .transitionDuration(1000)
         .projection(d3.geo.transverseMercator()
                 .center([5, -30])
@@ -295,20 +301,20 @@ d3.json("/static/js/argentina.json", function(geojson1){
                 )
         .overlayGeoJson(geojson1.features, 'NAME_1', function(d) {
             return d.properties.NAME_1.toUpperCase();
-        }) 
+        })
 
     capMap
         .dimension(cfDim)
         .group(cfGroup)
-        .width(148)
-        .height(148)
+        .width(minimapChart_width)
+        .height(minimapChart_height)
         .colors(d3.scale.quantize()
                .range(["#ecf2f7", "#dae6f0", "#c7d9e8", "#b5cde1",
                    "#a2c0d9", "#90b4d2", "#7da7ca", "#6a9bc3", "#588ebb",
                    "#4682b4"])
                 )
         .colorDomain([0, 100])
-        .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';}) 
+        .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';})
         .transitionDuration(1000)
         .projection(d3.geo.transverseMercator()
                 .center([7.9, -34.66])
@@ -318,7 +324,7 @@ d3.json("/static/js/argentina.json", function(geojson1){
                 )
         .overlayGeoJson(geojson2.features, 'NAME_1', function(d) {
             return d.properties.NAME_1.toUpperCase();
-        }) 
+        })
     dc.renderAll();
     });
 });

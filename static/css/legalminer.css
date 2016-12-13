@@ -45,7 +45,7 @@
 }
 .layer0 path {
     stroke: white ;
-    cursor: pointer; 
+    cursor: pointer;
 }
 
 .axis path,
@@ -125,7 +125,7 @@ div#details {
 .easyPaginateNav {
     font-size: 14px;
     padding:5px;
-    width: 100%; 
+    width: 100%;
 
 }
 #search-form{
@@ -210,21 +210,21 @@ ol, ul{
 .fa-times:hover{
     float: right;
     background-color: #f2f2f2;
-    cursor: pointer; 
+    cursor: pointer;
 }
 .fa-table{
     margin-left: 35%;
 }
 .fa-table:hover{
     background-color: #f2f2f2;
-    cursor: pointer; 
+    cursor: pointer;
 }
 .fa-cog{
     margin-left: 5%;
 }
 .fa-cog:hover{
     background-color: #f2f2f2;
-    cursor: pointer; 
+    cursor: pointer;
 }
 #home-link{
     padding: 0px;
@@ -256,7 +256,7 @@ nav.sidebar, .main{
 
     .main{
         position: absolute;
-        width: calc(100% - 40px); 
+        width: calc(100% - 40px);
         margin-left: 40px;
         float: right;
     }
@@ -429,10 +429,14 @@ section{
     height: 500px;
     background-color: white;
 }
+#pais {
+    width: 50%;
+    height: 100%;
+}
 #capital {
     float: right;
-    width: 150px;
-    height: 150px;
+    width: 50%;
+    height: 100%;
     margin-top: 30%;
     margin-right: 100px;
     border: solid 1px;
