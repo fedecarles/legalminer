@@ -434,9 +434,8 @@ section{
     height: 100%;
 }
 #capital {
-    float: right;
-    width: 50%;
-    height: 100%;
+    width: 30%;
+    height: 30%;
     margin-top: 30%;
     margin-right: 100px;
     border: solid 1px;
