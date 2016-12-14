@@ -3,6 +3,7 @@ import os
 import io
 import sys
 import re
+import time
 from datetime import datetime
 from collections import Counter
 from selenium import webdriver
@@ -269,8 +270,6 @@ def pdf_url_to_txt(url):
 date1 = browser.find_element_by_xpath("//div[6]/ul/li[4]").text
 date2 = browser.find_element_by_xpath("//div[25]/ul/li[4]").text
 
-counter = 0
-
 tri = []
 exp = []
 aut = []
@@ -292,16 +291,24 @@ while (date1 == date2):
     [fec.append(i.text) for i in fecha]
     [url.append(i.get_attribute('href')) for i in links]
 
+    pagina = browser.find_element_by_class_name("more").text
+
     element = WebDriverWait(browser, 5).until(
       EC.presence_of_element_located((By.XPATH, "//*")))
-    try:
-        browser.find_element_by_class_name("next").click()
-    except Exception:
-        pass
+
+    print (pagina)
+    print ("========")
+    for i in fecha:
+        print (i.text)
+    for i in autos:
+        print (i.text)
+
+    sig = browser.find_element_by_class_name("next")
+    sig.click()
+    print ("click pressed")
+
     date1 = browser.find_element_by_xpath("//div[6]/ul/li[4]").text
     date2 = browser.find_element_by_xpath("//div[25]/ul/li[4]").text
-    counter = counter + 1
-    print ("pag" + str(counter))
 
 browser.quit()
 display.stop()
