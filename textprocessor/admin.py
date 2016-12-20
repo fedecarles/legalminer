@@ -4,7 +4,7 @@ from .models import Fallos
 
 # Register your models here.
 class FallosAdmin(admin.ModelAdmin):
-    list_display = ('nr', 'autos', 'jueces')
+    list_display = ('nr', 'fecha', 'autos', 'jueces')
 admin.site.register(Fallos, FallosAdmin)
 
 

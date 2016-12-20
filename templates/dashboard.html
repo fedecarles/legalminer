@@ -297,7 +297,7 @@ d3.json("/static/js/argentina.json", function(geojson1){
                 .center([5, -30])
                 .rotate([66, 0])
                 .scale((24200) / 33)
-                .translate([200, 125])
+                .translate([120, 125])
                 )
         .overlayGeoJson(geojson1.features, 'NAME_1', function(d) {
             return d.properties.NAME_1.toUpperCase();

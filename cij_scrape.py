@@ -7,7 +7,7 @@ import time
 from datetime import datetime
 from collections import Counter
 from selenium import webdriver
-from pyvirtualdisplay import Display
+# from pyvirtualdisplay import Display
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -33,10 +33,9 @@ os.chdir(proj_path)
 with open('tesauro_dict.txt', 'r') as inf:
     d = eval(inf.read())
 
-display = Display(visible=0, size=(800, 600))
-display.start()
-# browser = webdriver.PhantomJS(
-#     "/home/fedecarles/legalminer/node_modules/phantomjs/bin/phantomjs")
+# display = Display(visible=0, size=(800, 600))
+# display.start()
+browser = webdriver.PhantomJS("/usr/local/bin/phantomjs")
 # browser = webdriver.Firefox()
 
 for retry in range(3):
@@ -54,15 +53,12 @@ browser.get("http://www.cij.gov.ar/sentencias.html")
 # browser.find_element_by_xpath('/html/body/div/div/a[2]/span').click()
 # browser.find_element_by_xpath('/html/body/div/div/a[2]/span').click()
 # browser.find_element_by_xpath('//tr[3]/td[7]/a').click()
-#
+
 # browser.find_element_by_id('fecha_fallo_hasta_aux').click()
-# browser.find_element_by_xpath('//tr[4]/td[7]/a').click()
-#
+# browser.find_element_by_xpath('/html/body/div/div/a[1]/span').click()
+# browser.find_element_by_xpath('//tr[4]/td[2]/a').click()
 # browser.find_element_by_xpath('//form/div[6]/input[1]').submit()
-
-# nr = browser.find_element_by_xpath('//div[5]/div[1]/span').text
-# loops = 1  # math.ceil(int(nr) / 20)
-
+# time.sleep(10)
 
 def get_materia(tesauro, text):
     materia = []
@@ -134,6 +130,7 @@ def cij_jueces(text):
                     jueces.append(j)
         jueces = ", ".join(jueces)
         jueces = re.sub(r'^\,\s', '', jueces)
+        jueces = re.sub(r'\s-', '\,\s', jueces)
     except Exception:
         pass
     return jueces
@@ -245,24 +242,27 @@ def cij_provincia(lugar):
 # http://stackoverflow.com/questions/26413216/pdfminer3k-has-no-method-named-create-pages-in-pdfpage
 def pdf_url_to_txt(url):
     text = ""
-    f = urlopen(url).read()
-    fp = io.BytesIO(f)
-    parser = PDFParser(fp)
-    doc = PDFDocument()
-    parser.set_document(doc)
-    doc.set_parser(parser)
-    doc.initialize('')
-    rsrcmgr = PDFResourceManager()
-    laparams = LAParams()
-    device = PDFPageAggregator(rsrcmgr, laparams=laparams)
-    interpreter = PDFPageInterpreter(rsrcmgr, device)
-    # Process each page contained in the document.
-    for page in doc.get_pages():
-        interpreter.process_page(page)
-        layout = device.get_result()
-        for lt_obj in layout:
-            if isinstance(lt_obj, LTTextBox):
-                text += lt_obj.get_text()
+    try:
+        f = urlopen(url).read()
+        fp = io.BytesIO(f)
+        parser = PDFParser(fp)
+        doc = PDFDocument()
+        parser.set_document(doc)
+        doc.set_parser(parser)
+        doc.initialize('')
+        rsrcmgr = PDFResourceManager()
+        laparams = LAParams()
+        device = PDFPageAggregator(rsrcmgr, laparams=laparams)
+        interpreter = PDFPageInterpreter(rsrcmgr, device)
+        # Process each page contained in the document.
+        for page in doc.get_pages():
+            interpreter.process_page(page)
+            layout = device.get_result()
+            for lt_obj in layout:
+                if isinstance(lt_obj, LTTextBox):
+                    text += lt_obj.get_text()
+    except Exception as e:
+       pass
     return text
 
 
@@ -310,8 +310,8 @@ while (date1 == date2):
     date1 = browser.find_element_by_xpath("//div[6]/ul/li[4]").text
     date2 = browser.find_element_by_xpath("//div[25]/ul/li[4]").text
 
-browser.quit()
-display.stop()
+# browser.quit()
+# display.stop()
 
 [nro.append(re.search('\d+', i).group(0)) for i in url]
 [txt.append(pdf_url_to_txt(i)) for i in url]
@@ -347,4 +347,14 @@ for o in range(len(nro)):
                       demandada=demandada, jueces=jueces, leyes=leyes,
                       citados=citas, lugar=lugar, provincia=provincia,
                       voces=voces, materia=materia)
-    instance.save()
+    try:
+        instance.save()
+        print ("Saved Fallo {} of {}".format(o, len(nro)))
+    except Exception as e:
+        print ("=======")
+        print ("Fallo not saved")
+        print (autos)
+        print (e)
+        pass
+
+
