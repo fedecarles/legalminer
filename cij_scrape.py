@@ -7,7 +7,6 @@ import time
 from datetime import datetime
 from collections import Counter
 from selenium import webdriver
-# from pyvirtualdisplay import Display
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -33,8 +32,7 @@ os.chdir(proj_path)
 with open('tesauro_dict.txt', 'r') as inf:
     d = eval(inf.read())
 
-# display = Display(visible=0, size=(800, 600))
-# display.start()
+# Load the webdriver.
 browser = webdriver.PhantomJS("/usr/local/bin/phantomjs")
 # browser = webdriver.Firefox()
 
@@ -45,20 +43,34 @@ for retry in range(3):
     except:
         time.sleep(3)
 
+# Check for robot.txt. As of Dec2016 there is no robot.txt
+# try:
+#     with urlopen("https://www.cij.gov.ar/robots.txt") as f:
+#         print(f.read().decode("utf-8"))
+# except Exception:
+#     sys.exit()
+
 # Ir a la página inicial de CIJ y realizar la búsqueda de fallos por voz simple
 # de inconstitucionalidad.
 browser.get("http://www.cij.gov.ar/sentencias.html")
 
-# browser.find_element_by_id('fecha_fallo_desde_aux').click()
-# browser.find_element_by_xpath('/html/body/div/div/a[2]/span').click()
-# browser.find_element_by_xpath('/html/body/div/div/a[2]/span').click()
-# browser.find_element_by_xpath('//tr[3]/td[7]/a').click()
+# Check for meta index, follow.
+try:
+    meta_robots = browser.find_element_by_xpath("//meta[@name='robots']").get_attribute("content")
+    if "index, follow" in meta_robots:
+        print ("Allowed to Index, Follow")
+        pass
+    else:
+        print ("Not allowed to Index, Follow")
+        sys.exit() 
+except Exception:
+    print ("No meta robots, pass")
+    pass
 
 # browser.find_element_by_id('fecha_fallo_hasta_aux').click()
 # browser.find_element_by_xpath('/html/body/div/div/a[1]/span').click()
 # browser.find_element_by_xpath('//tr[4]/td[2]/a').click()
 # browser.find_element_by_xpath('//form/div[6]/input[1]').submit()
-# time.sleep(10)
 
 def get_materia(tesauro, text):
     materia = []
@@ -130,7 +142,7 @@ def cij_jueces(text):
                     jueces.append(j)
         jueces = ", ".join(jueces)
         jueces = re.sub(r'^\,\s', '', jueces)
-        jueces = re.sub(r'\s-', '\,\s', jueces)
+        jueces = re.sub(r'\s-', ', ', jueces)
     except Exception:
         pass
     return jueces
@@ -138,7 +150,7 @@ def cij_jueces(text):
 
 def cij_actora(text):
     try:
-        patterns = re.search('(.*?)C\/|S\/|ACTOR:(.*?)S\/', text).groups()
+        patterns = re.search('(.*?)C\/|S\/|ACTOR:(.*?)S\/|DENUNCIANTE:(.*?)S\/|QUERELLANTE:(.*?)S\/', text).groups()
         actora = [p for p in patterns if p is not None]
         actora = "".join(actora).strip()
     except Exception:
@@ -148,7 +160,7 @@ def cij_actora(text):
 
 def cij_demandada(text):
     try:
-        patterns = re.search('C\/(.*?)S\/|IMPUTADO:(.*?)S\/|DEMANDADO:(.*?)S\/',
+        patterns = re.search('C\/(.*?)S\/|IMPUTADO:(.*?)S\/|DEMANDADO:(.*?)S\/|DENUNCIADO:(.*?)S\/',
                              text).groups()
         demandada = [p for p in patterns if p is not None]
         demandada = "".join(demandada).strip()
@@ -316,13 +328,7 @@ while (date1 == date2):
 [nro.append(re.search('\d+', i).group(0)) for i in url]
 [txt.append(pdf_url_to_txt(i)) for i in url]
 
-print (len(tri))
-print (len(exp))
-print (len(aut))
-print (len(fec))
-print (len(url))
-print (len(nro))
-print (len(txt))
+print (len(tri), len(exp), len(exp), len(aut), len(fec), len(url), len(nro), len(txt))
 
 for o in range(len(nro)):
     text = re.sub('“|”', '"', txt[o])
@@ -349,12 +355,14 @@ for o in range(len(nro)):
                       voces=voces, materia=materia)
     try:
         instance.save()
-        print ("Saved Fallo {} of {}".format(o, len(nro)))
+        print ('Saved Fallo {} of {}'.format(o, len(nro)))
+     
     except Exception as e:
-        print ("=======")
-        print ("Fallo not saved")
+        print ('=======')
+        print ('Fallo not saved')
         print (autos)
         print (e)
         pass
 
-
+with open('scrape_log.txt', 'a') as f:
+    f.write('{} {}\n'.format(fecha[0], len(nro)))

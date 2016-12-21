@@ -294,7 +294,7 @@ d3.json("/static/js/argentina.json", function(geojson1){
         .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';})
         .transitionDuration(1000)
         .projection(d3.geo.transverseMercator()
-                .center([5, -30])
+                .center([0, -30])
                 .rotate([66, 0])
                 .scale((24200) / 33)
                 .translate([120, 125])

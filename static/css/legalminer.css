@@ -430,15 +430,15 @@ section{
     background-color: white;
 }
 #pais {
-    width: 50%;
+    width: 60%;
     height: 100%;
 }
 #capital {
-    width: 30%;
+    width: 25%;
     height: 30%;
-    margin-top: 30%;
-    margin-right: 100px;
+    margin-top: 20%;
     border: solid 1px;
+    border-radius: 100px;
 }
 #medium-center-chart{
     background-color: #fff;
