@@ -44,7 +44,7 @@
     text-anchor: end;
 }
 .layer0 path {
-    stroke: white ;
+    stroke: black;
     cursor: pointer;
 }
 
@@ -434,8 +434,8 @@ section{
     height: 100%;
 }
 #capital {
-    width: 25%;
-    height: 30%;
+    width: 40%;
+    height: 40%;
     margin-top: 20%;
     border: solid 1px;
     border-radius: 100px;

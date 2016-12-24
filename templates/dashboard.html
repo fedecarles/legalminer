@@ -294,7 +294,7 @@ d3.json("/static/js/argentina.json", function(geojson1){
         .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';})
         .transitionDuration(1000)
         .projection(d3.geo.transverseMercator()
-                .center([0, -30])
+                .center([5, -30])
                 .rotate([66, 0])
                 .scale((24200) / 33)
                 .translate([120, 125])
@@ -317,10 +317,9 @@ d3.json("/static/js/argentina.json", function(geojson1){
         .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';})
         .transitionDuration(1000)
         .projection(d3.geo.transverseMercator()
-                .center([7.9, -34.66])
+                .center([8.03, -34.74])
                 .rotate([66, 0])
-                .scale(1562000 / 33)
-                .translate([300, 125])
+                .scale(minimapChart_width * 300)
                 )
         .overlayGeoJson(geojson2.features, 'NAME_1', function(d) {
             return d.properties.NAME_1.toUpperCase();
