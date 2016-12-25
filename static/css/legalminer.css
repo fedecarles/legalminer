@@ -1,8 +1,21 @@
+@font-face {
+font-family: Sertig;
+src: url("/static/fonts/Sertig.otf") format("opentype");
+}
 #navbar-container{
     padding-left: 0px;
+    font-family: Sertig;
+    font-size: 22px;
 }
 .navbar {
     margin-bottom: 0px;
+    border-radius: 0px;
+}
+.navbar-default {
+    background-color: #3498db;
+}
+.navbar-default .navbar-nav>li>a {
+    color: white;
 }
 #input_list{
     float: left;
@@ -56,20 +69,24 @@
     shape-rendering: crispEdges;
 }
 #id_q {
-    border-top-left-radius: 2em;
-    border-bottom-left-radius: 2em;
+    border: 0;
+    -webkit-appearance: none;
+    box-shadow:none;
+    border-radius: 0px;
 }
-#id_q_submit{
-    border-top-right-radius: 2em;
-    border-bottom-right-radius: 2em;
-}
-.form-inline .form-control{
-    width: 600px;
+.searchbtn {
+    border: 0;
+    -webkit-appearance: none;
+    box-shadow:none;
+    border-radius: 0px;
+    height: 100%;
+    width: 40px;
+    padding: 0px;
 }
 #search-filters{
     width: 100%;
     border: solid #e7e7e7;
-    background-color: #f8f8f8;
+    background-color: white;
 }
 body .highlighted{
     background-color: #EEFF66;
@@ -92,13 +109,6 @@ body .highlighted{
     width: 100%;
     background-color: transparent;
     border: none;
-}
-#search-form{
-    width: 45%;
-    float: left;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-top: 7px;
 }
 div#details {
     float: left;
@@ -129,10 +139,6 @@ div#details {
 
 }
 #search-form{
-    width: 45%;
-    float: left;
-    margin-left: 10%;
-    margin-right: 10%;
     margin-top: 7px;
 }
 #results{
@@ -227,7 +233,11 @@ ol, ul{
     cursor: pointer;
 }
 #home-link{
-    padding: 0px;
+    padding: 5px;
+}
+#intralex-logo {
+    width: 150px;
+    margin-top: 3%;
 }
 #proyecto{
     width: 50%;
@@ -527,4 +537,47 @@ h4 {
     padding-left: 15px;
     font-size: 18px;
     border: solid 1px;
+}
+#inicio_main {
+    width: 100%;
+    height: 495px; 
+    background-repeat: no-repeat;
+    background-position: 0 0;
+    background-size: 100% 100%;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url('/static/images/inicio_main.png');
+}
+#inicio_logo {
+    width: 100%;
+    height: 100%;
+}
+#main_logo {
+    color: white;
+    width: 30%;
+    margin-top: 5%;
+    margin-left: 15%;
+    color: white;
+}
+#tagline {
+    font-family: Sertig;
+    font-size: 30px;
+    color: white;
+    margin-left: 33%;
+}
+.flat_btn {
+    width: 150px;
+    height: 40px;
+    font-family: Sertig;
+    font-size: 22px;
+    color: white;
+    background-color: #3498db;
+    border: 0;
+    border-radius: 0px;
+}
+#registration {
+    font-family: Sertig;
+}
+.form-control{
+    border: 0;
+    border-radius: 0px;
 }

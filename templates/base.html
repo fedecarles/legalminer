@@ -7,7 +7,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Legal Miner</title>
+        <title>intraLex</title>
         <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href='/static/css/legalminer.css'/>
         <link rel="stylesheet" type="text/css" href='/static/css/jquery-ui.min.css'/>
@@ -28,7 +28,6 @@
         <script type="text/javascript" src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
         <script type="text/javascript" src="/static/js/crossfilter.min.js"></script>
         <script type="text/javascript" src="/static/js/dc.min.js"></script>
-
     </head>
 <body id="page-top">
 <nav class="navbar navbar-default">
@@ -42,37 +41,27 @@
         <span class="icon-bar"></span>
       </button>
       <a id="home-link" class="navbar-brand" href="{% url 'inicio' %}">
-          <i class="fa fa-home fa-3x" aria-hidden="true"></i>
+          <img id="intralex-logo" src="/static/icons/intralex-logo.svg"></img>
       </a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-        <li><a href="#">Link</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">Separated link</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="#">One more separated link</a></li>
-          </ul>
-        </li>
+        <li><a href="#">¿Qué hacemos?</a></li>
+        <li><a href="#">Precios</a></li>
+        <li><a href="#">Contacto</a></li>
       </ul>
-      <div id="search-form">
+      {% if user.is_authenticated %}
+      <div id="search-form" class="col-md-6">
       <form method="get" action="{% url 'haystack_search' %}"> {% csrf_token %}
                   <div class="input-group">
                       {% bootstrap_field search_form.q show_label=False %}
                       <span class="input-group-btn">
-                          <button class="btn btn-default" id="id_filters" type="button" onclick="showFilters()">
+                          <button class="btn btn-default searchbtn" type="button" onclick="showFilters()">
                               <i class="fa fa-filter" aria-hidden="true"></i>
                           </button> 
-                          <button class="btn btn-default" id="id_q_submit" type="submit">
+                          <button class="btn btn-default searchbtn" type="submit">
                               <i class="fa fa-search" aria-hidden="true"></i>
                           </button>
                       </span>
@@ -114,6 +103,7 @@
                   </div>
       </div>
       </form>
+      {% endif %}
       <ul class="nav navbar-nav navbar-right">
       {% if user.is_authenticated %}
         <li class="dropdown">

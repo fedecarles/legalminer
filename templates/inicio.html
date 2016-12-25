@@ -1,8 +1,20 @@
 {% extends 'base.html' %}
 {% load bootstrap3 %}
 {% block content %}
-<h1>Página principal</h2>
+<div id="inicio_main">
+    <div id="inicio_logo">
+        <img id="main_logo" src="/static/icons/intralex-logo-white.svg"/></img>
+        <p id="tagline">Inteligencia jurídica</p>
+        <a href="/accounts/login/">
+            <button class="flat_btn col-md-offset-4" type="button">Comenzar</button>
+        </a>
+    </div>
 
-<div id="proyecto">
+<div>
+    Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a>
+    from <a href="http://www.flaticon.com" title="Flaticon">www.flaticon.com</a> is licensed by
+    <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY
+    </a>
+</div>
 </div>
 {% endblock %}
