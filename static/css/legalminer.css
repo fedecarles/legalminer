@@ -584,16 +584,8 @@ h4 {
 .empty {
     height: 50px;
 }
-#libra {
+.icon-image {
     height: 100px;
-}
-#analytics {
-    height: 100px;
-}
-#plus {
-    margin-top: 40px;
-    font-size: 40px;
-    color: #2980b9;
 }
 .icon-text {
     text-align: center;
