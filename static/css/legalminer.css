@@ -581,3 +581,23 @@ h4 {
     border: 0;
     border-radius: 0px;
 }
+.empty {
+    height: 50px;
+}
+#libra {
+    height: 100px;
+}
+#analytics {
+    height: 100px;
+}
+#plus {
+    margin-top: 40px;
+    font-size: 40px;
+    color: #2980b9;
+}
+.icon-text {
+    text-align: center;
+    font-family: Sertig;
+    font-size: 20px;
+    color: #27ae60;
+}
