@@ -3,7 +3,11 @@
 {% load highlight %}
 {% block content %}
 
-<div id="details";></div>
+<br />
+<div id="main-controls" class="col-md-12">
+</div>
+<div id="details" class="col-md-12">
+</div>
 
 <form method="post" action="/dashboard/" name="seleccion">{% csrf_token %}
         {% for result in page.object_list %}

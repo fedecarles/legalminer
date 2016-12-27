@@ -110,15 +110,19 @@ body .highlighted{
     background-color: transparent;
     border: none;
 }
-div#details {
+#details {
     float: left;
     width: 65%;
     height: 100vh;
     overflow: auto;
     font-family: initial;
-    margin-left: 5%;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 2%;
+    background-color: white;
 }
 #titulo{
+    font-family: Century;
     text-align: center;
 }
 #results a {
@@ -145,7 +149,9 @@ div#details {
     float: right;
     width: 30%;
     font-size: 12px;
-    font-family: initial;
+    font-family: Century;
+    background-color: white;
+    margin-top: 2%;
 }
 #paginate li:hover {
     background-color: #e7e7e7;
@@ -154,16 +160,8 @@ div#details {
     background-color: #8098ee;
 }
 #desc_table{
-    font-size: 12px;
-}
-#desc_container{
-    display: none;
-}
-#expand_desc {
-    width: 100%;
-    background-color: #e7e7e7;
-    border: solid 1px;
-
+    font-size: 16px;
+    font-family: Sertig, arial;
 }
 .box {
     border: solid 0.5px;
@@ -172,10 +170,11 @@ div#details {
     list-style-type: none;
 }
 #texto-completo {
-    font-family: initial;
-    font-size: 14px;
+    font-family: Century;
+    font-size: 16px;
     background-color: transparent;
     border: None;
+    white-space: pre-wrap;
 }
 .area {
     fill: lightsteelblue;
@@ -592,4 +591,20 @@ h4 {
     font-family: Sertig;
     font-size: 20px;
     color: #27ae60;
+}
+.toolbar-btn {
+    width: 5%;
+    margin-top: 1%; 
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+}
+.toolbar-btn:hover {
+    background-color: #ececec;
+}
+.row a:hover{
+    text-decoration: none;
+}
+#main-controls {
+    height: 10%;
+    background-color: white;
 }
