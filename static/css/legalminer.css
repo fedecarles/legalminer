@@ -603,15 +603,31 @@ h4 {
 .toolbar-btn:hover {
     background-color: #ececec;
 }
-.row a:hover{
+.row a:hover, a:active, a:visited, a:link {
     text-decoration: none;
 }
 #main-controls {
-    height: 10%;
+    height: 3em;
     background-color: white;
     margin-left: 2%;
     margin-right: 2%;
+    margin-top: 2%;
+}
+#controls-placeholder {
+    height: 100%;
+    padding: 0px;
 }
 .controls-btn {
-    height: 10%;
+    width: 10%;
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+.controls-btn:hover {
+    background-color: #ececec;
+}
+.controls-placeholder a:hover, a:visited, a:visited, a:link {
+    text-decoration: none;
+    outline: none;
 }
