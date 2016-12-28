@@ -147,11 +147,12 @@ body .highlighted{
 }
 #results{
     float: right;
-    width: 30%;
+    width: 28%;
     font-size: 12px;
     font-family: Century;
     background-color: white;
     margin-top: 2%;
+    margin-right: 2%;
 }
 #paginate li:hover {
     background-color: #e7e7e7;
@@ -208,6 +209,7 @@ body .highlighted{
 }
 ol, ul{
     list-style-type: none;
+    padding: 5px;
 }
 .fa-times{
     float: right;
@@ -607,4 +609,6 @@ h4 {
 #main-controls {
     height: 10%;
     background-color: white;
+    margin-left: 2%;
+    margin-right: 2%;
 }
