@@ -263,10 +263,10 @@ var mainChart  = dc.barChart("#header-chart");
 var totalCount = dc.dataCount(".dc-data-count");
 
 var mainChart_width = $('#header-chart-div').width(),
-    mainChart_height = $('#header-chart').height() * .85;
+    mainChart_height = $('#header-chart').height();
 
-var mapChart_width = $('#pais').width() * .9,
-    mapChart_height = $('#pais').height() * .9;
+var mapChart_width = $('#pais').width(),
+    mapChart_height = $('#pais').height();
 
 var minimapChart_width = $('#capital').width(),
     minimapChart_height = $('#capital').height();
@@ -308,14 +308,18 @@ d3.json("/static/js/argentina.json", function(geojson1){
     var map_hscale  = map_scale*mapChart_width  / (map_bounds[1][0] - map_bounds[0][0]);
     var map_vscale  = map_scale*mapChart_height / (map_bounds[1][1] - map_bounds[0][1]);
     var map_scale   = (map_hscale < map_vscale) ? map_hscale : map_vscale;
-    var map_offset  = [mapChart_width - (map_bounds[0][0] + map_bounds[1][0])/2,
-                      mapChart_height - (map_bounds[0][1] + map_bounds[1][1])/2];
+    var map_offset  = [mapChart_width - (map_bounds[0][1] + map_bounds[1][0])/2,
+                      mapChart_height - (map_bounds[0][1] + map_bounds[1][1])/1.85];
 
     // new projection
     map_projection = d3.geo.mercator().center(map_center)
       .scale(map_scale).translate(map_offset);
     map_path = map_path.projection(map_projection);
 
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-10, 0])
+        .html(function (d) { return "<span style='color: #f0027f'>" +  d.key + "</span> : "  + numberFormat(d.value); });
 
     argMap
         .dimension(mapDim)
@@ -328,12 +332,13 @@ d3.json("/static/js/argentina.json", function(geojson1){
                    "#4682b4"])
                 )
         .colorDomain([0, 100])
+        .title(function(d) { return d.key + ': ' + d.value; })
         .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';})
         .transitionDuration(1000)
         .projection(d3.geo.mercator()
                 .center(map_center)
                 .translate(map_offset)
-                .scale(map_scale)
+                .scale(map_scale * .85)
                 )
         .overlayGeoJson(geojson1.features, 'NAME_1', function(d) {
             return d.properties.NAME_1.toUpperCase();
@@ -380,7 +385,7 @@ d3.json("/static/js/argentina.json", function(geojson1){
         .projection(d3.geo.mercator()
                 .center(minimap_center)
                 .translate(minimap_offset)
-                .scale(minimap_scale)
+                .scale(minimap_scale * .85)
                 )
         .overlayGeoJson(geojson2.features, 'NAME_1', function(d) {
             return d.properties.NAME_1.toUpperCase();

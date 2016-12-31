@@ -18,8 +18,7 @@ from django.contrib.auth import views as auth_views
 from caseanalyzer.forms import MySearchForm
 from django.conf.urls import url, include
 from django.contrib import admin
-from textprocessor.views import cij
-from caseanalyzer.views import inicio, analyzer, details, dashboard, dashboard2
+from caseanalyzer.views import inicio, details, dashboard
 
 urlpatterns = [
     # admin url
@@ -32,9 +31,6 @@ urlpatterns = [
 
     # start page
     url(r'^$', inicio, name='inicio'),
-
-    # file processor
-    url(r'^cij/', cij, name='cij'),
 
     # main search url
     url(r'search/$',

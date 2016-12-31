@@ -99,9 +99,7 @@ body .highlighted{
     margin: 0;
 }
 #table-filters td{
-    font-size: 12px;
-    font-weight: bold;
-    padding: 0;
+    font-size: 14px;
 }
 #table-filters input{
     padding: 0;
@@ -143,7 +141,7 @@ body .highlighted{
 
 }
 #search-form{
-    margin-top: 7px;
+    margin-top: 1rem;
 }
 #results{
     float: right;
@@ -445,8 +443,8 @@ section{
     height: 100%;
 }
 #capital {
-    width: 40%;
-    height: 40%;
+    width: 20rem;
+    height: 20rem;
     margin-top: 20%;
     border: solid 1px;
     border-radius: 100px;
@@ -517,6 +515,7 @@ h4 {
 }
 .dc-data-count {
     height: 130px;
+    margin-bottom: 1%;
 }
 #dc-data-table {
     background-color: #fff;
@@ -594,8 +593,11 @@ h4 {
     font-size: 20px;
     color: #27ae60;
 }
+.doc-toolbar {
+    height: 3em;
+}
 .toolbar-btn {
-    width: 5%;
+    width: 3rem;
     margin-top: 1%; 
     margin-left: 2.5%;
     margin-right: 2.5%;
@@ -607,7 +609,7 @@ h4 {
     text-decoration: none;
 }
 #main-controls {
-    height: 3em;
+    height: 4em;
     background-color: white;
     margin-left: 2%;
     margin-right: 2%;
@@ -618,7 +620,7 @@ h4 {
     padding: 0px;
 }
 .controls-btn {
-    width: 3rem;
+    width: 4rem;
     margin-left: 5%;
     margin-right: 5%;
     margin-top: 2%;
