@@ -69,7 +69,7 @@ except Exception:
 
 # browser.find_element_by_id('fecha_fallo_hasta_aux').click()
 # browser.find_element_by_xpath('/html/body/div/div/a[1]/span').click()
-# browser.find_element_by_xpath('//tr[5]/td[3]/a').click()
+# browser.find_element_by_xpath('//tr[5]/td[5]/a').click()
 # browser.find_element_by_xpath('//form/div[6]/input[1]').submit()
 
 def get_materia(tesauro, text):

@@ -4,7 +4,7 @@
 <body>
     <div id="main-controls">
         <div id="controls-placeholder" class="col-md-3 col-md-offset-5">
-            <a href="#">
+            <a id="fallos-submit" href="#">
                 <img class="controls-btn" src="/static/icons/stack.svg"></img>
             </a>
             <a id="dashboard-submit" href="#">
@@ -265,7 +265,7 @@ var totalCount = dc.dataCount(".dc-data-count");
 var mainChart_width = $('#header-chart-div').width(),
     mainChart_height = $('#header-chart').height() * .85;
 
-var mapChart_width = $('#pais').width(),
+var mapChart_width = $('#pais').width() * .9,
     mapChart_height = $('#pais').height() * .9;
 
 var minimapChart_width = $('#capital').width(),
@@ -290,6 +290,33 @@ var capMap = dc.geoChoroplethChart("#capital");
 d3.json("/static/js/argentina.json", function(geojson1){
     d3.json("/static/js/cf.geojson", function(geojson2){
 
+
+    // http://stackoverflow.com/questions/32884406/geojson-projection-with-d3-js-and-dc-js-for-south-africa-and-provinces
+    // create a first guess for the map projection
+    var map_center = d3.geo.centroid(geojson1)
+    var map_scale  = 150;
+    var map_offset = [mapChart_width/1.85, mapChart_height/1.7];
+    var map_projection = d3.geo.mercator().scale(map_scale).center(map_center)
+        .translate(map_offset);
+
+    // create the path
+    var map_path = d3.geo.path().projection(map_projection);
+
+    // using the path determine the bounds of the current map and use 
+    // these to determine better values for the scale and translation
+    var map_bounds  = map_path.bounds(geojson1);
+    var map_hscale  = map_scale*mapChart_width  / (map_bounds[1][0] - map_bounds[0][0]);
+    var map_vscale  = map_scale*mapChart_height / (map_bounds[1][1] - map_bounds[0][1]);
+    var map_scale   = (map_hscale < map_vscale) ? map_hscale : map_vscale;
+    var map_offset  = [mapChart_width - (map_bounds[0][0] + map_bounds[1][0])/2,
+                      mapChart_height - (map_bounds[0][1] + map_bounds[1][1])/2];
+
+    // new projection
+    map_projection = d3.geo.mercator().center(map_center)
+      .scale(map_scale).translate(map_offset);
+    map_path = map_path.projection(map_projection);
+
+
     argMap
         .dimension(mapDim)
         .group(mapGroup)
@@ -303,15 +330,39 @@ d3.json("/static/js/argentina.json", function(geojson1){
         .colorDomain([0, 100])
         .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';})
         .transitionDuration(1000)
-        .projection(d3.geo.transverseMercator()
-                .center([5, -30])
-                .rotate([66, 0])
-                .scale((24200) / 33)
-                .translate([120, 125])
+        .projection(d3.geo.mercator()
+                .center(map_center)
+                .translate(map_offset)
+                .scale(map_scale)
                 )
         .overlayGeoJson(geojson1.features, 'NAME_1', function(d) {
             return d.properties.NAME_1.toUpperCase();
         })
+
+      // http://stackoverflow.com/questions/32884406/geojson-projection-with-d3-js-and-dc-js-for-south-africa-and-provinces
+      // create a first guess for the minimap projection
+      var minimap_center = d3.geo.centroid(geojson2)
+      var minimap_scale  = 150;
+      var minimap_offset = [minimapChart_width/2, minimapChart_height/2];
+      var minimap_projection = d3.geo.mercator().scale(minimap_scale).center(minimap_center)
+          .translate(minimap_offset);
+
+      // create the path
+      var minimap_path = d3.geo.path().projection(minimap_projection);
+
+      // using the path determine the bounds of the current map and use 
+      // these to determine better values for the scale and translation
+      var minimap_bounds  = minimap_path.bounds(geojson2);
+      var minimap_hscale  = minimap_scale*minimapChart_width  / (minimap_bounds[1][0] - minimap_bounds[0][0]);
+      var minimap_vscale  = minimap_scale*minimapChart_height / (minimap_bounds[1][1] - minimap_bounds[0][1]);
+      var minimap_scale   = (minimap_hscale < minimap_vscale) ? minimap_hscale : minimap_vscale;
+      var minimap_offset  = [minimapChart_width - (minimap_bounds[0][0] + minimap_bounds[1][0])/2,
+                        minimapChart_height - (minimap_bounds[0][1] + minimap_bounds[1][1])/2];
+
+      // new projection
+      minimap_projection = d3.geo.mercator().center(minimap_center)
+        .scale(minimap_scale).translate(minimap_offset);
+      minimap_path = minimap_path.projection(minimap_projection);
 
     capMap
         .dimension(cfDim)
@@ -326,10 +377,10 @@ d3.json("/static/js/argentina.json", function(geojson1){
         .colorDomain([0, 100])
         .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';})
         .transitionDuration(1000)
-        .projection(d3.geo.transverseMercator()
-                .center([8.03, -34.74])
-                .rotate([66, 0])
-                .scale(minimapChart_width * 300)
+        .projection(d3.geo.mercator()
+                .center(minimap_center)
+                .translate(minimap_offset)
+                .scale(minimap_scale)
                 )
         .overlayGeoJson(geojson2.features, 'NAME_1', function(d) {
             return d.properties.NAME_1.toUpperCase();
@@ -436,6 +487,13 @@ function last() {
     update();
     datatable.redraw();
 }
+
+
+$('#fallos-submit').on('click', function() {
+    var q = $('#busqueda').text();
+    $('#id_q').val(q);
+    $('form').submit();
+});
 
 $(document).ready(function(){
     update();

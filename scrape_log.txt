@@ -6,3 +6,7 @@ Fecha de sentencia: 26/12/2016 120
 Fecha de sentencia: 26/12/2016 140
 Fecha de sentencia: 27/12/2016 280
 Fecha de sentencia: 27/12/2016 400
+Fecha de sentencia: 29/12/2016 60
+Fecha de sentencia: 28/12/2016 180
+Fecha de sentencia: 29/12/2016 580
+Fecha de sentencia: 30/12/2016 180
