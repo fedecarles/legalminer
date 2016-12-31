@@ -11,6 +11,12 @@
         <a id="dashboard-submit" href="#">
             <img class="controls-btn" src="/static/icons/bar-chart.svg"></img>
         </a>
+        <a id="download-submit" href="#">
+            <img class="controls-btn" src="/static/icons/download.svg"></img>
+        </a>
+        <a id="info-submit" href="#">
+            <img class="controls-btn" src="/static/icons/info.svg"></img>
+        </a>
     </div>
 </div>
 <div id="details" class="col-md-12">
@@ -56,5 +62,7 @@ $('#paginate').easyPaginate({
 $('#dashboard-submit').click(function() {
   $('form').submit();
 });
+
+
 </script>
 {% endblock %}

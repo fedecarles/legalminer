@@ -7,8 +7,14 @@
             <a id="fallos-submit" href="#">
                 <img class="controls-btn" src="/static/icons/stack.svg"></img>
             </a>
-            <a id="dashboard-submit" href="#">
-                <img class="controls-btn" src="/static/icons/bar-chart.svg"></img>
+            <a id="table-submit" href="#">
+                <img class="controls-btn" src="/static/icons/table.svg"></img>
+            </a>
+            <a id="report-submit" href="#">
+                <img class="controls-btn" src="/static/icons/report.svg"></img>
+            </a>
+            <a id="info-submit" href="#">
+                <img class="controls-btn" src="/static/icons/info.svg"></img>
             </a>
         </div>
     </div>
@@ -151,7 +157,7 @@
 
 <script type="text/javascript">
 var data = {{ case_data|safe }}
-
+var graph = {{ force_layout|safe }}
 var dtgFormat = d3.time.format("%Y-%m-%d");
 
 data.forEach(function(d) {
@@ -284,115 +290,112 @@ totalCount
     .dimension(ndx)
     .group(all);
 
-var argMap = dc.geoChoroplethChart("#pais");
-var capMap = dc.geoChoroplethChart("#capital");
-
-d3.json("/static/js/argentina.json", function(geojson1){
-    d3.json("/static/js/cf.geojson", function(geojson2){
-
-
-    // http://stackoverflow.com/questions/32884406/geojson-projection-with-d3-js-and-dc-js-for-south-africa-and-provinces
-    // create a first guess for the map projection
-    var map_center = d3.geo.centroid(geojson1)
-    var map_scale  = 150;
-    var map_offset = [mapChart_width/1.85, mapChart_height/1.7];
-    var map_projection = d3.geo.mercator().scale(map_scale).center(map_center)
-        .translate(map_offset);
-
-    // create the path
-    var map_path = d3.geo.path().projection(map_projection);
-
-    // using the path determine the bounds of the current map and use 
-    // these to determine better values for the scale and translation
-    var map_bounds  = map_path.bounds(geojson1);
-    var map_hscale  = map_scale*mapChart_width  / (map_bounds[1][0] - map_bounds[0][0]);
-    var map_vscale  = map_scale*mapChart_height / (map_bounds[1][1] - map_bounds[0][1]);
-    var map_scale   = (map_hscale < map_vscale) ? map_hscale : map_vscale;
-    var map_offset  = [mapChart_width - (map_bounds[0][1] + map_bounds[1][0])/2,
-                      mapChart_height - (map_bounds[0][1] + map_bounds[1][1])/1.85];
-
-    // new projection
-    map_projection = d3.geo.mercator().center(map_center)
-      .scale(map_scale).translate(map_offset);
-    map_path = map_path.projection(map_projection);
-
-    var tip = d3.tip()
-        .attr('class', 'd3-tip')
-        .offset([-10, 0])
-        .html(function (d) { return "<span style='color: #f0027f'>" +  d.key + "</span> : "  + numberFormat(d.value); });
-
-    argMap
-        .dimension(mapDim)
-        .group(mapGroup)
-        .width(mapChart_width)
-        .height(mapChart_height)
-        .colors(d3.scale.quantize()
-               .range(["#ecf2f7", "#dae6f0", "#c7d9e8", "#b5cde1",
-                   "#a2c0d9", "#90b4d2", "#7da7ca", "#6a9bc3", "#588ebb",
-                   "#4682b4"])
-                )
-        .colorDomain([0, 100])
-        .title(function(d) { return d.key + ': ' + d.value; })
-        .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';})
-        .transitionDuration(1000)
-        .projection(d3.geo.mercator()
-                .center(map_center)
-                .translate(map_offset)
-                .scale(map_scale * .85)
-                )
-        .overlayGeoJson(geojson1.features, 'NAME_1', function(d) {
-            return d.properties.NAME_1.toUpperCase();
-        })
-
-      // http://stackoverflow.com/questions/32884406/geojson-projection-with-d3-js-and-dc-js-for-south-africa-and-provinces
-      // create a first guess for the minimap projection
-      var minimap_center = d3.geo.centroid(geojson2)
-      var minimap_scale  = 150;
-      var minimap_offset = [minimapChart_width/2, minimapChart_height/2];
-      var minimap_projection = d3.geo.mercator().scale(minimap_scale).center(minimap_center)
-          .translate(minimap_offset);
-
-      // create the path
-      var minimap_path = d3.geo.path().projection(minimap_projection);
-
-      // using the path determine the bounds of the current map and use 
-      // these to determine better values for the scale and translation
-      var minimap_bounds  = minimap_path.bounds(geojson2);
-      var minimap_hscale  = minimap_scale*minimapChart_width  / (minimap_bounds[1][0] - minimap_bounds[0][0]);
-      var minimap_vscale  = minimap_scale*minimapChart_height / (minimap_bounds[1][1] - minimap_bounds[0][1]);
-      var minimap_scale   = (minimap_hscale < minimap_vscale) ? minimap_hscale : minimap_vscale;
-      var minimap_offset  = [minimapChart_width - (minimap_bounds[0][0] + minimap_bounds[1][0])/2,
-                        minimapChart_height - (minimap_bounds[0][1] + minimap_bounds[1][1])/2];
-
-      // new projection
-      minimap_projection = d3.geo.mercator().center(minimap_center)
-        .scale(minimap_scale).translate(minimap_offset);
-      minimap_path = minimap_path.projection(minimap_projection);
-
-    capMap
-        .dimension(cfDim)
-        .group(cfGroup)
-        .width(minimapChart_width)
-        .height(minimapChart_height)
-        .colors(d3.scale.quantize()
-               .range(["#ecf2f7", "#dae6f0", "#c7d9e8", "#b5cde1",
-                   "#a2c0d9", "#90b4d2", "#7da7ca", "#6a9bc3", "#588ebb",
-                   "#4682b4"])
-                )
-        .colorDomain([0, 100])
-        .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';})
-        .transitionDuration(1000)
-        .projection(d3.geo.mercator()
-                .center(minimap_center)
-                .translate(minimap_offset)
-                .scale(minimap_scale * .85)
-                )
-        .overlayGeoJson(geojson2.features, 'NAME_1', function(d) {
-            return d.properties.NAME_1.toUpperCase();
-        })
-    dc.renderAll();
+function mapCharts(uidarg, uidcap) {
+    var argMap = dc.geoChoroplethChart(uidarg);
+    var capMap = dc.geoChoroplethChart(uidcap);
+    
+    d3.json("/static/js/argentina.json", function(geojson1){
+        d3.json("/static/js/cf.geojson", function(geojson2){
+    
+    
+        // http://stackoverflow.com/questions/32884406/geojson-projection-with-d3-js-and-dc-js-for-south-africa-and-provinces
+        // create a first guess for the map projection
+        var map_center = d3.geo.centroid(geojson1)
+        var map_scale  = 150;
+        var map_offset = [mapChart_width/1.85, mapChart_height/1.7];
+        var map_projection = d3.geo.mercator().scale(map_scale).center(map_center)
+            .translate(map_offset);
+    
+        // create the path
+        var map_path = d3.geo.path().projection(map_projection);
+    
+        // using the path determine the bounds of the current map and use 
+        // these to determine better values for the scale and translation
+        var map_bounds  = map_path.bounds(geojson1);
+        var map_hscale  = map_scale*mapChart_width  / (map_bounds[1][0] - map_bounds[0][0]);
+        var map_vscale  = map_scale*mapChart_height / (map_bounds[1][1] - map_bounds[0][1]);
+        var map_scale   = (map_hscale < map_vscale) ? map_hscale : map_vscale;
+        var map_offset  = [mapChart_width - (map_bounds[0][1] + map_bounds[1][0])/2,
+                          mapChart_height - (map_bounds[0][1] + map_bounds[1][1])/1.85];
+    
+        // new projection
+        map_projection = d3.geo.mercator().center(map_center)
+          .scale(map_scale).translate(map_offset);
+        map_path = map_path.projection(map_projection);
+    
+        argMap
+            .dimension(mapDim)
+            .group(mapGroup)
+            .width(mapChart_width)
+            .height(mapChart_height)
+            .colors(d3.scale.quantize()
+                   .range(["#ecf2f7", "#dae6f0", "#c7d9e8", "#b5cde1",
+                       "#a2c0d9", "#90b4d2", "#7da7ca", "#6a9bc3", "#588ebb",
+                       "#4682b4"])
+                    )
+            .colorDomain([0, 100])
+            .title(function(d) { return d.key + ': ' + d.value; })
+            .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';})
+            .transitionDuration(1000)
+            .projection(d3.geo.mercator()
+                    .center(map_center)
+                    .translate(map_offset)
+                    .scale(map_scale * .85)
+                    )
+            .overlayGeoJson(geojson1.features, 'NAME_1', function(d) {
+                return d.properties.NAME_1.toUpperCase();
+            })
+    
+          // http://stackoverflow.com/questions/32884406/geojson-projection-with-d3-js-and-dc-js-for-south-africa-and-provinces
+          // create a first guess for the minimap projection
+          var minimap_center = d3.geo.centroid(geojson2)
+          var minimap_scale  = 150;
+          var minimap_offset = [minimapChart_width/2, minimapChart_height/2];
+          var minimap_projection = d3.geo.mercator().scale(minimap_scale).center(minimap_center)
+              .translate(minimap_offset);
+    
+          // create the path
+          var minimap_path = d3.geo.path().projection(minimap_projection);
+    
+          // using the path determine the bounds of the current map and use 
+          // these to determine better values for the scale and translation
+          var minimap_bounds  = minimap_path.bounds(geojson2);
+          var minimap_hscale  = minimap_scale*minimapChart_width  / (minimap_bounds[1][0] - minimap_bounds[0][0]);
+          var minimap_vscale  = minimap_scale*minimapChart_height / (minimap_bounds[1][1] - minimap_bounds[0][1]);
+          var minimap_scale   = (minimap_hscale < minimap_vscale) ? minimap_hscale : minimap_vscale;
+          var minimap_offset  = [minimapChart_width - (minimap_bounds[0][0] + minimap_bounds[1][0])/2,
+                            minimapChart_height - (minimap_bounds[0][1] + minimap_bounds[1][1])/2];
+    
+          // new projection
+          minimap_projection = d3.geo.mercator().center(minimap_center)
+            .scale(minimap_scale).translate(minimap_offset);
+          minimap_path = minimap_path.projection(minimap_projection);
+    
+        capMap
+            .dimension(cfDim)
+            .group(cfGroup)
+            .width(minimapChart_width)
+            .height(minimapChart_height)
+            .colors(d3.scale.quantize()
+                   .range(["#ecf2f7", "#dae6f0", "#c7d9e8", "#b5cde1",
+                       "#a2c0d9", "#90b4d2", "#7da7ca", "#6a9bc3", "#588ebb",
+                       "#4682b4"])
+                    )
+            .colorDomain([0, 100])
+            .colorCalculator(function(d) {return d ? argMap.colors()(d) : '#ccc';})
+            .transitionDuration(1000)
+            .projection(d3.geo.mercator()
+                    .center(minimap_center)
+                    .translate(minimap_offset)
+                    .scale(minimap_scale * .85)
+                    )
+            .overlayGeoJson(geojson2.features, 'NAME_1', function(d) {
+                return d.properties.NAME_1.toUpperCase();
+            })
+        dc.renderAll();
+        });
     });
-});
+};
 
 var datatable   = dc.dataTable("#dc-data-table");
 
@@ -503,6 +506,136 @@ $('#fallos-submit').on('click', function() {
 $(document).ready(function(){
     update();
 });
+
+// FORCE LAYOUT WITH SVG
+
+function forceLayout(uid) {
+    // Graph size.
+    var width = $(uid).width(),
+        height = $(uid).height() * .9;
+    
+    // Toggle var for node/link opacity.
+    var toggle = 0;
+    
+    // Scales values for zoom function.
+    var xScale = d3.scale.linear()
+            .domain([0, width])
+            .range([0, width]);
+    var yScale = d3.scale.linear()
+            .domain([0, height])
+            .range([0, height]);
+    
+    var zoomer = d3.behavior.zoom().x(xScale).y(yScale).scaleExtent([0.1, 8]);
+    
+    var color = d3.scale.category20();
+    
+    // Initiate force layout.
+    var force = d3.layout.force()
+        .gravity(0.5)
+        .charge(-500)
+        .linkDistance(50)
+        .size([width, height]);
+    
+    // Append svg element to html.
+    var svg = d3.select(uid).append("svg")
+        .attr("width", width)
+        .attr("height", height);
+    svg.call(zoomer);
+    
+    // Force config. Get node and link data from json graph var.
+      force
+          .nodes(graph.nodes)
+          .links(graph.links)
+          .start();
+    
+    
+    // Load tootip function to display node name.
+      var tip = d3.tip()
+          .attr('class', 'd3-tip')
+          .offset([-10, 0])
+          .html(function(d) { return d.name; })
+      svg.call(tip)
+    
+    // Append links and setup links details.
+      var link = svg.selectAll(".link")
+          .data(graph.links)
+        .enter().append("line")
+          .attr("class", "link")
+          .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+    
+    
+    // Append nodes and setup nodes details.
+      var node = svg.selectAll(".node")
+          .data(graph.nodes)
+          .enter().append("circle")
+          .attr("class", "node")
+          // .attr("r", function(d) {return d.weight * .5})
+          .attr("r", 5)
+          .style("fill", function(d) { return color(d.group); })
+          .on('click', connectedNodes)
+          .on('mouseover.tip', tip.show)
+          .on('mouseout', tip.hide)
+          .call(force.drag);
+    
+    // Append title to nodes.
+    //  node.append("title")
+    //      .text(function(d) { return d.name; });
+    
+    // Draw nodes and linnks on svg.
+      force.on("tick", function() {
+            link.attr("x1", function (d) { return  xScale(d.source.x); })
+                .attr("y1", function (d) { return yScale(d.source.y);  })
+                .attr("x2", function (d) { return xScale(d.target.x); })
+                .attr("y2", function (d) { return yScale(d.target.y); });
+    
+            // Nodes with scale factors for zoom.
+            node.attr("transform", function (d) {
+                return "translate(" + xScale(d.x) + "," + yScale(d.y) + ")";
+            });
+                // .attr('r', function(d){return Math.sqrt(d.weight)});
+      });
+    
+    // Index links and get neighboring nodes. This solution is form Mike Bostock in
+    // http://stackoverflow.com/questions/8739072/highlight-selected-node-its-links-and-its-children-in-a-d3-force-directed-grap
+    var linkedByIndex = {};
+    for (i = 0; i < graph.nodes.length; i++) {
+        linkedByIndex[i + "," + i] = 1;
+    };
+    
+    graph.links.forEach(function (d) {
+        linkedByIndex[d.source.index + "," + d.target.index] = 1;
+     });
+    
+    function neighboring(a, b) {
+        return linkedByIndex[a.index + "," + b.index];
+    }
+    
+    // Function to highlight connected links and nodes.
+    function connectedNodes() {
+    
+        if (toggle == 0) {
+        
+                d = d3.select(this).node().__data__;
+                node.style("opacity", function (o) {
+                                    return neighboring(d, o) | neighboring(o, d) ?
+                                    1 : 0.15;
+                                            });
+    
+                link.style("opacity", function (o) {
+                        return o.source === d || o.target === d ?
+                        1 : 0.15;
+                                });                                               
+                toggle = 1;
+            } else {
+                    node.style("opacity", 1);
+                    link.style("opacity", 1);
+                    toggle = 0;
+                }
+    }
+};
+
+
+forceLayout("#pais");
 
 </script>
 {% endblock %}

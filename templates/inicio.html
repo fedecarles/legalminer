@@ -5,25 +5,28 @@
     <div id="inicio_logo">
         <img id="main_logo" src="/static/icons/intralex-logo-white.svg"/></img>
         <p id="tagline">Inteligencia jurídica</p>
+        {% if user.is_authenticated %}
+        {% else %}
         <a href="/accounts/login/">
             <button class="flat_btn col-md-offset-4" type="button">Comenzar</button>
         </a>
+        {% endif %}
     </div>
     <div class="empty"></div>
     <div class="row">
         <div class="col-md-6 col-md-offset-3">
             <div class="col-md-4">
-                <img class="col-md-offset-2 icon-image" src="/static/icons/file.svg"/></img>
+                <img class="col-md-offset-4 icon-image" src="/static/icons/file.svg"/></img>
                 <br />
                 <p class="icon-text">Accede a todas las leyes nacionales y provinciales.</p>
             </div>
             <div class="col-md-4">
-                <img class="col-md-offset-2 icon-image" src="/static/icons/libra.svg"/></img>
+                <img class="col-md-offset-4 icon-image" src="/static/icons/libra.svg"/></img>
                 <br />
                 <p class="icon-text">Identifica la jurisprudencia relevante.</p>
             </div>
             <div class="col-md-4">
-                <img class="col-md-offset-2 icon-image" src="/static/icons/analytics.svg"/></img>
+                <img class="col-md-offset-4 icon-image" src="/static/icons/analytics.svg"/></img>
                 <p class="icon-text">Descubre los patrones detrás de los datos.</p>
             </div>
         </div>
