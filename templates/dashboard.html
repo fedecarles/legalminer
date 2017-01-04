@@ -86,15 +86,20 @@
     <br/>
     </div>
     <div class="col-md-4">
-        <div  id="map-chart" class="col-md-12">
+        <div  id="large-chart" class="col-md-12">
             <div id="heading">
                 <h4>
-                    Cantidad por Provincia
+                <img id="map" class="large-chart-btn" src="/static/icons/map.svg"></img>
+                <img id="network" class="large-chart-btn" src="/static/icons/network.svg"></img>
                 </h4>
             </div>
-            <div id="pais">
+            <div id="map-subchart">
+                <div id="pais">
+                </div>
+                <div id="capital">
+                </div>
             </div>
-            <div id="capital">
+            <div id="layout-subchart">
             </div>
         </div>
     </div>
@@ -156,14 +161,17 @@
 </body>
 
 <script type="text/javascript">
+// Load Data from backend
 var data = {{ case_data|safe }}
 var graph = {{ force_layout|safe }}
 var dtgFormat = d3.time.format("%Y-%m-%d");
 
+// Format date.
 data.forEach(function(d) {
   d.fechas   = dtgFormat.parse(d.fecha);
 });
 
+// Custom reduce functions for list elements.
 // http://stackoverflow.com/questions/17524627/is-there-a-way-to-tell-crossfilter-to-treat-elements-of-array-as-separate-record
 function reduceAdd(attr) {
   return function(p,v) {
@@ -205,8 +213,10 @@ function reduceRemoveArray(attr) {
     }
 }
 
+// Load crossfilter data.
 var ndx = crossfilter(data);
 
+// Setup dimensions.
 var dateDim = ndx.dimension(function(d) {return d.fechas;});
 var corteDim = ndx.dimension(function(d) {return d.corte;});
 var provinciaDim = ndx.dimension(function(d) {return d.provincia;});
@@ -217,6 +227,7 @@ var sobreDim = ndx.dimension(function(d) {return d.sobre;});
 var vocesDim = ndx.dimension(function(d) {return d.voces;});
 var materiaDim = ndx.dimension(function(d) {return d.materia;});
 
+// Setup groups, using custom reduce functions.
 var all = ndx.groupAll();
 var dateGroup = dateDim.group()
 var corteGroup = corteDim.group().reduceCount(function(d) {return d.corte;});
@@ -262,21 +273,22 @@ function arrayFilterHandler(dimension, filters) {
     return filters;
 }
 
+// Get date limits.
 var minDate = dateDim.bottom(1)[0].fechas;
 var maxDate = dateDim.top(1)[0].fechas;
 
 var mainChart  = dc.barChart("#header-chart");
 var totalCount = dc.dataCount(".dc-data-count");
 
+// Get div width adn height.
 var mainChart_width = $('#header-chart-div').width(),
     mainChart_height = $('#header-chart').height();
-
 var mapChart_width = $('#pais').width(),
     mapChart_height = $('#pais').height();
-
 var minimapChart_width = $('#capital').width(),
     minimapChart_height = $('#capital').height();
 
+// Plot main (count) bar graph.
 mainChart
 	.width(mainChart_width).height(mainChart_height)
 	.dimension(dateDim)
@@ -286,18 +298,22 @@ mainChart
     .xAxis().ticks(7);
 mainChart.yAxis().ticks(2)
 
+// Get total number of entries.
 totalCount
     .dimension(ndx)
     .group(all);
 
-function mapCharts(uidarg, uidcap) {
-    var argMap = dc.geoChoroplethChart(uidarg);
-    var capMap = dc.geoChoroplethChart(uidcap);
+// Map chart function.
+function mapChart() {
+
+    var argMap = dc.geoChoroplethChart('#pais');
+    var capMap = dc.geoChoroplethChart('#capital');
     
+    // Load the 2 geojson files for Argentina and Capital Federal
     d3.json("/static/js/argentina.json", function(geojson1){
         d3.json("/static/js/cf.geojson", function(geojson2){
     
-    
+        // Center projection dynamically based on div size. 
         // http://stackoverflow.com/questions/32884406/geojson-projection-with-d3-js-and-dc-js-for-south-africa-and-provinces
         // create a first guess for the map projection
         var map_center = d3.geo.centroid(geojson1)
@@ -315,7 +331,7 @@ function mapCharts(uidarg, uidcap) {
         var map_hscale  = map_scale*mapChart_width  / (map_bounds[1][0] - map_bounds[0][0]);
         var map_vscale  = map_scale*mapChart_height / (map_bounds[1][1] - map_bounds[0][1]);
         var map_scale   = (map_hscale < map_vscale) ? map_hscale : map_vscale;
-        var map_offset  = [mapChart_width - (map_bounds[0][1] + map_bounds[1][0])/2,
+        var map_offset  = [mapChart_width - (map_bounds[0][1] + map_bounds[1][0])/3,
                           mapChart_height - (map_bounds[0][1] + map_bounds[1][1])/1.85];
     
         // new projection
@@ -323,6 +339,7 @@ function mapCharts(uidarg, uidcap) {
           .scale(map_scale).translate(map_offset);
         map_path = map_path.projection(map_projection);
     
+        // Plot the geochoropleth map with dc.
         argMap
             .dimension(mapDim)
             .group(mapGroup)
@@ -371,6 +388,7 @@ function mapCharts(uidarg, uidcap) {
             .scale(minimap_scale).translate(minimap_offset);
           minimap_path = minimap_path.projection(minimap_projection);
     
+        // Plot the geochoropleth map with dc.
         capMap
             .dimension(cfDim)
             .group(cfGroup)
@@ -397,6 +415,7 @@ function mapCharts(uidarg, uidcap) {
     });
 };
 
+// Display data table.
 var datatable   = dc.dataTable("#dc-data-table");
 
 datatable
@@ -416,7 +435,38 @@ datatable
     .order(d3.descending);
     next();
 
+// Split the table by rows of 20 and build next/last functions to navigate.
+var ofs = 0, pag = 20;
+function display() {
+    d3.select('#begin')
+        .text(ofs);
+    d3.select('#end')
+        .text(ofs+pag-1);
+    d3.select('#last')
+        .attr('disabled', ofs-pag<0 ? 'true' : null);
+    d3.select('#next')
+        .attr('disabled', ofs+pag>=ndx.size() ? 'true' : null);
+    d3.select('#size').text(ndx.size());
+}
 
+function update() {
+    datatable.beginSlice(ofs);
+    datatable.endSlice(ofs+pag);
+    display();
+}
+function next() {
+    ofs += pag;
+    update();
+    datatable.redraw();
+}
+function last() {
+    ofs -= pag;
+    update();
+    datatable.redraw();
+}
+
+
+// Row chart function for single entry variables.
 function barChart(uid, dim, color) {
 
     var Dim = ndx.dimension(function(d) {return d[dim];});
@@ -435,8 +485,10 @@ function barChart(uid, dim, color) {
         .ordering(function(d){ return -d.value })
         .colors(color)
         .xAxis().ticks(10);
+    dc.renderAll();
 }
 
+// Row chart function for list entry variables.
 function barChartArray(uid, dim, color) {
 
     var Dim = ndx.dimension(function(d) {return d[dim];});
@@ -459,60 +511,23 @@ function barChartArray(uid, dim, color) {
         .filterHandler(arrayFilterHandler)
         .colors(color)
         .xAxis().ticks(10);
-}
-barChart("#main-chart", "corte", "#6a9bc3");
-barChartArray("#main-right-chart", "jueces", "#6a9bc3");
-barChartArray("#medium-left-chart", "citados", "#6a9bc3");
-barChartArray("#medium-center-chart", "leyes", "#6a9bc3");
-barChart("#bottom-left-chart", "sobre", "#6a9bc3");
-barChartArray("#bottom-center-chart", "voces", "#6a9bc3");
-barChartArray("#bottom-right-chart", "materia", "#6a9bc3");
-
-var ofs = 0, pag = 20;
-function display() {
-    d3.select('#begin')
-        .text(ofs);
-    d3.select('#end')
-        .text(ofs+pag-1);
-    d3.select('#last')
-        .attr('disabled', ofs-pag<0 ? 'true' : null);
-    d3.select('#next')
-        .attr('disabled', ofs+pag>=ndx.size() ? 'true' : null);
-    d3.select('#size').text(ndx.size());
-}
-function update() {
-    datatable.beginSlice(ofs);
-    datatable.endSlice(ofs+pag);
-    display();
-}
-function next() {
-    ofs += pag;
-    update();
-    datatable.redraw();
-}
-function last() {
-    ofs -= pag;
-    update();
-    datatable.redraw();
+    dc.renderAll();
 }
 
-
+// Submit search again to go back to the search result page.
 $('#fallos-submit').on('click', function() {
     var q = $('#busqueda').text();
     $('#id_q').val(q);
     $('form').submit();
 });
 
-$(document).ready(function(){
-    update();
-});
+// FORCE LAYOUT CHART (SVG)
+// Graph size.
 
-// FORCE LAYOUT WITH SVG
+function forceLayout() {
 
-function forceLayout(uid) {
-    // Graph size.
-    var width = $(uid).width(),
-        height = $(uid).height() * .9;
+    var layout_width = $('#layout-subchart').width(),
+        layout_height = $('#layout-subchart').height() * .9;
     
     // Toggle var for node/link opacity.
     var toggle = 0;
@@ -531,15 +546,15 @@ function forceLayout(uid) {
     
     // Initiate force layout.
     var force = d3.layout.force()
-        .gravity(0.5)
+        .gravity(0.2)
         .charge(-500)
         .linkDistance(50)
         .size([width, height]);
     
     // Append svg element to html.
-    var svg = d3.select(uid).append("svg")
-        .attr("width", width)
-        .attr("height", height);
+    var svg = d3.select("#layout-subchart").append("svg")
+        .attr("width", layout_width)
+        .attr("height", layout_height);
     svg.call(zoomer);
     
     // Force config. Get node and link data from json graph var.
@@ -562,7 +577,6 @@ function forceLayout(uid) {
         .enter().append("line")
           .attr("class", "link")
           .style("stroke-width", function(d) { return Math.sqrt(d.value); });
-    
     
     // Append nodes and setup nodes details.
       var node = svg.selectAll(".node")
@@ -594,9 +608,10 @@ function forceLayout(uid) {
             });
                 // .attr('r', function(d){return Math.sqrt(d.weight)});
       });
-    
+
     // Index links and get neighboring nodes. This solution is form Mike Bostock in
     // http://stackoverflow.com/questions/8739072/highlight-selected-node-its-links-and-its-children-in-a-d3-force-directed-grap
+    
     var linkedByIndex = {};
     for (i = 0; i < graph.nodes.length; i++) {
         linkedByIndex[i + "," + i] = 1;
@@ -612,30 +627,49 @@ function forceLayout(uid) {
     
     // Function to highlight connected links and nodes.
     function connectedNodes() {
-    
         if (toggle == 0) {
-        
-                d = d3.select(this).node().__data__;
-                node.style("opacity", function (o) {
-                                    return neighboring(d, o) | neighboring(o, d) ?
-                                    1 : 0.15;
-                                            });
+            d = d3.select(this).node().__data__;
+            node.style("opacity", function (o) {
+                    return neighboring(d, o) | neighboring(o, d) ?  1 : 0.15;
+                    });
     
-                link.style("opacity", function (o) {
-                        return o.source === d || o.target === d ?
-                        1 : 0.15;
-                                });                                               
-                toggle = 1;
-            } else {
-                    node.style("opacity", 1);
-                    link.style("opacity", 1);
-                    toggle = 0;
-                }
+            link.style("opacity", function (o) {
+                    return o.source === d || o.target === d ?  1 : 0.15;
+                    });                                               
+            toggle = 1;
+        } else {
+                node.style("opacity", 1);
+                link.style("opacity", 1);
+                toggle = 0;
+            }
     }
+
 };
 
+barChart("#main-chart", "corte", "#6a9bc3");
+barChartArray("#main-right-chart", "jueces", "#6a9bc3");
+barChartArray("#medium-left-chart", "citados", "#6a9bc3");
+barChartArray("#medium-center-chart", "leyes", "#6a9bc3");
+barChart("#bottom-left-chart", "sobre", "#6a9bc3");
+barChartArray("#bottom-center-chart", "voces", "#6a9bc3");
+barChartArray("#bottom-right-chart", "materia", "#6a9bc3");
+mapChart();
+forceLayout();
 
-forceLayout("#pais");
+$('#network').on('click', function (){
+    $('#map-subchart').hide()
+    $('#layout-subchart').show()
+        });
+
+$('#map').on('click', function (){
+    $('#map-subchart').show()
+    $('#layout-subchart').hide()
+        });
+
+$(document).ready(function(){
+    update();
+    $('#layout-subchart').hide()
+});
 
 </script>
 {% endblock %}

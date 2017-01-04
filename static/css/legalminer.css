@@ -433,18 +433,18 @@ section{
     background-color: #fff;
     border: 1px solid #E6E9ED;
 }
-#map-chart{
+#large-chart{
     border: 1px solid #E6E9ED;
     height: 500px;
     background-color: white;
 }
 #pais {
     width: 60%;
-    height: 100%;
+    height: 90%;
 }
 #capital {
-    width: 20rem;
-    height: 20rem;
+    width: 10rem;
+    height: 10rem;
     margin-top: 20%;
     border: solid 1px;
     border-radius: 100px;
@@ -632,4 +632,19 @@ h4 {
 .controls-placeholder a:hover, a:visited, a:visited, a:link {
     text-decoration: none;
     outline: none;
+}
+#map-subchart {
+    height: 100%
+}
+#layout-subchart {
+    height: 100%
+}
+.large-chart-btn {
+    width: 2rem;
+    margin-left: 5%;
+    margin-right: 5%;
+    cursor: pointer;
+}
+.large-chart-btn:hover {
+    background-color: #ececec;
 }
