@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.contrib.auth.decorators import login_required
 from textprocessor.models import Fallos
+from textprocessor.models import User
+from textprocessor.models import userProfile
 from caseanalyzer.forms import MySearchForm
+from .forms import userForm
+from .forms import userProfileForm
 from django.core.serializers.json import DjangoJSONEncoder
 import json
 import pandas as pd
@@ -34,20 +39,44 @@ def dashboard(request, pk=None):
     return render(request, 'dashboard.html', context)
 
 
-def dashboard2(request, pk=None):
-    context = {}
+# Profile views.
+@login_required
+def update_profile(request):
+    """Profile view for logged user."""
+    user = request.user
+    profile = user.profile
     if request.method == 'POST':
-        pks = request.POST.getlist('seleccion')
-        q = request.POST.get('query')
+        user_form = userForm(request.POST, instance=user)
+        profile_form = userProfileForm(request.POST, instance=profile)
+        if all([user_form.is_valid(), profile_form.is_valid()]):
+            user_form.save()
+            profile_form.save()
+            instance_url = reverse('view_profile')+str(user.id)
+            return redirect(instance_url)
+    else:
+        user_form = userForm(instance=user)
+        profile_form = userProfileForm(instance=profile)
+    return render(request, 'update_profile.html',
+                  {'user_form': user_form, 'profile_form': profile_form})
 
-        case_data = caseData(pks)
 
-        context = {
-            'query': q,
-            'case_data': json.dumps(case_data, cls=DjangoJSONEncoder),
-        }
-
-    return render(request, 'dashboard1.html', context)
+@login_required
+def view_profile(request, id=None, tag=None):
+    """Profile View for a user other than the logged user (not editable)."""
+    userdata = User.objects.get(pk=id)
+    userprofile = userProfile.objects.get(user_id=id)
+    context = {
+        "uuid": str(id),
+        "req_id": str(request.user.id),
+        "username": userdata.username,
+        "nombre": userdata.first_name,
+        "apellido": userdata.last_name,
+        "email": userdata.email,
+        "fav": userprofile.fav,
+        "busquedas": userprofile.busquedas,
+        "notas": userprofile.notas,
+    }
+    return render(request, 'view_profile.html', context)
 
 
 # Create JSON nodes and links list for D3 force layout chart. Most of the

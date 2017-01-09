@@ -1,0 +1,16 @@
+{% extends "base.html" %} {% load bootstrap3 %}
+{% block content %}
+<br>
+<br>
+<br> 
+<br>
+<br>
+<body>
+<form method="POST" action=''>{% csrf_token show_label=False %}
+<div class="panel panel-default">
+    <div class="panel-body" id="body-container">
+    </div>
+</div>
+</body>
+</form>
+{% endblock %}

@@ -1,8 +1,27 @@
 from django.db import models
+from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.template.defaultfilters import slugify
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 import locale
 locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
+
+
+class userProfile(models.Model):
+    user = models.OneToOneField(User, related_name='profile')
+    fav = models.TextField(max_length=5000, blank=True, null=True)
+    busquedas = models.TextField(max_length=1000, blank=True, null=True)
+    notas = models.TextField(max_length=999999, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.user.username
+
+
+@receiver(post_save, sender=User)
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        profile, new = userProfile.objects.get_or_create(user=instance)
 
 
 class Fallos(models.Model):
@@ -12,7 +31,7 @@ class Fallos(models.Model):
     autos = models.TextField(blank=True, null=True)
     fecha = models.DateField(blank=True, null=True)
     sobre = models.CharField(max_length=255, blank=True, null=True)
-    text = models.TextField(max_length=999999, blank=True, null=True)
+    text = models.TextField(max_length=9999999, blank=True, null=True)
     actora = models.CharField(max_length=255, blank=True, null=True)
     demandada = models.CharField(max_length=255, blank=True, null=True)
     jueces = models.CharField(max_length=255, blank=True, null=True)

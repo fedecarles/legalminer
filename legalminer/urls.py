@@ -18,7 +18,8 @@ from django.contrib.auth import views as auth_views
 from caseanalyzer.forms import MySearchForm
 from django.conf.urls import url, include
 from django.contrib import admin
-from caseanalyzer.views import inicio, details, dashboard
+from caseanalyzer.views import (inicio, details, dashboard, update_profile,
+                                view_profile)
 
 urlpatterns = [
     # admin url
@@ -42,4 +43,10 @@ urlpatterns = [
 
     # Case full text url
     url(r'details/(?P<slug>[\w-]+)/$', details, name='details'),
+
+    # Profile urls
+    url(r'^update_profile/$', update_profile, name='update_profile'),
+    url(r'^view_profile/$', view_profile, name='view_profile'),
+    url(r'^view_profile/(?P<id>\d+)/$', view_profile, name='view_profile'),
+
 ]

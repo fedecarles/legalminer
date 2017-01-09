@@ -1,4 +1,6 @@
 from django import forms
+from textprocessor.models import User
+from textprocessor.models import userProfile
 from haystack.forms import FacetedSearchForm
 
 
@@ -51,3 +53,17 @@ class MySearchForm(FacetedSearchForm):
             sqs = sqs.filter(voces__exact=self.cleaned_data['voces'])
 
         return sqs
+
+
+class userForm(forms.ModelForm):
+
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name')
+
+
+class userProfileForm(forms.ModelForm):
+
+    class Meta:
+        model = userProfile
+        exclude = ('user',)

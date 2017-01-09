@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load bootstrap3 %}
+{% load static %}
+
+{% block title %} Actualizar Perfil {% endblock %}
+{% block content %}
+<div style="margin-top: 150px;">
+    <div style="width: 20%; float: left; position: relative; margin-left: 50px;">
+        <h1 style="color: grey;">{{ username }}</h1>
+        <p>{{ nombre }} {{ apellido }}</p>
+        <p><i class="fa fa-envelope-o"></i> {{ email }}</p>
+        <br/>
+        {% if req_id == uuid %}
+        <form method="get" action="{% url 'update_profile' %}">
+        <input type="submit" class="flat_btn" value="Actualizar Perfil"></input>
+        </form>
+        <br/>
+        <form method="get" action="{% url 'auth_password_change' %}">
+        <input type="submit" class="flat_btn" value="Cambiar Contraseña"></input>
+        </form>
+        <span></span>
+        {% endif %} 
+    </div>
+</div>
+{% endblock %}

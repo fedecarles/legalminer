@@ -8,6 +8,7 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>intraLex</title>
+        <link rel="icon" type="image/png" href="/static/icons/favicon.png"/>
         <link rel="stylesheet" type="text/css" href="/static/css/bootstrap.min.css"/>
         <link rel="stylesheet" type="text/css" href='/static/css/legalminer.css'/>
         <link rel="stylesheet" type="text/css" href='/static/css/jquery-ui.min.css'/>
@@ -28,6 +29,7 @@
         <script type="text/javascript" src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
         <script type="text/javascript" src="/static/js/crossfilter.min.js"></script>
         <script type="text/javascript" src="/static/js/dc.min.js"></script>
+        <script type="text/javascript" src="/static/js/jquery.tabletoCSV.js"></script>
     </head>
 <body id="page-top">
 <nav class="navbar navbar-default">
@@ -111,7 +113,7 @@
           <ul class="dropdown-menu">
             <li><a href="#">Action</a></li>
             <li><a href="#">Another action</a></li>
-            <li><a href="#">Something else here</a></li>
+            <li><a href="{% url 'view_profile' user.id %}">Perfil</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="{% url 'auth_logout' %}?next=/">{% trans "Log out" %}</a></li>
           </ul>
