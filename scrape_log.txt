@@ -10,3 +10,5 @@ Fecha de sentencia: 29/12/2016 60
 Fecha de sentencia: 28/12/2016 180
 Fecha de sentencia: 29/12/2016 580
 Fecha de sentencia: 30/12/2016 180
+Fecha de sentencia: 03/01/2017 40
+Fecha de sentencia: 06/01/2017 80

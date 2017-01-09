@@ -290,7 +290,8 @@ url = []
 nro = []
 txt = []
 
-while (date1 == date2):
+# while (date1 == date2):
+for o in range(4):
     tribunal = browser.find_elements_by_xpath("//div/ul[@class='info']/li[1]")
     expediente = browser.find_elements_by_xpath("//div/ul[@class='info']/li[2]")
     autos = browser.find_elements_by_xpath("//div/ul[@class='info']/li[3]")
@@ -321,9 +322,6 @@ while (date1 == date2):
 
     date1 = browser.find_element_by_xpath("//div[6]/ul/li[4]").text
     date2 = browser.find_element_by_xpath("//div[25]/ul/li[4]").text
-
-# browser.quit()
-# display.stop()
 
 [nro.append(re.search('\d+', i).group(0)) for i in url]
 [txt.append(pdf_url_to_txt(i)) for i in url]
