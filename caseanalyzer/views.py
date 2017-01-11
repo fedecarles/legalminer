@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.shortcuts import render, get_object_or_404, redirect, reverse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from textprocessor.models import Fallos
 from textprocessor.models import User
@@ -19,7 +19,25 @@ def inicio(request):
 
 def details(request, slug):
     instance = get_object_or_404(Fallos, slug=slug)
-    return render(request, 'details.html', {'instance': instance})
+    context = {
+        'instance': instance,
+    }
+    return render(request, 'details.html', context)
+
+
+def like_button(request):
+    if request.method == 'POST':
+        user = request.user
+        id = request.POST.get('pk', None)
+        fallo = get_object_or_404(Fallos, pk=id)
+
+        if fallo.likes.filter(id=user.id).exists():
+            fallo.likes.remove(user)
+        else:
+            fallo.likes.add(user)
+
+    context = {'likes_count': fallo.total_likes}
+    return HttpResponse(json.dumps(context), content_type='application/json')
 
 
 def dashboard(request, pk=None):
@@ -72,9 +90,6 @@ def view_profile(request, id=None, tag=None):
         "nombre": userdata.first_name,
         "apellido": userdata.last_name,
         "email": userdata.email,
-        "fav": userprofile.fav,
-        "busquedas": userprofile.busquedas,
-        "notas": userprofile.notas,
     }
     return render(request, 'view_profile.html', context)
 

@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -10,9 +12,6 @@ locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
 
 class userProfile(models.Model):
     user = models.OneToOneField(User, related_name='profile')
-    fav = models.TextField(max_length=5000, blank=True, null=True)
-    busquedas = models.TextField(max_length=1000, blank=True, null=True)
-    notas = models.TextField(max_length=999999, blank=True, null=True)
 
     def __unicode__(self):
         return self.user.username
@@ -39,13 +38,18 @@ class Fallos(models.Model):
     citados = models.TextField(blank=True, null=True)
     lugar = models.CharField(max_length=150, blank=True, null=True)
     provincia = models.CharField(max_length=150, blank=True, null=True)
-
     voces = models.TextField(blank=True, null=True)
     materia = models.TextField(blank=True, null=True)
 
     slug = models.SlugField(unique=True, editable=False, max_length=255)
 
     updated = models.DateTimeField(auto_now=True)
+
+    likes = models.ManyToManyField(User, related_name="likes")
+
+    @property
+    def total_likes(self):
+        return self.likes.count()
 
     def save(self, **kwargs):
         super(Fallos, self).save()

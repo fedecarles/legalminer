@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """legalminer URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
@@ -19,7 +20,7 @@ from caseanalyzer.forms import MySearchForm
 from django.conf.urls import url, include
 from django.contrib import admin
 from caseanalyzer.views import (inicio, details, dashboard, update_profile,
-                                view_profile)
+                                view_profile, like_button)
 
 urlpatterns = [
     # admin url
@@ -48,5 +49,8 @@ urlpatterns = [
     url(r'^update_profile/$', update_profile, name='update_profile'),
     url(r'^view_profile/$', view_profile, name='view_profile'),
     url(r'^view_profile/(?P<id>\d+)/$', view_profile, name='view_profile'),
+
+    # Favorites url
+    url(r'^like/$', like_button, name='like_button'),
 
 ]

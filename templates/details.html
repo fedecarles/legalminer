@@ -6,8 +6,12 @@
         <a href="#" data-toggle="modal" data-target="#myModal">
            <img class="toolbar-btn" src="/static/icons/more.svg"></img>
         </a>
-        <a href="#">
-           <img class="toolbar-btn" src="/static/icons/star.svg"></img>
+        <a class="fav-btn" href="#" name="{{ instance.id }}">
+           {% if instance.total_likes == 0 %}
+           <img id="unfav" class="toolbar-btn like" src="/static/icons/star.svg"></img>
+           {% else %}
+           <img id="unfav" class="toolbar-btn like" src="/static/icons/star-filled.svg"></img>
+           {% endif %}
         </a>
         <a href="#">
            <img class="toolbar-btn" src="/static/icons/edit.svg"></img>
@@ -17,7 +21,12 @@
         </a>
     </div>
     <h3 id="titulo">{{ instance.autos }}</h3>
-    <pre id="texto-completo">{{ instance.text }}</pre>
+           <p>count : {{ instance.total_likes }}</p>
+    <pre id="texto-completo" class="col-md-offset-2">{{ instance.text }}</pre>
+    <form method="post" id="fav_form" action="/favorites/" name="favorites">{% csrf_token %}
+        <input id="fav_autos" name="fav_autos"></input>
+        <input id="fav_url" name="fav_url"></input>
+    </form>
 </div>
 
 <!-- Modal -->
@@ -71,6 +80,7 @@
 </div>
 
 <script type="text/javascript">
+
 // Highlight search word in case text.
 $(document).ready(function() {
     $('.highlighted').each(function() {
@@ -78,5 +88,24 @@ $(document).ready(function() {
                 {"className": 'highlighted'});
     });
 });
+
+$('.fav-btn').click(function(){
+    $.ajax({
+        type: "POST",
+        url: "{% url 'like_button' %}",
+        data: {'pk': $(this).attr('name'), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        dataType: "json",
+        success: function(response) {
+            if (response.likes_count == 0){
+                $('.fav-btn').html('<img class="toolbar-btn like" src="/static/icons/star.svg"></img>')
+            } else{
+                $('.fav-btn').html('<img class="toolbar-btn like" src="/static/icons/star-filled.svg"></img>')
+            };
+        },
+        error: function(rs, e) {
+        }
+    });
+})
+       
 </script>
 {% endblock %}
