@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 from textprocessor.models import Fallos
 from textprocessor.models import User
 from textprocessor.models import userProfile
+from textprocessor.models import MyNotes
+from textprocessor.models import MySearches
 from caseanalyzer.forms import MySearchForm
 from .forms import userForm
 from .forms import userProfileForm
@@ -18,9 +20,16 @@ def inicio(request):
 
 
 def details(request, slug):
+    liked = False
     instance = get_object_or_404(Fallos, slug=slug)
+    usuario = request.user
+    for l in instance.likes.all():
+        if str(l) in str(usuario):
+            liked = True
+            print (liked)
     context = {
         'instance': instance,
+        'liked': liked,
     }
     return render(request, 'details.html', context)
 
@@ -33,10 +42,12 @@ def like_button(request):
 
         if fallo.likes.filter(id=user.id).exists():
             fallo.likes.remove(user)
+            liked = False
         else:
             fallo.likes.add(user)
+            liked = True
 
-    context = {'likes_count': fallo.total_likes}
+    context = {'likes_count': fallo.total_likes, 'liked': liked}
     return HttpResponse(json.dumps(context), content_type='application/json')
 
 
@@ -180,3 +191,26 @@ def caseData(pks):
             }
         case_data.append(sub)
     return case_data
+
+
+def saveNotes(request):
+    if request.method == 'POST':
+        user = request.user
+        autos = request.POST.get('autos', None)
+        text = request.POST.get('text', None)
+        note = MyNotes.objects.get_or_create(autos=autos, text=text, user=user)
+        note.save()
+
+    context = {}
+    return HttpResponse(json.dumps(context), content_type='application/json')
+
+
+def saveSearch(request):
+    if request.method == 'POST':
+        user = request.user
+        search = request.POST.get('query', None)
+        q = MySearches.objects.get_or_create(search=search, user=user)
+        q.save()
+
+    context = {}
+    return HttpResponse(json.dumps(context), content_type='application/json')

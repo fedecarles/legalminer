@@ -13,7 +13,7 @@
             <a id="report-submit" href="#">
                 <img class="controls-btn" src="/static/icons/report.svg"></img>
             </a>
-            <a id="info-submit" href="#">
+            <a id="info-submit" href="#" data-toggle="modal" data-target="#info_modal">
                 <img class="controls-btn" src="/static/icons/info.svg"></img>
             </a>
         </div>
@@ -61,6 +61,7 @@
                                     <li role="presentation" class="color" data-value="#6A9BC3"><a role="menuitem" tabindex="-1" href="#">Azul</a></li>
                                     <li role="presentation" class="color" data-value="#9BC36A"><a role="menuitem" tabindex="-1" href="#">Verde</a></li>
                                     <li role="presentation" class="color" data-value="#C36A6f"><a role="menuitem" tabindex="-1" href="#">Rojo</a></li>
+                                    <li role="presentation" class="image"><a role="menuitem" tabindex="-1" href="#">Image</a></li>
                                 </ul>
                             </div>
                         </h4>
@@ -88,7 +89,7 @@
                                 <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
                                     <li role="presentation" class="color" data-value="#6A9BC3"><a role="menuitem" tabindex="-1" href="#">Azul</a></li>
                                     <li role="presentation" class="color" data-value="#9BC36A"><a role="menuitem" tabindex="-1" href="#">Verde</a></li>
-                                    <li role="presentation" class="color" data-value="#C36A6f"><a role="menuitem" tabindex="-1" href="#">Rojo</a></li>
+                                    <li role="presentation" class="color" data-value="#C36A6f"><a role="menuitem" id="image-save" tabindex="-1" href="#">Rojo</a></li>
                                 </ul>
                             </div>
                         </h4>
@@ -282,7 +283,6 @@
         <input id="next" class="flat_btn_small" type="button" value="Siguiente" onclick="javascript:next()"/>
         <button id="export" class="flat_btn_small">CSV </button>
     </div>
-    <br/>
     <div class="col-md-12">
         <table id="dc-data-table" class="table-hover table-condensed table-striped">
         <thead>
@@ -299,6 +299,45 @@
             </tr>
         </thead>
     </table>
+    </div>
+</div>
+
+<div class="modal fade" id="info_modal" tabindex="-1" role="dialog" aria-labelledby="modal_info" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_info">Ayuda</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="info" class="table table-hover">
+                    <tr>
+                        <td>
+                            <img class="info-btn" src="/static/icons/stack.svg"/>
+                        </td>
+                        <td>
+                            Ir a lista de fallos.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img class="info-btn" src="/static/icons/table.svg"/>
+                        </td>
+                        <td>
+                            Mostar tabla.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img class="info-btn" src="/static/icons/report.svg"/>
+                        </td>
+                        <td>
+                            Generar Reporte.
+                        </td>
+                    </tr>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -864,7 +903,6 @@ $('#table-submit').on('click', function(){
 $("#export").on('click', function (event) {
     $('#dc-data-table').tableToCSV();
 });
-
 
 </script>
 </body>

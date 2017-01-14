@@ -11,7 +11,7 @@ locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
 
 
 class userProfile(models.Model):
-    user = models.OneToOneField(User, related_name='profile')
+    user = models.ForeignKey(User, related_name='profile')
 
     def __unicode__(self):
         return self.user.username
@@ -61,6 +61,21 @@ class Fallos(models.Model):
 
     def get_absolute_url(self):
         return reverse('details', args=[str(self.slug)])
+
+    def __unicode__(self):
+        return self.user
+
+
+class MyNotes(userProfile):
+    autos = models.TextField(blank=True, null=True)
+    text = models.TextField(max_length=9999999, blank=True, null=True)
+
+    def __unicode__(self):
+        return self.user
+
+
+class MySearches(userProfile):
+    search = models.TextField(blank=True, null=True)
 
     def __unicode__(self):
         return self.user

@@ -5,16 +5,13 @@
 
 <div id="main-controls">
     <div id="controls-placeholder" class="col-md-3 col-md-offset-5">
-        <a href="#">
-            <img class="controls-btn" src="/static/icons/stack.svg"></img>
-        </a>
         <a id="dashboard-submit" href="#">
             <img class="controls-btn" src="/static/icons/bar-chart.svg"></img>
         </a>
-        <a id="download-submit" href="#">
-            <img class="controls-btn" src="/static/icons/download.svg"></img>
+        <a id="save-search" href="#" data-toggle="modal" data-target="#search_modal">
+            <img class="controls-btn" src="/static/icons/save.svg"></img>
         </a>
-        <a id="info-submit" href="#">
+        <a id="info-submit" href="#" data-toggle="modal" data-target="#info_modal">
             <img class="controls-btn" src="/static/icons/info.svg"></img>
         </a>
     </div>
@@ -28,7 +25,7 @@
         <input type="hidden" name="seleccion" value="{{ result.object.pk }}"></input>
         {% endfor %}
 
-        <input name="query" value="{{ query }}" type=hidden></input>
+        <input id="query" name="query" value="{{ query }}" type=hidden></input>
     <div id="results">
     {% if query %}
         {{ page.paginator.count }} resultados
@@ -44,6 +41,102 @@
     {% endif %}
     </div>
 </form>
+
+<div class="modal fade" id="search_modal" tabindex="-1" role="dialog" aria-labelledby="modal_search" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_search">Busqueda Guardada</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Tu busqueda fue guardada. Puedes acceder a ella en cualquier momento desde tu perfil</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="info_modal" tabindex="-1" role="dialog" aria-labelledby="modal_info" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_info">Ayuda</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                </button>
+            </div>
+            <div class="modal-body">
+                <table id="info" class="table table-hover">
+                    <tr>
+                        <td>
+                            <img class="info-btn" src="/static/icons/bar-chart.svg"/>
+                        </td>
+                        <td>
+                            Ir a panel gráfico.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img class="info-btn" src="/static/icons/save.svg"/>
+                        </td>
+                        <td>
+                            Guardar búsqueda.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img class="info-btn" src="/static/icons/info.svg"/>
+                        </td>
+                        <td>
+                            Mostrar datos adicionales del fallos seleccionado.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img class="info-btn" src="/static/icons/star.svg"/>
+                        </td>
+                        <td>
+                            Marcar como favorito.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img class="info-btn" src="/static/icons/edit.svg"/>
+                        </td>
+                        <td>
+                            Insertar anotaciones al fallos seleccionado.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img class="info-btn" src="/static/icons/download.svg"/>
+                        </td>
+                        <td>
+                            Bajar fallo.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img class="info-btn" src="/static/icons/highlighter.svg"/>
+                        </td>
+                        <td>
+                            Resaltar texto.
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <img class="info-btn" src="/static/icons/comment.svg"/>
+                        </td>
+                        <td>
+                            Insertar comentario.
+                        </td>
+                    </tr>
+
+            </div>
+        </div>
+    </div>
+</div>
 
 <script type="text/javascript">
 
@@ -64,6 +157,19 @@ $('#dashboard-submit').click(function() {
   $('form').submit();
 });
 
+//// SAVE SEARCHES /////
+$('#save-search').click(function(){
+    $.ajax({
+        type: "POST",
+        url: "{% url 'savesearch' %}",
+        data: {'query': $("#query").val(), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        dataType: "json",
+        success: function(response) {
+        },
+        error: function(rs, e) {
+        }
+    });
+})
 
 </script>
 {% endblock %}

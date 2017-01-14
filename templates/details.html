@@ -1,32 +1,46 @@
 {% load bootstrap3 %}
 {% block content %}
 <br />
-<div>
+<div id="toolbar">
     <div class="row col-md-offset-4 doc-toolbar">
         <a href="#" data-toggle="modal" data-target="#myModal">
            <img class="toolbar-btn" src="/static/icons/more.svg"></img>
         </a>
         <a class="fav-btn" href="#" name="{{ instance.id }}">
-           {% if instance.total_likes == 0 %}
-           <img id="unfav" class="toolbar-btn like" src="/static/icons/star.svg"></img>
+           {% if not liked %}
+           <img class="toolbar-btn like" src="/static/icons/star.svg"></img>
            {% else %}
-           <img id="unfav" class="toolbar-btn like" src="/static/icons/star-filled.svg"></img>
+           <img class="toolbar-btn like" src="/static/icons/star-filled.svg"></img>
            {% endif %}
         </a>
-        <a href="#">
+        <a id="notas-off" href="#">
            <img class="toolbar-btn" src="/static/icons/edit.svg"></img>
+        </a>
+        <a id="notas-on" href="#">
+           <img class="toolbar-btn" src="/static/icons/edit-on.svg"></img>
         </a>
         <a href="#">
            <img class="toolbar-btn" src="/static/icons/download.svg"></img>
         </a>
     </div>
+    <div id="text-tools" class="row col-md-offset-5 doc-toolbar">
+        <a id="hl-on" href="#">
+           <img class="toolbar-btn" src="/static/icons/highlighter.svg"></img>
+        </a>
+        <a id="hl-off" href="#">
+           <img class="toolbar-btn" src="/static/icons/highlighter-on.svg"></img>
+        </a>
+        <a id="cm-on" href="#">
+           <img class="toolbar-btn" src="/static/icons/comment.svg"></img>
+        </a>
+        <a id="save" href="#" data-toggle="modal" data-target="#note_confirmation">
+           <img class="toolbar-btn" src="/static/icons/save.svg"></img>
+        </a>
+    </div>
+</div>
+<div id="text-view">
     <h3 id="titulo">{{ instance.autos }}</h3>
-           <p>count : {{ instance.total_likes }}</p>
     <pre id="texto-completo" class="col-md-offset-2">{{ instance.text }}</pre>
-    <form method="post" id="fav_form" action="/favorites/" name="favorites">{% csrf_token %}
-        <input id="fav_autos" name="fav_autos"></input>
-        <input id="fav_url" name="fav_url"></input>
-    </form>
 </div>
 
 <!-- Modal -->
@@ -79,6 +93,22 @@
   </div>
 </div>
 
+<div class="modal fade" id="note_confirmation" tabindex="-1" role="dialog" aria-labelledby="modal_note" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_note">Anotaciones Guardadas</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Tus anotaciones fueron guardadas. Puedes acceder a ellas en cualquier momento desde tu perfil</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script type="text/javascript">
 
 // Highlight search word in case text.
@@ -87,8 +117,12 @@ $(document).ready(function() {
         $('#details pre').mark($(this).text(),
                 {"className": 'highlighted'});
     });
+    $('#hl-off').hide();
+    $('#text-tools').hide();
+    $('#notas-on').hide();
 });
 
+// FAV / UNFAV BUTTON
 $('.fav-btn').click(function(){
     $.ajax({
         type: "POST",
@@ -96,7 +130,7 @@ $('.fav-btn').click(function(){
         data: {'pk': $(this).attr('name'), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
         dataType: "json",
         success: function(response) {
-            if (response.likes_count == 0){
+            if (response.liked == false){
                 $('.fav-btn').html('<img class="toolbar-btn like" src="/static/icons/star.svg"></img>')
             } else{
                 $('.fav-btn').html('<img class="toolbar-btn like" src="/static/icons/star-filled.svg"></img>')
@@ -107,5 +141,123 @@ $('.fav-btn').click(function(){
     });
 })
        
+$('#hl-on').on('click', function() {
+    $('#hl-off').show();
+    $('#hl-on').hide();
+    hlText();
+});
+
+$('#hl-off').on('click', function() {
+    $('#hl-on').show();
+    $('#hl-off').hide();
+    $('#texto-completo').unbind();
+});
+
+///// EDIT TOOLS /////
+
+// Get date
+var user = "{{request.user}}";
+var d = new Date();
+var month = d.getMonth()+1;
+var day = d.getDate();
+
+var cmdate = (day<10 ? '0' : '') + day + '/' +
+    (month<10 ? '0' : '') + month + '/' +
+    d.getFullYear() 
+
+
+// Text Hightlight function.
+function hlText() {
+    $('pre').on("mouseup", function (e) {
+        var selected = getSelection();
+        var range = selected.getRangeAt(0);
+        console.log(range);
+        if(selected.toString().length > 1){
+            var newNode = document.createElement("span");
+            newNode.setAttribute("class", "text-hl");
+            range.surroundContents(newNode); 
+        }
+        selected.removeAllRanges();
+    });
+}
+
+function getSelection() {
+    var seltxt = '';
+    if ($('#details').getSelection) { 
+        seltxt = $('#details').getSelection(); 
+    } else if (document.getSelection) { 
+        seltxt = document.getSelection(); 
+    } else if (document.selection) { 
+        seltxt = document.selection.createRange().text; 
+    }
+    else return;
+    return seltxt;
+}
+
+// Add comments to text on mouse position click.
+$('#cm-on').on('click', function() {
+    $('texto-completo').focus();
+    pasteHtmlAtCaret("<p><div contenteditable=true class='comment'>" + cmdate + " " + user + ": </div></p>");
+    $('.comment').focus();
+});
+
+function pasteHtmlAtCaret(html) {
+    var sel, range;
+    if (window.getSelection) {
+        sel = window.getSelection();
+        if (sel.getRangeAt && sel.rangeCount) {
+            range = sel.getRangeAt(0);
+            range.deleteContents();
+
+            var el = document.createElement("div");
+            el.innerHTML = html;
+            var frag = document.createDocumentFragment(), node, lastNode;
+            while ( (node = el.firstChild) ) {
+                lastNode = frag.appendChild(node);
+            }
+            range.insertNode(frag);
+
+            if (lastNode) {
+                range = range.cloneRange();
+                range.setStartAfter(lastNode);
+                range.collapse(true);
+                sel.removeAllRanges();
+                sel.addRange(range);
+            }
+        }
+    } else if (document.selection && document.selection.type != "Control") {
+        document.selection.createRange().pasteHTML(html);
+    }
+}
+
+$('#notas-off').on('click', function(){
+    $('#notas-on').show();
+    $('#notas-off').hide();
+    $('#text-tools').slideToggle(300);
+    $('#texto-completo').attr('contenteditable', true);
+});
+
+$('#notas-on').on('click', function(){
+    $('#notas-on').hide();
+    $('#notas-off').show();
+    $('#text-tools').slideToggle(300);
+    $('#texto-completo').attr('contenteditable', false);
+});
+
+///// SAVE NOTES /////
+$('#save').click(function(){
+    $.ajax({
+        type: "POST",
+        url: "{% url 'savenotes' %}",
+        data: {'autos': $('#titulo').text(), 'text': $('#texto-completo').html(), 'csrfmiddlewaretoken': '{{ csrf_token }}'},
+        dataType: "json",
+        success: function(response) {
+        },
+        error: function(rs, e) {
+        }
+    });
+})
+
+
 </script>
 {% endblock %}

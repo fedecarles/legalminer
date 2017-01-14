@@ -20,7 +20,8 @@ from caseanalyzer.forms import MySearchForm
 from django.conf.urls import url, include
 from django.contrib import admin
 from caseanalyzer.views import (inicio, details, dashboard, update_profile,
-                                view_profile, like_button)
+                                view_profile, like_button, saveNotes,
+                                saveSearch)
 
 urlpatterns = [
     # admin url
@@ -52,5 +53,11 @@ urlpatterns = [
 
     # Favorites url
     url(r'^like/$', like_button, name='like_button'),
+
+    # Save Notes.
+    url(r'saveNotes/$', saveNotes, name='savenotes'),
+
+    # Save Notes.
+    url(r'saveSearch/$', saveSearch, name='savesearch'),
 
 ]
