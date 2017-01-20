@@ -1,6 +1,5 @@
 {% load bootstrap3 %}
 {% block content %}
-<br />
 <div id="toolbar">
     <div class="row col-md-offset-4 doc-toolbar">
         <a href="#" data-toggle="modal" data-target="#myModal">
@@ -34,7 +33,7 @@
            <img class="toolbar-btn" src="/static/icons/comment.svg"></img>
         </a>
         <a id="save" href="#" data-toggle="modal" data-target="#note_confirmation">
-           <img class="toolbar-btn" src="/static/icons/save.svg"></img>
+           <img class="toolbar-btn" src="/static/icons/save-small.svg"></img>
         </a>
     </div>
 </div>
@@ -78,7 +77,11 @@
               <tr>
                   <td>Fallos:</td>
                   <td>{{ instance.citados }}</td>
+               <tr>
+                  <td>Decisión:</td>
+                  <td>{{ instance.resultados }}</td>
               </tr>
+             </tr>
               <tr>
                   <td>Voces:</td>
                   <td>{{ instance.voces }}</td>

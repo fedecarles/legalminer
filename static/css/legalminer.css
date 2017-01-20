@@ -115,13 +115,14 @@ body .highlighted{
 }
 #details {
     float: left;
-    width: 65%;
+    width: 50%;
     height: 75vh;
     font-family: initial;
     margin-left: 2%;
     margin-right: 2%;
     margin-top: 2%;
     background-color: white;
+    padding: 0;
 }
 #titulo{
     font-family: Century;
@@ -149,12 +150,15 @@ body .highlighted{
 }
 #results{
     float: right;
-    width: 28%;
+    width: 44%;
     font-size: 12px;
     font-family: Century;
     background-color: white;
     margin-top: 2%;
     margin-right: 2%;
+}
+#results-btn{
+    width: 2rem;
 }
 #paginate li:hover {
     background-color: #e7e7e7;
@@ -576,21 +580,41 @@ h4 {
 .empty {
     height: 50px;
 }
-.icon-image {
-    height: 100px;
-}
-.icon-text {
+.monitor{
     text-align: center;
-    font-family: Sertig;
+}
+.monitor-image {
+    height: 20em;
+}
+.monitor-header {
+    text-align: center;
+    font-family: sertig;
     font-size: 20px;
     color: #27ae60;
+    font-weight: 600;
+}
+.monitor-text {
+    height: 150px;
+    text-align: center;
+    font-size: 13px;
+    line-height: 24px;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#toolbar{
+    border: solid 1px #fff;
+}
+#toolbar:hover {
+    border: solid 1px #dedede;
+    background-color: #f5f8f9;
 }
 .doc-toolbar {
-    height: 3em;
+    height: 53px;
 }
 .toolbar-btn {
-    width: 3rem;
-    margin-top: 1%; 
+    width: 2rem;
+    margin-top: 3%; 
     margin-left: 2.5%;
     margin-right: 2.5%;
 }
@@ -691,7 +715,7 @@ h4 {
 }
 .comment{
     width: 85%;
-    background-color: #BDBDBD;
+    background-color: #f5f8f9;
     resize: none;
     font-family: Sertig;
     font-size: 20px;

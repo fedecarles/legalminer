@@ -158,6 +158,7 @@ def caseData(pks):
     voces = []
     materia = []
     citados = []
+    resultados = []
 
     # Get data from database.
     instances = [get_object_or_404(Fallos, pk=i) for i in pks]
@@ -171,6 +172,7 @@ def caseData(pks):
     [voces.append(i.voces) for i in instances]
     [materia.append(i.materia) for i in instances]
     [citados.append(i.citados) for i in instances]
+    [resultados.append(i.resultados) for i in instances]
     num = [i.nr for i in instances]
 
     # Build dictionary with case data.
@@ -188,6 +190,7 @@ def caseData(pks):
             'voces': voces[p].split(', '),
             'materia': materia[p].split(', '),
             'citados': citados[p].split('; '),
+            'resultados': resultados[p].split(', '),
             }
         case_data.append(sub)
     return case_data

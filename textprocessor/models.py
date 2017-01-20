@@ -40,6 +40,7 @@ class Fallos(models.Model):
     provincia = models.CharField(max_length=150, blank=True, null=True)
     voces = models.TextField(blank=True, null=True)
     materia = models.TextField(blank=True, null=True)
+    resultados = models.CharField(max_length=255, blank=True, null=True)
 
     slug = models.SlugField(unique=True, editable=False, max_length=255)
 

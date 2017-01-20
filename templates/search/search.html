@@ -27,8 +27,8 @@
 
         <input id="query" name="query" value="{{ query }}" type=hidden></input>
     <div id="results">
-    {% if query %}
         {{ page.paginator.count }} resultados
+    {% if query %}
         <div id="paginate">
             <ul>
         {% for result in page.object_list %}
@@ -86,7 +86,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <img class="info-btn" src="/static/icons/info.svg"/>
+                            <img class="info-btn" src="/static/icons/more.svg"/>
                         </td>
                         <td>
                             Mostrar datos adicionales del fallos seleccionado.
