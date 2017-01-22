@@ -4,7 +4,8 @@
 
 {% block title %} Actualizar Perfil {% endblock %}
 {% block content %}
-<div style="margin-top: 150px;">
+<div>
+    <div class="empty"></div>
     <div style="width: 20%; float: left; position: relative; margin-left: 50px;">
         <h1 style="color: grey;">{{ username }}</h1>
         <p>{{ nombre }} {{ apellido }}</p>
@@ -21,5 +22,40 @@
         <span></span>
         {% endif %} 
     </div>
+    <div id="hidden-text" style="display: none;"></div>
+    <div class="container">
+        <div class="col-md-4">
+            <div class=row>
+                <div id="favoritos">
+                    <h5 class="monitor-header">Mis Favoritos</h5>
+                    {% for f in favs %}
+                    <p><a href="/details/{{f.slug}}" onclick="return go(this);">{{ f.autos }}</a></p>
+                    {% endfor %}
+                </div>
+            </div>
+            <div id="notas">
+                <h5 class="monitor-header">Mis Notas</h5>
+                {% for n in notes %}
+                <p><a class="mynotes" href="/mynotes/{{ n.note_id }}" onclick="return go(this);">{{ n.autos }}</a></p>
+                <p><a href="/delete/{{ n.note_id }}">Borrar</a></p>
+                {% endfor %}
+            </div>
+        </div>
+        <div id="details" class="col-md-12">
+            <p id="intruccion-texto" class="col-md-offset-2">Selecciona un fallo para ver el texto completo.</p>
+        </div>
+
+    </div>
 </div>
+<script type="text/javascript">
+
+function go(obj) {
+
+    var page = obj.href;
+    $('#details').load(page);
+    return false
+}
+
+
+</script>
 {% endblock %}

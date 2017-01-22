@@ -7,6 +7,7 @@ from django.template.defaultfilters import slugify
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 import locale
+import uuid
 locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
 
 
@@ -67,7 +68,15 @@ class Fallos(models.Model):
         return self.user
 
 
+class MyLikes(models.Model):
+    fallos = models.ForeignKey(Fallos)
+    user = models.ForeignKey(User)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+
 class MyNotes(userProfile):
+    note_id = models.CharField(max_length=11, unique=True,
+                               default=str(uuid.uuid4())[:10])
     autos = models.TextField(blank=True, null=True)
     text = models.TextField(max_length=9999999, blank=True, null=True)
 

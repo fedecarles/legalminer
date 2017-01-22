@@ -584,7 +584,7 @@ h4 {
     text-align: center;
 }
 .monitor-image {
-    height: 20em;
+    height: 20rem;
 }
 .monitor-header {
     text-align: center;
@@ -594,12 +594,18 @@ h4 {
     font-weight: 600;
 }
 .monitor-text {
-    height: 150px;
+    height: 10rem;
     text-align: center;
-    font-size: 13px;
+    font-size: 1em;
+    font-family: Sertig;
     line-height: 24px;
     font-weight: 400;
     font-style: normal;
+}
+.desc-text {
+    font-family: Sertig;
+    font-size: 2rem;
+    text-align: justify;
 }
 
 #toolbar{
@@ -728,4 +734,12 @@ h4 {
 }
 .info-btn {
     height: 50px;
+}
+#footer {
+    height: 15em;
+    background-color: #3498db;
+    color: white;
+}
+#footer a {
+    color: black;
 }

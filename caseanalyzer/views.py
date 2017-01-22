@@ -1,16 +1,18 @@
 # -*- coding: utf-8 -*-
-from django.shortcuts import render, get_object_or_404, redirect, reverse, HttpResponse
+from django.shortcuts import (render, get_object_or_404, redirect, reverse,
+                              HttpResponse, HttpResponseRedirect)
 from django.contrib.auth.decorators import login_required
 from textprocessor.models import Fallos
 from textprocessor.models import User
-from textprocessor.models import userProfile
 from textprocessor.models import MyNotes
 from textprocessor.models import MySearches
+from textprocessor.models import MyLikes
 from caseanalyzer.forms import MySearchForm
 from .forms import userForm
 from .forms import userProfileForm
 from django.core.serializers.json import DjangoJSONEncoder
 import json
+import uuid
 import pandas as pd
 
 
@@ -41,9 +43,11 @@ def like_button(request):
         fallo = get_object_or_404(Fallos, pk=id)
 
         if fallo.likes.filter(id=user.id).exists():
+            MyLikes.objects.filter(user=request.user, fallos=fallo).delete()
             fallo.likes.remove(user)
             liked = False
         else:
+            MyLikes.objects.get_or_create(user=request.user, fallos=fallo)
             fallo.likes.add(user)
             liked = True
 
@@ -90,10 +94,16 @@ def update_profile(request):
 
 
 @login_required
-def view_profile(request, id=None, tag=None):
+def view_profile(request, id=None):
     """Profile View for a user other than the logged user (not editable)."""
     userdata = User.objects.get(pk=id)
-    userprofile = userProfile.objects.get(user_id=id)
+    notes = MyNotes.objects.filter(user=request.user)
+    liked = MyLikes.objects.filter(user=request.user)
+    searches = MySearches.objects.filter(user=request.user)
+    fav_list = [fav.fallos for fav in liked]
+    notes_list = [note for note in notes]
+    searches_list = [search for search in searches]
+
     context = {
         "uuid": str(id),
         "req_id": str(request.user.id),
@@ -101,6 +111,9 @@ def view_profile(request, id=None, tag=None):
         "nombre": userdata.first_name,
         "apellido": userdata.last_name,
         "email": userdata.email,
+        "favs": fav_list,
+        "notes": notes_list,
+        "searches": searches_list,
     }
     return render(request, 'view_profile.html', context)
 
@@ -201,7 +214,8 @@ def saveNotes(request):
         user = request.user
         autos = request.POST.get('autos', None)
         text = request.POST.get('text', None)
-        note = MyNotes.objects.get_or_create(autos=autos, text=text, user=user)
+        note = MyNotes.objects.get_or_create(autos=autos, text=text, user=user,
+                                             note_id=str(uuid.uuid4())[:10])
         note.save()
 
     context = {}
@@ -217,3 +231,18 @@ def saveSearch(request):
 
     context = {}
     return HttpResponse(json.dumps(context), content_type='application/json')
+
+
+def myNotes(request, note_id):
+    instance = get_object_or_404(MyNotes, note_id=note_id)
+    context = {
+        'instance': instance,
+    }
+    return render(request, 'details.html', context)
+
+
+def deleteNote(request, note_id):
+    user = request.user.id
+    get_object_or_404(MyNotes, note_id=note_id).delete()
+    reverse_url = reverse('view_profile', kwargs={'id': user})
+    return HttpResponseRedirect(reverse_url)

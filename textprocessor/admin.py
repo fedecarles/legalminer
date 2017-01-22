@@ -3,6 +3,7 @@ from .models import Fallos
 from .models import userProfile
 from .models import MyNotes
 from .models import MySearches
+from .models import MyLikes
 
 
 # Register your models here.
@@ -12,6 +13,9 @@ class FallosAdmin(admin.ModelAdmin):
 
 admin.site.register(Fallos, FallosAdmin)
 admin.site.register(userProfile)
+
+
+admin.site.register(MyLikes)
 
 
 class MyNotesAdmin(admin.ModelAdmin):

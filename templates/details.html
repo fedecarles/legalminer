@@ -39,7 +39,7 @@
 </div>
 <div id="text-view">
     <h3 id="titulo">{{ instance.autos }}</h3>
-    <pre id="texto-completo" class="col-md-offset-2">{{ instance.text }}</pre>
+    <pre id="texto-completo" class="col-md-offset-2">{{ instance.text|safe }}</pre>
 </div>
 
 <!-- Modal -->
