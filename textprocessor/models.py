@@ -12,7 +12,8 @@ locale.setlocale(locale.LC_ALL, 'es_AR.UTF-8')
 
 
 class userProfile(models.Model):
-    user = models.ForeignKey(User, related_name='profile')
+    user = models.OneToOneField(User, related_name='profile')
+    compania = models.CharField(max_length=255, blank=True, null=True)
 
     def __unicode__(self):
         return self.user.username
@@ -74,7 +75,8 @@ class MyLikes(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
 
 
-class MyNotes(userProfile):
+class MyNotes(models.Model):
+    user = models.ForeignKey(User)
     note_id = models.CharField(max_length=11, unique=True,
                                default=str(uuid.uuid4())[:10])
     autos = models.TextField(blank=True, null=True)
@@ -84,8 +86,10 @@ class MyNotes(userProfile):
         return self.user
 
 
-class MySearches(userProfile):
+class MySearches(models.Model):
+    user = models.ForeignKey(User)
     search = models.TextField(blank=True, null=True)
+    date_added = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
         return self.user

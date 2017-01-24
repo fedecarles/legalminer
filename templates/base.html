@@ -102,7 +102,6 @@
                               <td>{{ search_form.sobre }}</td>
                               <td></td>
                               <td></td>
-
                           </tr>
                       </table>
                   </div>
@@ -114,9 +113,7 @@
         <li class="dropdown">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.username }}<span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
-            <li><a href="{% url 'view_profile' user.id %}">Perfil</a></li>
+            <li><a href="{% url 'view_profile' user.id %}">Mi Cuenta</a></li>
             <li role="separator" class="divider"></li>
             <li><a href="{% url 'auth_logout' %}?next=/">{% trans "Log out" %}</a></li>
           </ul>

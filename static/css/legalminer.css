@@ -96,10 +96,6 @@ src: url("/static/fonts/ufonts.com_century.ttf") format("truetype");
 body .highlighted{
     background-color: #EEFF66;
 }
-.form-inline input{
-    height: 10px;
-    margin: auto 0;
-}
 #table-filters{
     margin: 0;
 }
@@ -114,8 +110,6 @@ body .highlighted{
     border: none;
 }
 #details {
-    float: left;
-    width: 50%;
     height: 75vh;
     font-family: initial;
     margin-left: 2%;
@@ -123,7 +117,19 @@ body .highlighted{
     margin-top: 2%;
     background-color: white;
     padding: 0;
+    display: inline-block;
 }
+#profile-details {
+    height: 75vh;
+    font-family: initial;
+    margin-left: 2%;
+    margin-right: 2%;
+    margin-top: 2%;
+    background-color: white;
+    padding: 0;
+    display: inline-block;
+}
+
 #titulo{
     font-family: Century;
     text-align: center;
@@ -561,10 +567,9 @@ h4 {
     margin-left: 33%;
 }
 .flat_btn {
-    height: 40px;
-    width: 200px;
+    height: 30px;
     font-family: Sertig;
-    font-size: 22px;
+    font-size: 18px;
     color: white;
     background-color: #3498db;
     border: 0;
@@ -588,15 +593,15 @@ h4 {
 }
 .monitor-header {
     text-align: center;
-    font-family: sertig;
-    font-size: 20px;
+    font-family: Sertig;
+    font-size: 26px;
     color: #27ae60;
     font-weight: 600;
 }
 .monitor-text {
-    height: 10rem;
+    height: 20rem;
     text-align: center;
-    font-size: 1em;
+    font-size: 1vw; 
     font-family: Sertig;
     line-height: 24px;
     font-weight: 400;
@@ -742,4 +747,35 @@ h4 {
 }
 #footer a {
     color: black;
+}
+.text-link {
+    font-family: Sertig;
+    color: black;
+    display: inline;
+    font-size: 20px;
+}
+.text-link:hover  .text-link:visited {
+    text-decoration: none;
+    outline: none;
+}
+#profile-side {
+    float: left;
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+#favoritos {
+    display: none;
+}
+#notas {
+    display: none;
+}
+#busquedas {
+    display: none;
+}
+#profile-details {
+    display: none;
+}
+@media only screen and (max-width: 320px) {
+
+   body { font-size: 1em; }
 }

@@ -21,7 +21,7 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from caseanalyzer.views import (inicio, details, dashboard, update_profile,
                                 view_profile, like_button, saveNotes,
-                                saveSearch, myNotes, deleteNote)
+                                saveSearch, myNotes, deleteNote, deleteSearch)
 
 urlpatterns = [
     # admin url
@@ -54,11 +54,14 @@ urlpatterns = [
     # Favorites url
     url(r'^like/$', like_button, name='like_button'),
 
-    # Save Notes.
+    # Save Notes
     url(r'saveNotes/$', saveNotes, name='savenotes'),
 
-    # Save Notes.
+    # Save Search
     url(r'saveSearch/$', saveSearch, name='savesearch'),
+
+    # Delete Search
+    url(r'^deletesearch/(?P<id>\d+)/$', deleteSearch, name='deletesearch'),
 
     # View MyNotes
     url(r'^mynotes/(?P<note_id>\w+-.)/$', myNotes, name='mynotes'),

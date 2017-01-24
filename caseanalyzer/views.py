@@ -246,3 +246,10 @@ def deleteNote(request, note_id):
     get_object_or_404(MyNotes, note_id=note_id).delete()
     reverse_url = reverse('view_profile', kwargs={'id': user})
     return HttpResponseRedirect(reverse_url)
+
+
+def deleteSearch(request, id):
+    user = request.user.id
+    get_object_or_404(MySearches, pk=id).delete()
+    reverse_url = reverse('view_profile', kwargs={'id': user})
+    return HttpResponseRedirect(reverse_url)

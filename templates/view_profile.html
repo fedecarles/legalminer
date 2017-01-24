@@ -6,56 +6,144 @@
 {% block content %}
 <div>
     <div class="empty"></div>
-    <div style="width: 20%; float: left; position: relative; margin-left: 50px;">
+    <div id="profile-side">
         <h1 style="color: grey;">{{ username }}</h1>
         <p>{{ nombre }} {{ apellido }}</p>
         <p><i class="fa fa-envelope-o"></i> {{ email }}</p>
         <br/>
         {% if req_id == uuid %}
-        <form method="get" action="{% url 'update_profile' %}">
-        <input type="submit" class="flat_btn" value="Actualizar Perfil"></input>
-        </form>
-        <br/>
-        <form method="get" action="{% url 'auth_password_change' %}">
-        <input type="submit" class="flat_btn" value="Cambiar Contraseña"></input>
-        </form>
-        <span></span>
+        <table class="table table-hover">
+            <tr>
+                <td><a href="{% url 'update_profile' %}" onclick="return goProfile(this)";>Actualizar Perfil</a></td>
+            </tr>
+             <tr>
+                <td><a href="{% url 'auth_password_change' %}" onclick="return goPass(this)">Cambiar Contraseña</a></td>
+            </tr>
+             <tr>
+                <td><a id="show-favs" href="#">Mis Favoritos</a></td>
+            </tr>
+             <tr>
+                <td><a id="show-notas" href="#">Mis Notas</a></td>
+            </tr>
+             <tr>
+                <td><a id="show-busquedas" href="#">Mis Búsquedas</a></td>
+            </tr>
+        </table>
         {% endif %} 
     </div>
     <div id="hidden-text" style="display: none;"></div>
-    <div class="container">
+    <div class="container-fluid">
         <div class="col-md-4">
-            <div class=row>
+            <div class="empty"></div>
                 <div id="favoritos">
                     <h5 class="monitor-header">Mis Favoritos</h5>
-                    {% for f in favs %}
-                    <p><a href="/details/{{f.slug}}" onclick="return go(this);">{{ f.autos }}</a></p>
-                    {% endfor %}
+                    <table class="table table-hover">
+                        {% for f in favs %}
+                        
+                        <tr>
+                            <td><a class="text-link" href="/details/{{f.slug}}" onclick="return goDetails(this);">{{ f.autos }}</a></td>
+                        </tr>
+                        {% endfor %}
+                    </table>
                 </div>
-            </div>
             <div id="notas">
                 <h5 class="monitor-header">Mis Notas</h5>
-                {% for n in notes %}
-                <p><a class="mynotes" href="/mynotes/{{ n.note_id }}" onclick="return go(this);">{{ n.autos }}</a></p>
-                <p><a href="/delete/{{ n.note_id }}">Borrar</a></p>
-                {% endfor %}
+                <table class="table table-hover">
+                    {% for n in notes %}
+                    <tr>
+                        <td><a class="text-link" href="/mynotes/{{ n.note_id }}" onclick="return goDetails(this);">{{ n.autos }}</a></td>
+                        <td><a href="/delete/{{ n.note_id }}">Eliminar</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
+            </div>
+            <div id="busquedas">
+                <h5 class="monitor-header">Mis Búsquedas</h5>
+                <table class="table table-hover">
+                    {% for n in searches %}
+                    <tr>
+                        <td><a id="fallos-submit" class="text-link" href="#">{{ n.search }}</a></td>
+                        <td>{{ n.date_added }}</td>
+                        <td><a href="/deletesearch/{{ n.id }}">Eliminar</a></td>
+                    </tr>
+                    {% endfor %}
+                </table>
             </div>
         </div>
-        <div id="details" class="col-md-12">
+        <div id="profile-details" class="col-md-5">
             <p id="intruccion-texto" class="col-md-offset-2">Selecciona un fallo para ver el texto completo.</p>
         </div>
-
+        <div id="profile"></div>
+        <div id="change-pass"></div>
     </div>
 </div>
+
 <script type="text/javascript">
 
-function go(obj) {
-
+function goDetails(obj) {
     var page = obj.href;
-    $('#details').load(page);
+    $('#profile-details').show();
+    $('#profile-details').load(page);
     return false
 }
 
+// Submit search again to go back to the search result page.
+$('#fallos-submit').on('click', function() {
+    var q = $(this).text();
+    $('#id_q').val(q);
+    $('#search-form form').submit();
+});
+
+$('#show-favs').on('click', function() {
+    $('#profile').hide();
+    $('#profile-details').hide();
+    $('#busquedas').hide();
+    $('#notas').hide();
+    $('#change-pass').hide();
+    $('#favoritos').animate({width: 'toggle'}, 0);
+});
+
+$('#show-notas').on('click', function() {
+    $('#profile').hide();
+    $('#profile-details').hide();
+    $('#busquedas').hide();
+    $('#favoritos').hide();
+    $('#change-pass').hide();
+    $('#notas').animate({width: 'toggle'}, 0);
+});
+
+$('#show-busquedas').on('click', function() {
+    $('#profile').hide();
+    $('#profile-details').hide();
+    $('#favoritos').hide();
+    $('#notas').hide();
+    $('#change-pass').hide();
+    $('#busquedas').animate({width: 'toggle'}, 0);
+});
+
+function goProfile(obj) {
+    var page = obj.href;
+    $('#profile').animate({width: 'toggle'}, 0);
+    $('#profile').load(page);
+    $('#favoritos').hide();
+    $('#notas').hide();
+    $('#busquedas').hide();
+    $('#change-pass').hide();
+    $('#profile-details').hide();
+    return false
+}
+
+function goPass(obj) {
+    $('#favoritos').hide();
+    $('#notas').hide();
+    $('#busquedas').hide();
+    $('#profile').hide();
+    $('#profile-details').hide();
+    var page = obj.href;
+    $('#change-pass').load(page);
+    $('#change-pass').animate({width: 'toggle'}, 0);
+    return false
+}
 
 </script>
 {% endblock %}
