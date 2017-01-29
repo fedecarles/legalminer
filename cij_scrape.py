@@ -32,6 +32,10 @@ os.chdir(proj_path)
 with open('tesauro_dict.txt', 'r') as inf:
     d = eval(inf.read())
 
+# Load results dict.
+with open('resultados.txt', 'r') as inf:
+    res = eval(inf.read())
+
 # Load the webdriver.
 browser = webdriver.PhantomJS("/usr/local/bin/phantomjs")
 # browser = webdriver.Firefox()
@@ -67,10 +71,13 @@ except Exception:
     print ("No meta robots, pass")
     pass
 
-# browser.find_element_by_id('fecha_fallo_hasta_aux').click()
-# browser.find_element_by_xpath('/html/body/div/div/a[1]/span').click()
-# browser.find_element_by_xpath('//tr[5]/td[5]/a').click()
-# browser.find_element_by_xpath('//form/div[6]/input[1]').submit()
+desde = browser.find_element_by_id('fecha_fallo_desde_aux')
+desde.clear()
+desde.send_keys("29/07/2016")
+hasta = browser.find_element_by_id('fecha_fallo_hasta_aux')
+hasta.clear()
+hasta.send_keys("29/07/2016")
+browser.find_element_by_xpath('//form/div[6]/input[1]').submit()
 
 def get_materia(tesauro, text):
     materia = []
@@ -251,6 +258,26 @@ def cij_provincia(lugar):
                 return k
 
 
+def cij_resultados(result, text):
+    resultados = []
+    section = re.sub('\s+', ' ', text)
+    try:
+        section = re.search(r'RESUELVE.*', section).group(0)
+    except Exception:
+        section = ""
+    for k, v in result.items():
+        for i in v:
+            pattern = re.compile(r'%s' % i)
+            try:
+                term = re.search(pattern, section.lower()).group(0)
+                if term:
+                    resultados.append(k)
+            except Exception:
+                pass
+    resultados = ", ".join(resultados)
+    return resultados
+
+
 # http://stackoverflow.com/questions/26413216/pdfminer3k-has-no-method-named-create-pages-in-pdfpage
 def pdf_url_to_txt(url):
     text = ""
@@ -290,38 +317,41 @@ url = []
 nro = []
 txt = []
 
-# while (date1 == date2):
-for o in range(4):
-    tribunal = browser.find_elements_by_xpath("//div/ul[@class='info']/li[1]")
-    expediente = browser.find_elements_by_xpath("//div/ul[@class='info']/li[2]")
-    autos = browser.find_elements_by_xpath("//div/ul[@class='info']/li[3]")
-    fecha = browser.find_elements_by_xpath("//div/ul[@class='info']/li[4]")
-    links = browser.find_elements_by_xpath("//a[@class='download']")
+while (date1 == date2):
+# for o in range(7):
+    try:
+        tribunal = browser.find_elements_by_xpath("//div/ul[@class='info']/li[1]")
+        expediente = browser.find_elements_by_xpath("//div/ul[@class='info']/li[2]")
+        autos = browser.find_elements_by_xpath("//div/ul[@class='info']/li[3]")
+        fecha = browser.find_elements_by_xpath("//div/ul[@class='info']/li[4]")
+        links = browser.find_elements_by_xpath("//a[@class='download']")
 
-    [tri.append(i.text) for i in tribunal]
-    [exp.append(i.text) for i in expediente]
-    [aut.append(i.text) for i in autos]
-    [fec.append(i.text) for i in fecha]
-    [url.append(i.get_attribute('href')) for i in links]
+        [tri.append(i.text) for i in tribunal]
+        [exp.append(i.text) for i in expediente]
+        [aut.append(i.text) for i in autos]
+        [fec.append(i.text) for i in fecha]
+        [url.append(i.get_attribute('href')) for i in links]
 
-    pagina = browser.find_element_by_class_name("more").text
+        pagina = browser.find_element_by_class_name("more").text
 
-    element = WebDriverWait(browser, 5).until(
-      EC.presence_of_element_located((By.XPATH, "//*")))
+        element = WebDriverWait(browser, 5).until(
+          EC.presence_of_element_located((By.XPATH, "//*")))
 
-    print (pagina)
-    print ("========")
-    for i in fecha:
-        print (i.text)
-    for i in autos:
-        print (i.text)
+        print (pagina)
+        print ("========")
+        for i in fecha:
+            print (i.text)
+        for i in autos:
+            print (i.text)
 
-    sig = browser.find_element_by_class_name("next")
-    sig.click()
-    print ("click pressed")
+        sig = browser.find_element_by_class_name("next")
+        sig.click()
+        print ("click pressed")
 
-    date1 = browser.find_element_by_xpath("//div[6]/ul/li[4]").text
-    date2 = browser.find_element_by_xpath("//div[25]/ul/li[4]").text
+        date1 = browser.find_element_by_xpath("//div[6]/ul/li[4]").text
+        date2 = browser.find_element_by_xpath("//div[25]/ul/li[4]").text
+    except Exception:
+        break
 
 [nro.append(re.search('\d+', i).group(0)) for i in url]
 [txt.append(pdf_url_to_txt(i)) for i in url]
@@ -345,12 +375,13 @@ for o in range(len(nro)):
     provincia = cij_provincia(lugar)
     materia = get_materia(d, text)
     voces = get_voces(d, text)
+    resultados = cij_resultados(res, text)
 
     instance = Fallos(nr=nro[o], corte=corte, exp=expediente, autos=autos,
                       fecha=fecha, text=text, sobre=sobre, actora=actora,
                       demandada=demandada, jueces=jueces, leyes=leyes,
                       citados=citas, lugar=lugar, provincia=provincia,
-                      voces=voces, materia=materia)
+                      voces=voces, materia=materia, resultados=resultados)
     try:
         instance.save()
         print ('Saved Fallo {} of {}'.format(o, len(nro)))
