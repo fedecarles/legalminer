@@ -463,6 +463,15 @@ section{
     border: 1px solid #E6E9ED;
     height: 250px;
 }
+#comparator-chart{
+    background-color: #fff;
+    border: 1px solid #E6E9ED;
+    height: 500px;
+}
+#comparator-chart .x.axis text {
+    text-anchor: end !important;
+    transform: rotate(-45deg);
+}
 #page-top{
     background-color: #F7F7F7;
 }
@@ -701,9 +710,19 @@ h4 {
     background-color: transparent;
     border: 0;
 }
+
 .var-drop:visited .var-drop:active{
     outline: none;
 }
+.comp-drop{
+    background-color: transparent;
+    border: 0;
+}
+
+.comp-drop:visited .var-drop:active{
+    outline: none;
+}
+
 .flat_btn_small {
     font-family: Sertig;
     font-size: 12px;

@@ -218,6 +218,7 @@
                                        <li role="presentation" class="color" data-value="#C36A6f"><a role="menuitem" tabindex="-1" href="#">Rojo</a></li>
                                        <li role="presentation" class="image"><a role="menuitem" tabindex="-1" href="#">Image</a></li>
                                    </ul>
+                               </div>
                             </h4>
                         </div>
                     </div>
@@ -249,6 +250,7 @@
                                        <li role="presentation" class="color" data-value="#C36A6f"><a role="menuitem" tabindex="-1" href="#">Rojo</a></li>
                                        <li role="presentation" class="image"><a role="menuitem" tabindex="-1" href="#">Image</a></li>
                                    </ul>
+                               </div>
                             </h4>
                         </div>
                     </div>
@@ -280,6 +282,7 @@
                                        <li role="presentation" class="color" data-value="#C36A6f"><a role="menuitem" tabindex="-1" href="#">Rojo</a></li>
                                        <li role="presentation" class="image"><a role="menuitem" tabindex="-1" href="#">Image</a></li>
                                    </ul>
+                               </div>
                             </h4>
                         </div>
                     </div>
@@ -287,6 +290,40 @@
             </div>
         </div>
         <br/>
+    </div>
+    <div class="col-md-12">
+        <div clas="row">
+            <div class="col-md-12">
+                <div id="comparator-div">
+                    <div id="comparator-chart">
+                        <div id="heading">
+                            <h4>
+                               <select id="opt1" class="comp-drop">
+                               </select>
+                               <select id="stacker" class="comp-drop">
+                                    <option value="corte">Tribunales</option>
+                                    <option value="jueces">Jueces</option>
+                               </select>
+                               <select id="opt2" class="comp-drop">
+                               </select>
+                               <i class="close" />X</i>
+                               <div class="color-drop dropdown">
+                                   <button class="color-btn btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> 
+                                       <img class="cog" src="/static/icons/cog.svg"></img>
+                                   </button>
+                                   <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
+                                       <li role="presentation" class="color" data-value="#6A9BC3"><a role="menuitem" tabindex="-1" href="#">Azul</a></li>
+                                       <li role="presentation" class="color" data-value="#9BC36A"><a role="menuitem" tabindex="-1" href="#">Verde</a></li>
+                                       <li role="presentation" class="color" data-value="#C36A6f"><a role="menuitem" tabindex="-1" href="#">Rojo</a></li>
+                                       <li role="presentation" class="image"><a role="menuitem" tabindex="-1" href="#">Image</a></li>
+                                   </ul>
+                               </div>
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <div id="table-div" class="container-fluid">
@@ -412,28 +449,28 @@ var ndx = crossfilter(data);
 
 // Setup dimensions.
 var dateDim = ndx.dimension(function(d) {return d.fechas;});
-var corteDim = ndx.dimension(function(d) {return d.corte;});
-var provinciaDim = ndx.dimension(function(d) {return d.provincia;});
-var juecesDim = ndx.dimension(function(d) {return d.jueces;});
+// var corteDim = ndx.dimension(function(d) {return d.corte;});
+// var provinciaDim = ndx.dimension(function(d) {return d.provincia;});
+// var juecesDim = ndx.dimension(function(d) {return d.jueces;});
 var mapDim = ndx.dimension(function(d) {return d.provincia;});
 var cfDim = ndx.dimension(function(d) {return d.provincia;});
-var sobreDim = ndx.dimension(function(d) {return d.sobre;});
-var vocesDim = ndx.dimension(function(d) {return d.voces;});
-var materiaDim = ndx.dimension(function(d) {return d.materia;});
-var resultadoDim = ndx.dimension(function(d) {return d.resultados;});
-
-// Setup groups, using custom reduce functions.
+// var sobreDim = ndx.dimension(function(d) {return d.sobre;});
+// var vocesDim = ndx.dimension(function(d) {return d.voces;});
+// var materiaDim = ndx.dimension(function(d) {return d.materia;});
+var resultadosDim = ndx.dimension(function(d) {return d.resultados;});
+// 
+// // Setup groups, using custom reduce functions.
 var all = ndx.groupAll();
 var dateGroup = dateDim.group()
-var corteGroup = corteDim.group().reduceCount(function(d) {return d.corte;});
-var provinciaGroup = provinciaDim.group().reduceCount(function(d) {return d.provincia;});
-var juecesGroup = juecesDim.groupAll().reduce(reduceAddArray("jueces"), reduceRemoveArray("jueces"), reduceInitial).value();
+// var corteGroup = corteDim.group().reduceCount(function(d) {return d.corte;});
+// var provinciaGroup = provinciaDim.group().reduceCount(function(d) {return d.provincia;});
+// var juecesGroup = juecesDim.groupAll().reduce(reduceAddArray("jueces"), reduceRemoveArray("jueces"), reduceInitial).value();
 var mapGroup = mapDim.group();
 var cfGroup = cfDim.group();
-var sobreGroup = sobreDim.group().reduceCount(function(d) {return d.sobre;});
-var vocesGroup = vocesDim.groupAll().reduce(reduceAddArray("voces"), reduceRemoveArray("voces"), reduceInitial).value();
-var materiaGroup = materiaDim.groupAll().reduce(reduceAddArray("materia"), reduceRemoveArray("materia"), reduceInitial).value();
-var resultadoGroup = resultadoDim.groupAll().reduce(reduceAddArray("resultados"), reduceRemoveArray("resultados"), reduceInitial).value();
+// var sobreGroup = sobreDim.group().reduceCount(function(d) {return d.sobre;});
+// var vocesGroup = vocesDim.groupAll().reduce(reduceAddArray("voces"), reduceRemoveArray("voces"), reduceInitial).value();
+// var materiaGroup = materiaDim.groupAll().reduce(reduceAddArray("materia"), reduceRemoveArray("materia"), reduceInitial).value();
+// var resultadosGroup = resultadosDim.groupAll().reduce(reduceAddArray("resultados"), reduceRemoveArray("resultados"), reduceInitial).value();
 
 // hack to make dc.js charts work
 function arrayGroupAll() {
@@ -924,6 +961,127 @@ $('.image').on('click', function(){
     saveSvgAsPng(document.querySelector("#" + this_id + " svg"), "image.png",
             {scale: 1.5,
             backgroundColor: '#fff'});
+});
+
+// COMPARATOR CHART
+// http://bl.ocks.org/emiguevara/4bd152a8828f6b31270702d97dc0133d
+// http://stackoverflow.com/questions/30886088/dc-js-stacked-bar-chart-with-empty-bin-filter-displaying-in-strange-way
+
+function remove_empty_bins(source_group) {
+    return {
+        all:function () {
+            return source_group.all().filter(function(d) {
+                return d.key != "";
+            });
+        }
+    };
+}
+
+$('#opt1').on('change', function(){
+
+    var comp_width = $('#comparator-chart').width();
+    var comp_height = $('#comparator-chart').height();
+
+    var stacker = $('#stacker option:selected').val();
+    var op1 = $('#opt1 option:selected').text();
+    var op2 = $('#opt2 option:selected').text();
+
+    var compDim = ndx.dimension(function(d){ return d.resultados;}, true);
+
+    if (stacker === "corte"){
+        var group1 = compDim.group().reduceSum(function(d) {return d.corte === op1;});
+        var group2 = compDim.group().reduceSum(function(d) {return d.corte === op2;});
+    } else if (stacker === "jueces"){
+        var group1 = compDim.group().reduceSum(function(d) {return d.jueces[0] === op1 | d.jueces[1] === op1 | d.jueces[2] === op1 | d.jueces[3] === op1;});
+        var group2 = compDim.group().reduceSum(function(d) {return d.jueces[0] === op2 | d.jueces[1] === op2 | d.jueces[2] === op2 | d.jueces[3] === op2;});
+    }
+
+        var filtered_group1 = remove_empty_bins(group1)
+        var filtered_group2 = remove_empty_bins(group2)
+
+    dc.barChart("#comparator-chart")
+        .renderLabel(true)
+        .height(comp_height)
+        .width(comp_width)
+        .x(d3.scale.ordinal())
+        .xUnits(dc.units.ordinal)
+        .legend(dc.legend().x(600).y(0).horizontal(0).itemHeight(13).gap(6).legendWidth(400).itemWidth(60))
+        .renderHorizontalGridLines(true)
+        .margins({top:50, left:50, right:10, bottom:200})
+        .ordinalColors(["#6a9bc3", "#C36A6f"])
+        .dimension(compDim)
+        .group(filtered_group1, op1)
+        .stack(filtered_group2, op2)
+        .elasticY(true)
+        .elasticX(true)
+        .xAxis().ticks(3);
+
+    dc.renderAll();
+});
+
+$('#stacker').on('change', function(){
+    var options1 = {}; 
+    var options2 = {}; 
+    var stacker = $('#stacker option:selected').text();
+
+    $('#opt1').empty();
+    $('#opt2').empty();
+
+    if (stacker === "Tribunales"){
+        $.each(data, function(i, item){
+            options1[item.corte] = item.corte;
+        });
+
+        $.each(data, function(i, item){
+            options2[item.corte]= item.corte;
+        });
+
+        $.each(options1, function (i, item) {
+            $('#opt1').append($('<option>', { 
+                text : item 
+            }));
+        });
+        
+        $.each(options2, function (i, item) {
+            $('#opt2').append($('<option>', { 
+                text : item 
+            }));
+        });
+
+    } else if(stacker === "Jueces"){
+
+        $.each(data, function(idx, value) {
+            $.each(value.jueces, function(i, v){
+                options1[v] = v; 
+            });
+        });
+
+        $.each(data, function(idx, value) {
+            $.each(value.jueces, function(i, v){
+                options2[v] = v; 
+            });
+        });
+
+        $.each(options1, function (i, item) {
+            $('#opt1').append($('<option>', { 
+                text : item 
+            }));
+        });
+        
+        $.each(options2, function (i, item) {
+            $('#opt2').append($('<option>', { 
+                text : item 
+            }));
+        });
+    }
+    
+    $("#opt1").html($("#opt1 option").sort(function (a, b) {
+        return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
+    }))
+
+    $("#opt2").html($("#opt2 option").sort(function (a, b) {
+        return a.text == b.text ? 0 : a.text < b.text ? -1 : 1
+    }))
 });
 
 
