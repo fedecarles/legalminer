@@ -187,7 +187,8 @@ body .highlighted{
     font-size: 16px;
     background-color: transparent;
     border: None;
-    white-space: pre-wrap;
+    white-space: pre-line;
+    word-break: break-word;
 }
 #text-view{
     overflow: auto;
