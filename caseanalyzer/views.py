@@ -253,3 +253,13 @@ def deleteSearch(request, id):
     get_object_or_404(MySearches, pk=id).delete()
     reverse_url = reverse('view_profile', kwargs={'id': user})
     return HttpResponseRedirect(reverse_url)
+
+
+def showCortes(request):
+    with open('cortes.txt', 'r') as f:
+        cortes = f.read().split(', ')
+    context = {
+        'cortes': sorted(cortes)
+    }
+
+    return render(request, 'cortes.html', context)

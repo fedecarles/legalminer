@@ -24,6 +24,7 @@
         <script type="text/javascript" src="/static/js/datepicker-es.js"></script>
         <script type="text/javascript" src="/static/js/jquery.easyPaginate.js"></script>
         <script type="text/javascript" src="/static/js/jquery.mark.min.js"></script>
+        <script type="text/javascript" src="/static/js/list.min.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.1/d3.min.js"></script>
         <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/d3-tip/0.6.3/d3-tip.min.js"></script>
         <script type="text/javascript" src="http://d3js.org/d3.geo.projection.v0.min.js"></script>
@@ -80,7 +81,9 @@
                           </tr>
                           <tr>
                               <td>Corte:</td>
-                              <td>{{ search_form.corte }}</td>
+                              <td>{{ search_form.corte }}
+                                  <a href="{% url 'showcortes' %}" data-toggle="modal" data-target="#cortesModal">LISTA</a>
+                              </td>
                               <td>Magistrado:</td>
                               <td>{{ search_form.jueces }}</td>
                           </tr>
@@ -126,6 +129,24 @@
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
+
+<!-- Modal -->
+<div class="modal fade" id="cortesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        <h4 class="modal-title" id="myModalLabel">Datos adicionales</h4>
+      </div>
+      <div class="modal-body">
+        {% include 'cortes.html' %}
+      </div>
+    </div>
+  </div>
+</div>
+
 {% block content %}
 {% endblock %}
 </body>

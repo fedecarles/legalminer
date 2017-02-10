@@ -1,0 +1,19 @@
+<h4>Lista de Tribunales</h4>
+<div id="cortes-list">
+    <input class="fuzzy-search"/>
+    <ul class="list">
+        {% for c in cortes %}
+        <li><p class="corte-item">{{c}}</p></li>
+        {% endfor %}
+    </ul>
+    <ul class="pagination"></ul>
+</div>
+<script type="text/javascript">
+
+var corteList = new List('cortes-list', { 
+    valueNames: ['corte-item'],
+    page: 20,
+    pagination: true
+});
+
+</script>
