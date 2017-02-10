@@ -98,3 +98,6 @@ whoosh/
 # swap files
 *.swp
 *.swn
+
+# static admin
+static/admin
