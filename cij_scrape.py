@@ -73,10 +73,10 @@ except Exception:
 
 desde = browser.find_element_by_id('fecha_fallo_desde_aux')
 desde.clear()
-desde.send_keys("22/07/2016")
+desde.send_keys("04/02/2017")
 hasta = browser.find_element_by_id('fecha_fallo_hasta_aux')
 hasta.clear()
-hasta.send_keys("22/07/2016")
+hasta.send_keys("04/02/2017")
 browser.find_element_by_xpath('//form/div[6]/input[1]').submit()
 
 def get_materia(tesauro, text):

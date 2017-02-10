@@ -29,3 +29,15 @@ Fecha de sentencia: 27/07/2016 220
 Fecha de sentencia: 26/07/2016 220
 Fecha de sentencia: 25/07/2016 120
 Fecha de sentencia: 22/07/2016 20
+Fecha de sentencia: 17/01/2017 20
+Fecha de sentencia: 18/01/2017 20
+Fecha de sentencia: 19/01/2017 40
+Fecha de sentencia: 20/01/2017 20
+Fecha de sentencia: 24/01/2017 20
+Fecha de sentencia: 26/01/2017 40
+Fecha de sentencia: 27/01/2017 20
+Fecha de sentencia: 30/01/2017 40
+Fecha de sentencia: 31/01/2017 20
+Fecha de sentencia: 01/02/2017 60
+Fecha de sentencia: 02/02/2017 320
+Fecha de sentencia: 03/02/2017 180
