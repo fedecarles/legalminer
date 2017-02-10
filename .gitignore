@@ -100,4 +100,4 @@ whoosh/
 *.swn
 
 # static admin
-static/admin
+static/admin/
