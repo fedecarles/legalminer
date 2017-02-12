@@ -28,7 +28,7 @@ def details(request, slug):
     for l in instance.likes.all():
         if str(l) in str(usuario):
             liked = True
-            print (liked)
+            print(liked)
     context = {
         'instance': instance,
         'liked': liked,
@@ -261,5 +261,40 @@ def showCortes(request):
     context = {
         'cortes': sorted(cortes)
     }
-
     return render(request, 'cortes.html', context)
+
+
+def showJueces(request):
+    with open('jueces.txt', 'r') as f:
+        jueces = f.read().split(', ')
+    context = {
+        'jueces': sorted(jueces)
+    }
+    return render(request, 'jueces.html', context)
+
+
+def showVoces(request):
+    with open('voces.txt', 'r') as f:
+        voces = f.read().split(', ')
+    context = {
+        'voces': sorted(voces)
+    }
+    return render(request, 'voces.html', context)
+
+
+def showMateria(request):
+    with open('materia.txt', 'r') as f:
+        materia = f.read().split(', ')
+    context = {
+        'materia': sorted(materia)
+    }
+    return render(request, 'materia.html', context)
+
+
+def showSobre(request):
+    with open('sobre.txt', 'r') as f:
+        sobre = f.read().split(', ')
+    context = {
+        'sobre': sorted(sobre)
+    }
+    return render(request, 'sobre.html', context)

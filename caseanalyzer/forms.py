@@ -6,16 +6,43 @@ from haystack.forms import FacetedSearchForm
 
 class MySearchForm(FacetedSearchForm):
 
-    fecha_from = forms.DateField(required=False, input_formats=['%d/%m/%Y'])
-    fecha_to = forms.DateField(required=False, input_formats=['%d/%m/%Y'])
+    fecha_from = forms.DateField(required=False, input_formats=['%d/%m/%Y'],
+                                 widget=forms.TextInput(attrs={
+                                     'placeholder': '...',
+                                     'class': 'col-md-9'}))
 
-    jueces = forms.CharField(required=False)
-    corte = forms.CharField(required=False)
-    actora = forms.CharField(required=False)
-    demandada = forms.CharField(required=False)
-    sobre = forms.CharField(required=False)
-    materia = forms.CharField(required=False)
-    voces = forms.CharField(required=False)
+    fecha_to = forms.DateField(required=False, input_formats=['%d/%m/%Y'],
+                               widget=forms.TextInput(attrs={
+                                   'placeholder': '...',
+                                   'class': 'col-md-9'}))
+    jueces = forms.CharField(required=False,
+                             widget=forms.TextInput(attrs={'placeholder': '...',
+                                                           'class': 'col-md-9'})
+                             )
+    corte = forms.CharField(required=False,
+                            widget=forms.TextInput(attrs={'placeholder': '...',
+                                                          'class': 'col-md-9'}))
+    actora = forms.CharField(required=False,
+                             widget=forms.TextInput(attrs={'placeholder': '...',
+                                                           'class': 'col-md-9'})
+                             )
+    demandada = forms.CharField(required=False,
+                                widget=forms.TextInput(attrs={
+                                    'placeholder': '...',
+                                    'class': 'col-md-9'}))
+
+    sobre = forms.CharField(required=False,
+                            widget=forms.TextInput(attrs={'placeholder': '...',
+                                                          'class': 'col-md-9'}))
+
+    materia = forms.CharField(required=False,
+                              widget=forms.TextInput(attrs={
+                                  'placeholder': '...',
+                                  'class': 'col-md-9'}))
+
+    voces = forms.CharField(required=False,
+                            widget=forms.TextInput(attrs={'placeholder': '...',
+                                                          'class': 'col-md-9'}))
 
     def search(self):
         # First, store the SearchQuerySet received from other processing.

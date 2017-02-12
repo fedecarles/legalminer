@@ -1,11 +1,11 @@
-<h4 >Lista de Tribunales</h4>
-<div id="cortes-list">
+<h4 >Lista de Magistrados</h4>
+<div id="jueces-list">
     <input class="fuzzy-search form-control" placeholder="Buscar"/>
     <ul class="list col-md-offset-1">
-        {% for c in cortes %}
+        {% for j in jueces %}
         <li>
-            <p class="corte-item"  onclick="filterSelec()">
-                <a href="#" class="filter-selec">{{c}}</a>
+            <p class="jueces-item" onclick="filterSelec()">
+                <a href="#" class="filter-selec">{{j}}</a>
             </p>
         </li>
         {% endfor %}
@@ -16,18 +16,19 @@
 </div>
 <script type="text/javascript">
 
-var corteList = new List('cortes-list', { 
-    valueNames: ['filter-selec'],
+var juecejuecessList = new List('jueces-list', { 
+    valueNames: ['jueces-item'],
     page: 20,
     pagination: true
 });
 
 function filterSelec(){
-    $('.corte-item').click(function(){
+    $('.jueces-item').click(function(){
         var selec = $(this).text();
-        var field = $('#id_corte');
+        var field = $('#id_jueces');
         field.val($.trim(selec));
-        $('#cortesModal').modal('hide');
+        $('#juecesModal').modal('hide');
     });
 }
+
 </script>

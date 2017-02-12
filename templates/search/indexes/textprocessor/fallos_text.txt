@@ -1,6 +1,5 @@
 {{ object.autos }}
-{{ object.actora }}
-{{ object.demandada }}
+{{ object.corte }}
 {{ object.sobre }}
 {{ object.text }}
 {{ object.fecha }}

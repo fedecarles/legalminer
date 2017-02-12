@@ -22,7 +22,8 @@ from django.contrib import admin
 from caseanalyzer.views import (inicio, details, dashboard, update_profile,
                                 view_profile, like_button, saveNotes,
                                 saveSearch, myNotes, deleteNote, deleteSearch,
-                                showCortes)
+                                showCortes, showJueces, showVoces, showMateria,
+                                showSobre)
 
 urlpatterns = [
     # admin url
@@ -72,5 +73,17 @@ urlpatterns = [
 
     # Show cortes
     url(r'^cortes/$', showCortes, name='showcortes'),
+
+    # Show jueces
+    url(r'^jueces/$', showJueces, name='showjueces'),
+
+    # Show voces
+    url(r'^voces/$', showVoces, name='showvoces'),
+
+    # Show materia
+    url(r'^materia/$', showMateria, name='showmateria'),
+
+    # Show sobre
+    url(r'^sobre/$', showSobre, name='showsobre'),
 
 ]

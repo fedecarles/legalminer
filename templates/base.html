@@ -82,26 +82,28 @@
                           <tr>
                               <td>Corte:</td>
                               <td>{{ search_form.corte }}
-                                  <a href="{% url 'showcortes' %}" data-toggle="modal" data-target="#cortesModal">LISTA</a>
+                                  <a href="{% url 'showcortes' %}" class="col-md-offset-1" data-toggle="modal" data-target="#cortesModal">LISTA</a>
                               </td>
                               <td>Magistrado:</td>
-                              <td>{{ search_form.jueces }}</td>
+                              <td>{{ search_form.jueces }}
+                                  <a href="{% url 'showjueces' %}" class="col-md-offset-1" data-toggle="modal" data-target="#juecesModal">LISTA</a>
+                              </td>
                           </tr>
-                          <tr>
-                              <td>Accionante:</td>
-                              <td>{{ search_form.actora }}</td>
-                              <td>Accionada:</td>
-                              <td>{{ search_form.demandada }}</td>
-                          </tr>
-                          <tr>
+                         <tr>
                               <td>Voces:</td>
-                              <td>{{ search_form.voces }}</td>
+                              <td>{{ search_form.voces }}
+                                  <a href="{% url 'showvoces' %}" class="col-md-offset-1" data-toggle="modal" data-target="#vocesModal">LISTA</a>
+                              </td>
                               <td>Materia:</td>
-                              <td>{{ search_form.materia }}</td>
+                              <td>{{ search_form.materia }}
+                                  <a href="{% url 'showmateria' %}" class="col-md-offset-1" data-toggle="modal" data-target="#materiaModal">LISTA</a>
+                          </td>
                           </tr>
                           <tr>
                               <td>Asunto:</td>
-                              <td>{{ search_form.sobre }}</td>
+                              <td>{{ search_form.sobre }} 
+                                  <a href="{% url 'showsobre' %}" class="col-md-offset-1" data-toggle="modal" data-target="#sobreModal">LISTA</a>
+                              </td>
                               <td></td>
                               <td></td>
                           </tr>
@@ -138,10 +140,73 @@
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
-        <h4 class="modal-title" id="myModalLabel">Datos adicionales</h4>
       </div>
       <div class="modal-body">
         {% include 'cortes.html' %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="juecesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% include 'jueces.html' %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="vocesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% include 'voces.html' %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="materiaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% include 'materia.html' %}
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="sobreModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% include 'sobre.html' %}
       </div>
     </div>
   </div>
