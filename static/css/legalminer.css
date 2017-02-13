@@ -465,7 +465,7 @@ section{
 #comparator-chart{
     background-color: #fff;
     border: 1px solid #E6E9ED;
-    height: 500px;
+    height: 600px;
 }
 #comparator-chart .x.axis text {
     text-anchor: end !important;
