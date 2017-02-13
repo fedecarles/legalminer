@@ -8,7 +8,7 @@ from .models import MyLikes
 
 # Register your models here.
 class FallosAdmin(admin.ModelAdmin):
-    list_display = ('nr', 'fecha', 'autos', 'jueces')
+    list_display = ('pk', 'autos', 'fecha', 'jueces')
 
 
 admin.site.register(Fallos, FallosAdmin)

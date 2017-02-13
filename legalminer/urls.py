@@ -21,9 +21,9 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from caseanalyzer.views import (inicio, details, dashboard, update_profile,
                                 view_profile, like_button, saveNotes,
-                                saveSearch, myNotes, deleteNote, deleteSearch,
+                                saveSearch, deleteNote, deleteSearch,
                                 showCortes, showJueces, showVoces, showMateria,
-                                showSobre)
+                                showSobre, myNotes)
 
 urlpatterns = [
     # admin url

@@ -56,10 +56,7 @@ class Fallos(models.Model):
 
     def save(self, **kwargs):
         super(Fallos, self).save()
-        # return reverse('details', (), {"slug": self.slug})
-        # slug_str = "%s %s" % (self.autos, self.nr)
         self.slug = '%i-%s' % (self.pk, slugify(self.autos[:255]))
-        # self.slug = slugify(self.autos) + "-" + str(self.pk)
         super(Fallos, self).save()
 
     def get_absolute_url(self):

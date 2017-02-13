@@ -186,12 +186,11 @@ def caseData(pks):
     [materia.append(i.materia) for i in instances]
     [citados.append(i.citados) for i in instances]
     [resultados.append(i.resultados) for i in instances]
-    num = [i.nr for i in instances]
 
     # Build dictionary with case data.
     case_data = []
 
-    for p in range(len(num)):
+    for p in range(len(instances)):
         sub = {
             'fecha': fecha[p],
             'autos': autos[p],
