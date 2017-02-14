@@ -8,7 +8,8 @@ from datetime import datetime
 from collections import Counter
 from selenium import webdriver
 
-proj_path = "/home/fedecarles/legalminer/"
+# proj_path = "/home/fedecarles/legalminer/"
+proj_path = "/home/federico/Dropbox/legalminer/"
 # This is so Django knows where to find stuff.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "legalminer.settings")
 sys.path.append(proj_path)
@@ -136,7 +137,9 @@ def get_voces(tesauro, text):
 
 def get_actora(text):
     try:
-        patterns = re.search('(.*?)C\/|S\/|ACTOR:(.*?)S\/|DENUNCIANTE:(.*?)S\/|QUERELLANTE:(.*?)S\/', text).groups()
+        patterns = re.search("""(.*?)C\/|(.*?)CONTRA|(.*?)S\/|
+                             ACTOR:(.*?)S\/|DENUNCIANTE:(.*?)S\/|
+                             QUERELLANTE:(.*?)S\/""", text).groups()
         actora = [p for p in patterns if p is not None]
         actora = "".join(actora).strip()
     except Exception:
@@ -146,13 +149,25 @@ def get_actora(text):
 
 def get_demandada(text):
     try:
-        patterns = re.search('C\/(.*?)S\/|IMPUTADO:(.*?)S\/|DEMANDADO:(.*?)S\/|DENUNCIADO:(.*?)S\/',
-                             text).groups()
+        patterns = re.search("""C\/(.*?)\.\s|CONTRA(.*?)\.\s|
+                             IMPUTADO:(.*?)S\/|DEMANDADO:(.*?)S\/|
+                             DENUNCIADO:(.*?)S\/""", text).groups()
         demandada = [p for p in patterns if p is not None]
         demandada = "".join(demandada).strip()
     except Exception:
         demandada = ""
     return demandada
+
+
+def get_sobre(text):
+    try:
+        sobre = re.sub(get_actora(text), '', text)
+        sobre = re.sub(get_demandada(text), '', sobre)
+        replacements = "CONTRA|C/|S/|\.|Y OTRO"
+        sobre = re.sub(replacements, '', sobre)
+    except Exception:
+        sobre = ""
+    return sobre.strip()
 
 
 def get_leyes(text):
@@ -183,14 +198,6 @@ def get_citas(text):
     except Exception:
         pass
     return citas
-
-
-def get_sobre(text):
-    try:
-        sobre = re.search('S\/(.*)', text).group(1).strip()
-    except Exception:
-        sobre = ""
-    return sobre
 
 
 def get_resultados(result, text):
