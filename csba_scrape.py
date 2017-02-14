@@ -8,7 +8,7 @@ from datetime import datetime
 from collections import Counter
 from selenium import webdriver
 
-proj_path = "/home/federico/Dropbox/legalminer/"
+proj_path = "/home/fedecarles/legalminer/"
 # This is so Django knows where to find stuff.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "legalminer.settings")
 sys.path.append(proj_path)
@@ -67,7 +67,7 @@ except Exception:
 
 desde = browser.find_element_by_id('txtExpresionBusquedaIntegral')
 desde.clear()
-desde.send_keys('FechaDesdeFallo:01/12/2016 Y FechaHastaFallo:13/02/2017')
+desde.send_keys('FechaDesdeFallo:01/02/2016 Y FechaHastaFallo:28/02/2016')
 browser.find_element_by_id('btnRealizarBusqueda').click()
 time.sleep(10)
 
