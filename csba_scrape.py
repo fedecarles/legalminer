@@ -8,8 +8,8 @@ from datetime import datetime
 from collections import Counter
 from selenium import webdriver
 
-# proj_path = "/home/fedecarles/legalminer/"
-proj_path = "/home/federico/Dropbox/legalminer/"
+proj_path = "/home/fedecarles/legalminer/"
+# proj_path = "/home/federico/Dropbox/legalminer/"
 # This is so Django knows where to find stuff.
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "legalminer.settings")
 sys.path.append(proj_path)
@@ -79,11 +79,16 @@ total = math.ceil(total / 20)
 
 links = []
 
-for p in range(1):
+for p in range(total):
     urls = browser.find_elements_by_xpath('//td/div/div/table/tbody/tr/td/p/a')
     for u in urls:
         if u.get_attribute('href') not in links:
             links.append(u.get_attribute('href'))
+
+        print(u.get_attribute('href'))
+    print("====")
+    browser.find_element_by_id('cphMainContent_lnkSiguiente').click()
+    time.sleep(3)
 
 
 def get_materia(tesauro, text):
@@ -222,35 +227,43 @@ def get_resultados(result, text):
 
 count = 0
 for l in links:
-    browser.get(l)
-    browser.find_element_by_id('cphMainContent_lnkDatosFallo').click()
-    time.sleep(1)
-    text = browser.find_element_by_xpath(
-        "//div[3]/table[2]/tbody/tr[3]/td").text
-    corte = browser.find_element_by_id('lblTribunalEmisor').text
-    expediente = browser.find_element_by_id('lblCausa').text
-    autos = browser.find_element_by_id('lblCaratula').text.upper()
-    fecha = browser.find_element_by_id('lblFecha').text
-    fecha = datetime.strptime(fecha, '%d/%m/%Y')
-    sobre = get_sobre(autos)
-    actora = get_actora(autos)
-    demandada = get_demandada(autos)
-    jueces = browser.find_element_by_id('lblmagistradosVotantes').text
-    jueces = re.sub('-', ', ', jueces).upper()
-    leyes = get_leyes(text)
-    citas = get_citas(text)
-    provincia = "BUENOS AIRES"
-    materia = get_materia(d, text)
-    voces = get_voces(d, text)
-    resultados = get_resultados(res, text)
-    lugar = "LA PLATA"
-    count += 1
-
+    try:
+        browser.get(l)
+        browser.find_element_by_id('cphMainContent_lnkDatosFallo').click()
+        time.sleep(1)
+        text = browser.find_element_by_xpath(
+            "//div[3]/table[2]/tbody/tr[3]/td").text
+        corte = browser.find_element_by_id('lblTribunalEmisor').text
+        expediente = browser.find_element_by_id('lblCausa').text
+        autos = browser.find_element_by_id('lblCaratula').text.upper()
+        fecha = browser.find_element_by_id('lblFecha').text
+        fecha = datetime.strptime(fecha, '%d/%m/%Y')
+        sobre = get_sobre(autos)
+        actora = get_actora(autos)
+        demandada = get_demandada(autos)
+        jueces = browser.find_element_by_id('lblmagistradosVotantes').text
+        jueces = re.sub('-', ', ', jueces).upper()
+        leyes = get_leyes(text)
+        citas = get_citas(text)
+        provincia = "BUENOS AIRES"
+        # materia = get_materia(d, text)
+        # voces = get_voces(d, text)
+        resultados = get_resultados(res, text)
+        lugar = "LA PLATA"
+        count += 1
+        print(autos)
+    except Exception as e:
+        print('Cant access link')
+        print(e)
+        continue
+    
     instance = Fallos(corte=corte, exp=expediente, autos=autos,
                       fecha=fecha, text=text, sobre=sobre, actora=actora,
                       demandada=demandada, jueces=jueces, leyes=leyes,
                       citados=citas, lugar=lugar, provincia=provincia,
-                      voces=voces, materia=materia, resultados=resultados)
+                      # voces=voces,
+                      # materia=materia,
+                      resultados=resultados)
     try:
         instance.save()
         print('Saved Fallo {} of {}'.format(count, len(links)))
