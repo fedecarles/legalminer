@@ -1,8 +1,0 @@
-{{ object.autos }}
-{{ object.corte }}
-{{ object.sobre }}
-{{ object.text }}
-{{ object.fecha }}
-{{ object.jueces }}
-{{ object.materia }}
-{{ object.voces }}

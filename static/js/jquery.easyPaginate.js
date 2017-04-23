@@ -62,11 +62,11 @@
                 htmlNav = '<ul class="easyPaginateNav nav nav-tabs">';
 
                 if (plugin.settings.firstButton) {
-                    htmlNav += '<li><a href="#' + plugin.settings.hashPage + ':1" title="First page" rel="1" class="first">' + plugin.settings.firstButtonText + '<img id="results-btn" src="/static/icons/rewind.svg"></img></a></li>';
+                    htmlNav += '<li><a href="#' + plugin.settings.hashPage + ':1" title="First page" rel="1" class="first">' + plugin.settings.firstButtonText + '<i class="fa fa-angle-double-left"></i></a></li>';
                 }
 
                 if (plugin.settings.prevButton) {
-                    htmlNav += '<li><a href="" title="Previous" rel="" class="prev">' + plugin.settings.prevButtonText + '<img id="results-btn" src="/static/icons/left.svg"></img></a></li>';
+                    htmlNav += '<li><a href="" title="Previous" rel="" class="prev">' + plugin.settings.prevButtonText + '<i class="fa fa-angle-left"></i></a></li>';
                 }
 
                 for (i = 0; i <= plugin.settings.pages - 1; i++) {
@@ -100,11 +100,11 @@
                 };
 
                 if (plugin.settings.nextButton) {
-                    htmlNav += '<li><a href="" title="Next" rel="" class="next">' + plugin.settings.nextButtonText + '<img id="results-btn" src="/static/icons/right.svg"></img></a></li>';
+                    htmlNav += '<li><a href="" title="Next" rel="" class="next">' + plugin.settings.nextButtonText + '<i class="fa fa-angle-right"></i></a></li>';
                 }
 
                 if (plugin.settings.lastButton) {
-                    htmlNav += '<li><a href="#' + plugin.settings.hashPage + ':' + plugin.settings.pages + '" title="Last page" rel="' + plugin.settings.pages + '" class="last">' + plugin.settings.lastButtonText + '<img id="results-btn" src="/static/icons/fforward.svg"></img></a></li>';
+                    htmlNav += '<li><a href="#' + plugin.settings.hashPage + ':' + plugin.settings.pages + '" title="Last page" rel="' + plugin.settings.pages + '" class="last">' + plugin.settings.lastButtonText + '<i class="fa fa-angle-double-right"></i></a></li>';
                 }
 
                 htmlNav += '</ul>';

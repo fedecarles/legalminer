@@ -16,14 +16,13 @@ Including another URLconf
 """
 from haystack.views import FacetedSearchView, search_view_factory
 from django.contrib.auth import views as auth_views
-from caseanalyzer.forms import MySearchForm
+from fallos.forms import MySearchForm
 from django.conf.urls import url, include
 from django.contrib import admin
-from caseanalyzer.views import (inicio, details, dashboard, update_profile,
-                                view_profile, like_button, saveNotes,
-                                saveSearch, deleteNote, deleteSearch,
-                                showCortes, showJueces, showVoces, showMateria,
-                                showSobre, myNotes)
+from fallos.views import (inicio, details, dashboard, update_profile,
+                          view_profile, like_button, saveNotes,
+                          saveSearch, deleteNote, deleteSearch,
+                          showCortes, showJueces, showSobre, myNotes)
 
 urlpatterns = [
     # admin url
@@ -78,10 +77,10 @@ urlpatterns = [
     url(r'^jueces/$', showJueces, name='showjueces'),
 
     # Show voces
-    url(r'^voces/$', showVoces, name='showvoces'),
+    # url(r'^voces/$', showVoces, name='showvoces'),
 
     # Show materia
-    url(r'^materia/$', showMateria, name='showmateria'),
+    # url(r'^materia/$', showMateria, name='showmateria'),
 
     # Show sobre
     url(r'^sobre/$', showSobre, name='showsobre'),

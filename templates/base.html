@@ -34,7 +34,7 @@
         <script type="text/javascript" src="/static/js/saveSvgAsPng.js"></script>
 
     </head>
-<body id="page-top">
+<body>
 <nav class="navbar navbar-default">
   <div id="navbar-container" class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -52,13 +52,16 @@
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      {% if request.get_full_path == "/" %}
       <ul class="nav navbar-nav">
           <li><a href="{% url 'inicio' %}#quehacemos">¿Qué hacemos?</a></li>
-        <li><a href="#">Precios</a></li>
-        <li><a href="#">Contacto</a></li>
+          <li><a href="#">Precios</a></li>
+          <li><a href="#">Contacto</a></li>
+      {% else %}
+      {% endif %}
       </ul>
       {% if user.is_authenticated %}
-      <div id="search-form" class="col-md-6">
+      <div id="search-form" class="col-md-5 col-md-offset-4">
       <form method="get" action="{% url 'haystack_search' %}"> {% csrf_token %}
                   <div class="input-group">
                       {% bootstrap_field search_form.q show_label=False %}
@@ -90,16 +93,6 @@
                               </td>
                           </tr>
                          <tr>
-                              <td>Voces:</td>
-                              <td>{{ search_form.voces }}
-                                  <a href="{% url 'showvoces' %}" class="col-md-offset-1" data-toggle="modal" data-target="#vocesModal">LISTA</a>
-                              </td>
-                              <td>Materia:</td>
-                              <td>{{ search_form.materia }}
-                                  <a href="{% url 'showmateria' %}" class="col-md-offset-1" data-toggle="modal" data-target="#materiaModal">LISTA</a>
-                          </td>
-                          </tr>
-                          <tr>
                               <td>Asunto:</td>
                               <td>{{ search_form.sobre }} 
                                   <a href="{% url 'showsobre' %}" class="col-md-offset-1" data-toggle="modal" data-target="#sobreModal">LISTA</a>
@@ -165,39 +158,6 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="vocesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <h4 class="modal-title" id="myModalLabel">Lista de Voces del Tesauro</h4>
-      </div>
-      <div class="modal-body">
-        {% include 'voces.html' %}
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal -->
-<div class="modal fade" id="materiaModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        {% include 'materia.html' %}
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Modal -->
 <div class="modal fade" id="sobreModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -212,7 +172,6 @@
     </div>
   </div>
 </div>
-
 {% block content %}
 {% endblock %}
 </body>

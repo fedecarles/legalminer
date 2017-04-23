@@ -3,21 +3,18 @@
 {% block content %}
 <body>
     <div id="main-controls">
-        <div id="controls-placeholder" class="col-md-5 col-md-offset-4">
+        <div id="controls-placeholder" class="col-md-5 col-md-offset-5">
             <a id="fallos-submit" href="#">
-                <img class="controls-btn" src="/static/icons/stack.svg"></img>
+                <i class="fa fa-list fa-3x" aria-hidden="true" title="Lista de Resultados"></i>
             </a>
             <a id="dashboard-submit" href="#">
-                <img class="controls-btn" src="/static/icons/bar-chart.svg"></img>
+                <i class="fa fa-bar-chart fa-3x" aria-hidden="true" title="Panel Gráfico"></i>
             </a>
             <a id="table-submit" href="#">
-                <img class="controls-btn" src="/static/icons/table.svg"></img>
+                <i class="fa fa-table fa-3x" aria-hidden="true" title="Tabla"></i>
             </a>
             <a id="compare-submit" href="#">
-                <img class="controls-btn" src="/static/icons/scale.svg"></img>
-            </a>
-            <a id="info-submit" href="#" data-toggle="modal" data-target="#info_modal">
-                <img class="controls-btn" src="/static/icons/info.svg"></img>
+                <i class="fa fa-balance-scale fa-3x" aria-hidden="true" title="Comparador de Mociones"></i>
             </a>
         </div>
     </div>
@@ -52,14 +49,12 @@
                                 <option class="var" data-value="citados">Citados</option>
                                 <option class="var" data-value="leyes">Leyes</option>
                                 <option class="var" data-value="sobre">Asunto</option>
-                                <option class="var" data-value="voces">Voces</option>
-                                <option class="var" data-value="materia">Materia</option>
                                 <option class="var" data-value="resultados">Decisiones</option>
                             </select>
                             <i class="close" />X</i>
                             <div class="color-drop dropdown">
                                 <button class="color-btn btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> 
-                                    <img class="cog" src="/static/icons/cog.svg"></img>
+                                    <i class="fa fa-cog" aria-hidden="true"></i>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
                                     <li role="presentation" class="color" data-value="#6A9BC3"><a role="menuitem" tabindex="-1" href="#">Azul</a></li>
@@ -82,14 +77,12 @@
                                 <option class="var" data-value="citados">Citados</option>
                                 <option class="var" data-value="leyes">Leyes</option>
                                 <option class="var" data-value="sobre">Asunto</option>
-                                <option class="var" data-value="voces">Voces</option>
-                                <option class="var" data-value="materia">Materia</option>
                                 <option class="var" data-value="resultados">Decisiones</option>
                             </select>
                             <i class="close" />X</i>
                             <div class="color-drop dropdown">
                                 <button class="color-btn btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> 
-                                    <img class="cog" src="/static/icons/cog.svg"></img>
+                                    <i class="fa fa-cog" aria-hidden="true"></i>
                                 </button>
                                 <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
                                     <li role="presentation" class="color" data-value="#6A9BC3"><a role="menuitem" tabindex="-1" href="#">Azul</a></li>
@@ -116,14 +109,12 @@
                                    <option class="var" data-value="jueces">Jueces</option>
                                    <option class="var" data-value="leyes">Leyes</option>
                                    <option class="var" data-value="sobre">Asunto</option>
-                                   <option class="var" data-value="voces">Voces</option>
-                                   <option class="var" data-value="materia">Materia</option>
                                    <option class="var" data-value="resultados">Decisiones</option>
                                </select>
                                <i class="close" />X</i>
                                <div class="color-drop dropdown">
                                    <button class="color-btn btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> 
-                                       <img class="cog" src="/static/icons/cog.svg"></img>
+                                        <i class="fa fa-cog" aria-hidden="true"></i>
                                    </button>
                                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
                                        <li role="presentation" class="color" data-value="#6A9BC3"><a role="menuitem" tabindex="-1" href="#">Azul</a></li>
@@ -148,14 +139,12 @@
                                    <option class="var" data-value="corte">Corte</option>
                                    <option class="var" data-value="leyes">Leyes</option>
                                    <option class="var" data-value="sobre">Asunto</option>
-                                   <option class="var" data-value="voces">Voces</option>
-                                   <option class="var" data-value="materia">Materia</option>
                                    <option class="var" data-value="resultados">Decisiones</option>
                                </select>
                                <i class="close" />X</i>
                                <div class="color-drop dropdown">
                                    <button class="color-btn btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> 
-                                       <img class="cog" src="/static/icons/cog.svg"></img>
+                                       <i class="fa fa-cog" aria-hidden="true"></i>
                                    </button>
                                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
                                        <li role="presentation" class="color" data-value="#6A9BC3"><a role="menuitem" tabindex="-1" href="#">Azul</a></li>
@@ -177,12 +166,12 @@
             <div id="heading">
                 <h4>
                     <div class="col-md-offset-4">
-                        <img id="map" class="large-chart-btn" src="/static/icons/map.svg"></img>
-                        <img id="network" class="large-chart-btn" src="/static/icons/network.svg"></img>
+                        <i id="map" class="fa fa-map-o" aria-hidden="true"></i>
+                        <i id="network" class="fa fa-circle-o" aria-hidden="true"></i>
                         <i class="close" />X</i>
                         <div class="color-drop dropdown">
                             <button class="color-btn btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> 
-                                <img class="cog" src="/static/icons/cog.svg"></img>
+                                <i class="fa fa-cog" aria-hidden="true"></i>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
                                 <li role="presentation" class="image"><a role="menuitem" tabindex="-1" href="#">Guardar Imagen</a></li>
@@ -214,46 +203,12 @@
                                    <option class="var" data-value="citados">Citados</option>
                                    <option class="var" data-value="corte">Corte</option>
                                    <option class="var" data-value="leyes">Leyes</option>
-                                   <option class="var" data-value="voces">Voces</option>
-                                   <option class="var" data-value="materia">Materia</option>
                                    <option class="var" data-value="resultados">Decisiones</option>
                                </select>
                                <i class="close" />X</i>
                                <div class="color-drop dropdown">
                                    <button class="color-btn btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> 
-                                       <img class="cog" src="/static/icons/cog.svg"></img>
-                                   </button>
-                                   <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
-                                       <li role="presentation" class="color" data-value="#6A9BC3"><a role="menuitem" tabindex="-1" href="#">Azul</a></li>
-                                       <li role="presentation" class="color" data-value="#9BC36A"><a role="menuitem" tabindex="-1" href="#">Verde</a></li>
-                                       <li role="presentation" class="color" data-value="#C36A6f"><a role="menuitem" tabindex="-1" href="#">Rojo</a></li>
-                                       <li role="presentation" class="image"><a role="menuitem" tabindex="-1" href="#">Guardar Imagen</a></li>
-                                   </ul>
-                               </div>
-                            </h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div id="bottom-center-div">
-                    <div  id="bottom-center-chart" class="col-md-12">
-                        <div id="heading">
-                            <h4>
-                               <select class="var-drop">
-                                   <option class="var" data-value="voces">Voces</option>
-                                   <option class="var" data-value="sobre">Asunto</option>
-                                   <option class="var" data-value="leyes">Leyes</option>
-                                   <option class="var" data-value="citados">Citados</option>
-                                   <option class="var" data-value="corte">Corte</option>
-                                   <option class="var" data-value="leyes">Leyes</option>
-                                   <option class="var" data-value="materia">Materia</option>
-                                   <option class="var" data-value="resultados">Decisiones</option>
-                               </select>
-                               <i class="close" />X</i>
-                               <div class="color-drop dropdown">
-                                   <button class="color-btn btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> 
-                                       <img class="cog" src="/static/icons/cog.svg"></img>
+                                       <i class="fa fa-cog" aria-hidden="true"></i>
                                    </button>
                                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
                                        <li role="presentation" class="color" data-value="#6A9BC3"><a role="menuitem" tabindex="-1" href="#">Azul</a></li>
@@ -279,13 +234,11 @@
                                    <option class="var" data-value="citados">Citados</option>
                                    <option class="var" data-value="corte">Corte</option>
                                    <option class="var" data-value="leyes">Leyes</option>
-                                   <option class="var" data-value="voces">Voces</option>
-                                   <option class="var" data-value="materia">Materia</option>
                                </select>
                                <i class="close" />X</i>
                                <div class="color-drop dropdown">
                                    <button class="color-btn btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> 
-                                       <img class="cog" src="/static/icons/cog.svg"></img>
+                                       <i class="fa fa-cog" aria-hidden="true"></i>
                                    </button>
                                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
                                        <li role="presentation" class="color" data-value="#6A9BC3"><a role="menuitem" tabindex="-1" href="#">Azul</a></li>
@@ -327,7 +280,7 @@
                        <i class="close" />X</i>
                        <div class="color-drop dropdown">
                            <button class="color-btn btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"> 
-                               <img class="cog" src="/static/icons/cog.svg"></img>
+                               <i class="fa fa-cog" aria-hidden="true"></i>
                            </button>
                            <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="menu1">
                                <li role="presentation" class="image"><a role="menuitem" tabindex="-1" href="#">Guardar Imagen</a></li>
@@ -357,60 +310,12 @@
                 <th>Sobre</th>
                 <th>Citas</th>
                 <th>Leyes</th>
-                <th>Voces</th>
-                <th>Materia</th>
             </tr>
         </thead>
     </table>
     </div>
 </div>
 
-<div class="modal fade" id="info_modal" tabindex="-1" role="dialog" aria-labelledby="modal_info" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal_info">Ayuda</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <table id="info" class="table table-hover">
-                    <tr>
-                        <td>
-                            <img class="info-btn" src="/static/icons/stack.svg"/>
-                        </td>
-                        <td>
-                            Ir a lista de fallos.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img class="info-btn" src="/static/icons/stack.svg"/>
-                        </td>
-                        <td>
-                            Ir a panel gráfico.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img class="info-btn" src="/static/icons/table.svg"/>
-                        </td>
-                        <td>
-                            Mostar tabla.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img class="info-btn" src="/static/icons/scale.svg"/>
-                        </td>
-                        <td>
-                            Comparar cortes y jueces.
-                        </td>
-                    </tr>
-            </div>
-        </div>
-    </div>
-</div>
 
 <script type="text/javascript">
 // Load Data from backend
@@ -686,8 +591,6 @@ datatable
         function(d) {return d.sobre;},
         function(d) {return d.citados;},
         function(d) {return d.leyes;},
-        function(d) {return d.voces;},
-        function(d) {return d.materia;}
     ]).sortBy(function(d) {
         return d.Value;
     })
@@ -739,7 +642,8 @@ function barChart(uid, dim, color) {
     	    .width(width).height(height)
     	    .dimension(Dim)
     	    .group(Group)
-            .cap(10)
+            //.cap(10)
+            .data(function (group) { return group.top(10);})
             .ordering(function(d){ return -d.value })
             .colors(color)
             .title(function(d) { return ""; })
@@ -753,7 +657,8 @@ function barChart(uid, dim, color) {
     	    .width(width).height(height)
     	    .dimension(Dim)
     	    .group(Group)
-            .cap(10)
+            //.cap(10)
+            .data(function (group) { return group.top(10);})
             .ordering(function(d){ return -d.value })
             .colors(color)
             .title(function(d) { return ""; })
@@ -922,7 +827,6 @@ barChart("#main-right-chart", "jueces", "#6a9bc3");
 barChart("#medium-left-chart", "citados", "#6a9bc3");
 barChart("#medium-center-chart", "leyes", "#6a9bc3");
 barChart("#bottom-left-chart", "sobre", "#6a9bc3");
-barChart("#bottom-center-chart", "voces", "#6a9bc3");
 barChart("#bottom-right-chart", "resultados", "#6a9bc3");
 mapChart();
 forceLayout();

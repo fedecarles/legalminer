@@ -6,22 +6,30 @@ src: url("/static/fonts/Sertig.otf") format("opentype");
 font-family: Century;
 src: url("/static/fonts/ufonts.com_century.ttf") format("truetype");
 }
+@font-face {
+font-family: Roboto-Light;
+src: url("/static/fonts/Roboto-Light.ttf") format("truetype");
+}
 
-#navbar-container{
-    padding-left: 0px;
-    font-family: Sertig;
-    font-size: 22px;
-}
-.navbar {
-    margin-bottom: 0px;
-    border-radius: 0px;
-}
 .navbar-default {
     background-color: #3498db;
+    position: fixed;
+    top: 0px;
+    width: 100%;
+    border-radius: 0px;
+    border: 0px; 
+    font-Family: Roboto-Light;
+    font-size: 22px;
+    z-index: 100;
 }
 .navbar-default .navbar-nav>li>a {
     color: white;
 }
+.navbar-nav>li>a {
+    padding-top: 10px;
+    padding-bottom: 0px;
+}
+
 #input_list{
     float: left;
     width: 300px;
@@ -132,8 +140,7 @@ body .highlighted{
     font-family: Century;
     text-align: center;
 }
-#results a {
-    font-weight: bold;
+.fa {
     color: black;
 }
 
@@ -151,12 +158,14 @@ body .highlighted{
 }
 #search-form{
     margin-top: 1rem;
+    position: absolute;
 }
 #results{
     float: right;
     width: 44%;
+    height: 75vh;
     font-size: 12px;
-    font-family: Century;
+    font-family: Roboto-Light;
     background-color: white;
     margin-top: 2%;
     margin-right: 2%;
@@ -172,7 +181,7 @@ body .highlighted{
 }
 #desc_table{
     font-size: 16px;
-    font-family: Sertig, arial;
+    font-family: Roboto-Light, arial;
 }
 .box {
     border: solid 0.5px;
@@ -208,18 +217,16 @@ ol, ul{
     background-color: #f2f2f2;
     cursor: pointer;
 }
-.fa-table{
-    margin-left: 35%;
-}
 .fa-table:hover{
     background-color: #f2f2f2;
     cursor: pointer;
 }
 .fa-cog{
     margin-left: 5%;
+    font-size: 20px;
 }
 .fa-cog:hover{
-    background-color: #f2f2f2;
+    opacity: 0.2;
     cursor: pointer;
 }
 #home-link{
@@ -236,6 +243,7 @@ ol, ul{
 }
 body{
     overflow: auto;
+    background-color: #e6e5e5;
 }
 
 nav.sidebar, .main{
@@ -391,7 +399,7 @@ section{
 .d3-tip {
     line-height: 1;
     font-weight: bold;
-    font-family: Sertig;
+    font-family: Roboto-Light;
     padding: 10px;
     background-color: #fff;
     color: #000;
@@ -428,7 +436,7 @@ section{
 }
 #large-chart{
     border: 1px solid #E6E9ED;
-    height: 500px;
+    height: 520px;
     background-color: white;
 }
 #pais {
@@ -471,9 +479,6 @@ section{
     text-anchor: end !important;
     transform: rotate(-45deg);
 }
-#page-top{
-    background-color: #F7F7F7;
-}
 #header-chart {
     height: 150px;
     width: 100%;
@@ -511,6 +516,10 @@ div.mtool {
 }
 #heading {
     border-bottom: 2px solid #E6E9ED;
+}
+#heading i{
+    font-size; 20px;
+    color: #c1c0c0;
 }
 h4 {
     color: #73879C;
@@ -569,14 +578,13 @@ h4 {
     color: white;
 }
 #tagline {
-    font-family: Sertig;
+    font-family: Roboto-Light;
     font-size: 30px;
     color: white;
     margin-left: 33%;
 }
 .flat_btn {
-    height: 30px;
-    font-family: Sertig;
+    font-family: Roboto-Light;
     font-size: 18px;
     color: white;
     background-color: #3498db;
@@ -584,7 +592,7 @@ h4 {
     border-radius: 0px;
 }
 #registration {
-    font-family: Sertig;
+    font-family: Roboto-Light;
 }
 .form-control{
     border: 0;
@@ -601,7 +609,7 @@ h4 {
 }
 .monitor-header {
     text-align: center;
-    font-family: Sertig;
+    font-family: Roboto-Light;
     font-size: 26px;
     color: #27ae60;
     font-weight: 600;
@@ -610,59 +618,52 @@ h4 {
     height: 20rem;
     text-align: center;
     font-size: 1vw; 
-    font-family: Sertig;
+    font-family: Roboto-Light;
     line-height: 24px;
     font-weight: 400;
     font-style: normal;
 }
 .desc-text {
-    font-family: Sertig;
+    font-family: Roboto-Light;
     font-size: 2rem;
     text-align: justify;
 }
 
 #toolbar{
     border: solid 1px #fff;
+    padding: 5px;
+    font-size: 20px;
 }
-#toolbar:hover {
-    border: solid 1px #dedede;
-    background-color: #f5f8f9;
+#toolbar a {
+    color: black;
+    margin-right: 10px;
 }
-.doc-toolbar {
-    height: 53px;
+#toolbar a:hover {
+    color: grey;
 }
-.toolbar-btn {
-    width: 2rem;
-    margin-top: 3%; 
-    margin-left: 2.5%;
-    margin-right: 2.5%;
-}
-.toolbar-btn:hover {
-    background-color: #ececec;
+#toolbar i {
+    color: #c1c0c0;
 }
 .row a:hover, a:active, a:visited, a:link {
     text-decoration: none;
 }
 #main-controls {
-    height: 4em;
+    height: 3em;
     background-color: white;
     margin-left: 2%;
     margin-right: 2%;
-    margin-top: 2%;
+    margin-top: 4%;
+}
+#main-controls a {
+    color: black;
+    margin-right: 10px;
+}
+#main-controls a:hover {
+    background-color: #ececec;
 }
 #controls-placeholder {
     height: 100%;
     padding: 0px;
-}
-.controls-btn {
-    width: 4rem;
-    margin-left: 5%;
-    margin-right: 5%;
-    margin-top: 2%;
-    margin-bottom: 2%;
-}
-.controls-btn:hover {
-    background-color: #ececec;
 }
 .controls-placeholder a:hover, a:visited, a:link {
     text-decoration: none;
@@ -674,20 +675,25 @@ h4 {
 #layout-subchart {
     height: 100%
 }
-.large-chart-btn {
-    width: 2rem;
-    margin-left: 5%;
-    margin-right: 5%;
+#network{
     cursor: pointer;
 }
-.large-chart-btn:hover {
+#network:hover {
     background-color: #ececec;
 }
+#map{
+    cursor: pointer;
+}
+#map:hover {
+    background-color: #ececec;
+}
+
 .close {
     float: right;
-    color: #73879C;
     font-size: 20px;
     margin-left: 1rem;
+    opacity: 1;
+    font-size: 20px;
 }
 .cog {
     width: 2rem;
@@ -705,9 +711,21 @@ h4 {
 .color-drop{
     float: right;
 }
+.color-drop i{
+    font-size: 20px;
+}
+.color-drop i:hover{
+    opacity: 0.2;
+}
+
 .var-drop{
     background-color: transparent;
-    border: 0;
+    border: solid 1px #c1c0c0;
+    font-family: Roboto-Light;
+    font-size: 16px;
+}
+.var-drop i:hover{
+    opacity: 0.2;
 }
 
 .var-drop:visited .var-drop:active{
@@ -715,7 +733,9 @@ h4 {
 }
 .comp-drop{
     background-color: transparent;
-    border: 0;
+    border: solid 1px #c1c0c0;
+    font-family: Roboto-Light;
+    font-size: 16px;
 }
 
 .comp-drop:visited .var-drop:active{
@@ -723,7 +743,7 @@ h4 {
 }
 
 .flat_btn_small {
-    font-family: Sertig;
+    font-family: Roboto-Light;
     font-size: 12px;
     color: white;
     background-color: #3498db;
@@ -731,11 +751,11 @@ h4 {
     border-radius: 0px;
 }
 #table-div {
-    font-family: Sertig;
+    font-family: Roboto-Light;
 }
 #intruccion-texto {
     font-size: 30px;
-    font-family: Sertig;
+    font-family: Roboto-Light;
     font-weight: 100;
     margin-top: 10%;
 }
@@ -744,15 +764,16 @@ h4 {
 }
 .comment{
     width: 85%;
-    background-color: #f5f8f9;
+    border: solid 1px #a7a7a7;
+    background-color: #e6e5e5;
     resize: none;
-    font-family: Sertig;
-    font-size: 20px;
+    font-family: Roboto-Light;
+    font-size: 1em;
     font-style: italic;
     margin-top: 10px;
 }
 .modal{
-    font-family: Sertig;
+    font-family: Roboto-Light;
     font-size: 16px;
 }
 .info-btn {
@@ -767,7 +788,7 @@ h4 {
     color: black;
 }
 .text-link {
-    font-family: Sertig;
+    font-family: Roboto-Light;
     color: black;
     display: inline;
     font-size: 20px;

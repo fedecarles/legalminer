@@ -2,24 +2,19 @@
 {% load bootstrap3 %}
 {% load highlight %}
 {% block content %}
-
 <div id="main-controls">
     <div id="controls-placeholder" class="col-md-3 col-md-offset-5">
         <a id="dashboard-submit" href="#">
-            <img class="controls-btn" src="/static/icons/bar-chart.svg"></img>
+            <i class="fa fa-bar-chart fa-3x" aria-hidden="true" title="Panel Gráfico"></i>
         </a>
         <a id="save-search" href="#" data-toggle="modal" data-target="#search_modal">
-            <img class="controls-btn" src="/static/icons/save.svg"></img>
-        </a>
-        <a id="info-submit" href="#" data-toggle="modal" data-target="#info_modal">
-            <img class="controls-btn" src="/static/icons/info.svg"></img>
+            <i class="fa fa-floppy-o fa-3x" aria-hidden="true" title="Guardar Búsqueda"></i>
         </a>
     </div>
 </div>
 <div id="details" class="col-md-6">
     <p id="intruccion-texto" class="col-md-offset-1">Selecciona un fallo para ver el texto completo.</p>
 </div>
-
 <form method="post" action="/dashboard/" name="seleccion">{% csrf_token %}
         {% for result in page.object_list %}
         <input type="hidden" name="seleccion" value="{{ result.object.pk }}"></input>
@@ -58,85 +53,6 @@
     </div>
 </div>
 
-<div class="modal fade" id="info_modal" tabindex="-1" role="dialog" aria-labelledby="modal_info" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal_info">Ayuda</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <table id="info" class="table table-hover">
-                    <tr>
-                        <td>
-                            <img class="info-btn" src="/static/icons/bar-chart.svg"/>
-                        </td>
-                        <td>
-                            Ir a panel gráfico.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img class="info-btn" src="/static/icons/save.svg"/>
-                        </td>
-                        <td>
-                            Guardar búsqueda.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img class="info-btn" src="/static/icons/more.svg"/>
-                        </td>
-                        <td>
-                            Mostrar datos adicionales del fallos seleccionado.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img class="info-btn" src="/static/icons/star.svg"/>
-                        </td>
-                        <td>
-                            Marcar como favorito.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img class="info-btn" src="/static/icons/edit.svg"/>
-                        </td>
-                        <td>
-                            Insertar anotaciones al fallos seleccionado.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img class="info-btn" src="/static/icons/download.svg"/>
-                        </td>
-                        <td>
-                            Bajar fallo.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img class="info-btn" src="/static/icons/highlighter.svg"/>
-                        </td>
-                        <td>
-                            Resaltar texto.
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <img class="info-btn" src="/static/icons/comment.svg"/>
-                        </td>
-                        <td>
-                            Insertar comentario.
-                        </td>
-                    </tr>
-
-            </div>
-        </div>
-    </div>
-</div>
 
 <script type="text/javascript">
 
@@ -148,7 +64,7 @@ function go(obj) {
 
 $('#paginate').easyPaginate({
     paginateElement: 'li',
-    elementsPerPage: 8,
+    elementsPerPage: 10,
     effect: 'fade',
     position: 'before'
 });

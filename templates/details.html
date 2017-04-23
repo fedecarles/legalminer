@@ -1,39 +1,39 @@
 {% load bootstrap3 %}
 {% block content %}
 <div id="toolbar">
-    <div class="row col-md-offset-4 doc-toolbar">
+    <div class="col-md-offset-5 doc-toolbar">
         <a href="#" data-toggle="modal" data-target="#myModal">
-           <img class="toolbar-btn" src="/static/icons/more.svg"></img>
+           <i class="fa fa-ellipsis-h" aria-hidden="true" title="Datos Adicionales"></i>
         </a>
         <a class="fav-btn" href="#" name="{{ instance.id }}">
            {% if not liked %}
-           <img class="toolbar-btn like" src="/static/icons/star.svg"></img>
+           <i class="fa fa-star-o" aria-hidden="true" title="Guardar como Favorito"></i>
            {% else %}
-           <img class="toolbar-btn like" src="/static/icons/star-filled.svg"></img>
+           <i class="fa fa-star" aria-hidden="true" title="Remover Favorito"></i>
            {% endif %}
         </a>
         <a id="notas-off" href="#">
-           <img class="toolbar-btn" src="/static/icons/edit.svg"></img>
+           <i class="fa fa-pencil-square-o" aria-hidden="true" title="Anotar Texto"></i>
         </a>
         <a id="notas-on" href="#">
-           <img class="toolbar-btn" src="/static/icons/edit-on.svg"></img>
+           <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
         </a>
         <a href="#">
-           <img class="toolbar-btn" src="/static/icons/download.svg"></img>
+           <i class="fa fa-download" aria-hidden="true" title="Bajar Texto"></i>
         </a>
     </div>
-    <div id="text-tools" class="row col-md-offset-5 doc-toolbar">
+    <div id="text-tools" class="col-md-offset-5 doc-toolbar">
         <a id="hl-on" href="#">
-           <img class="toolbar-btn" src="/static/icons/highlighter.svg"></img>
+           <i class="fa fa-pencil" aria-hidden="true" title="Resaltador"></i>
         </a>
         <a id="hl-off" href="#">
-           <img class="toolbar-btn" src="/static/icons/highlighter-on.svg"></img>
+           <i class="fa fa-pencil-square" aria-hidden="true" title="Resaltador"></i>
         </a>
         <a id="cm-on" href="#">
-           <img class="toolbar-btn" src="/static/icons/comment.svg"></img>
+           <i class="fa fa-comment-o" aria-hidden="true" title="Insertar Comentario"></i>
         </a>
         <a id="save" href="#" data-toggle="modal" data-target="#note_confirmation">
-           <img class="toolbar-btn" src="/static/icons/save-small.svg"></img>
+           <i class="fa fa-floppy-o" aria-hidden="true" title="Guardar Anotaciones"></i>
         </a>
     </div>
 </div>
@@ -82,14 +82,6 @@
                   <td>{{ instance.resultados }}</td>
               </tr>
              </tr>
-              <tr>
-                  <td>Voces:</td>
-                  <td>{{ instance.voces }}</td>
-              </tr>
-              <tr>
-                  <td>Materia:</td>
-                  <td>{{ instance.materia }}</td>
-              </tr>
           </table>
       </div>
     </div>
@@ -134,9 +126,9 @@ $('.fav-btn').click(function(){
         dataType: "json",
         success: function(response) {
             if (response.liked == false){
-                $('.fav-btn').html('<img class="toolbar-btn like" src="/static/icons/star.svg"></img>')
+                $('.fav-btn').html('<i class="fa fa-star-o" aria-hidden="true"></i>')
             } else{
-                $('.fav-btn').html('<img class="toolbar-btn like" src="/static/icons/star-filled.svg"></img>')
+                $('.fav-btn').html('<i class="fa fa-star" aria-hidden="true"></i>')
             };
         },
         error: function(rs, e) {
@@ -200,7 +192,7 @@ function getSelection() {
 // Add comments to text on mouse position click.
 $('#cm-on').on('click', function() {
     $('texto-completo').focus();
-    pasteHtmlAtCaret("<p><div contenteditable=true class='comment'>" + cmdate + " " + user + ": </div></p>");
+    pasteHtmlAtCaret("<p><div contenteditable=true class='comment'>" + cmdate + " " + user + ": " + "</div></p>");
     $('.comment').focus();
 });
 
