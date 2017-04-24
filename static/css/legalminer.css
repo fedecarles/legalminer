@@ -530,11 +530,11 @@ h4 {
 }
 #dc-data-table {
     background-color: #fff;
-    font-size: 15px;
-    color: #73879C;
+    font-size: 10px;
     table-layout: fixed;
     width: 100%;
     margin-bottom: 15px;
+    font-family: Roboto-Light;
 }
 #dc-data-table td{
     padding-left: 15px;
@@ -542,7 +542,6 @@ h4 {
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 30%;
-    border: solid 1px;
 }
 #dc-data-table th{
     padding-left: 15px;
@@ -556,6 +555,9 @@ h4 {
     text-overflow: clip;
     white-space: normal;
     word-break: break-all;
+}
+#dc-data-table tr:hover {
+    background-color: #c1c0c0;
 }
 #inicio_main {
     width: 100%;
